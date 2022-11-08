@@ -22,5 +22,8 @@
     "morgan": "^1.10.0",
     "pg": "^8.8.0",
     "sequelize": "^6.25.5"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0"
   }
 }
