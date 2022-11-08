@@ -46,6 +46,11 @@ const { Artist, Post } = sequelize.models;
 Artist.belongsToMany(Post, { through: 'artists_posts' });
 Post.belongsToMany(Artist, { through: 'artists_posts'});
 
+const { Event, Place } = sequelize.models;
+
+Event.belongsTo(Place); // Un evento pertenece a un lugar
+Place.hasMany(Event); // Un lugar tiene muchos eventos
+
 module.exports = {
     ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
     conn: sequelize, // para importart la conexión { conn } = require('./db.js');

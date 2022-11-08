@@ -22,6 +22,7 @@ const createUser = async (req, res = response) => {
                 msg: 'Las contraseñas no coinciden',
             });
         }
+
         user = new User(req.body);
 
         // Encriptar contraseña
@@ -80,6 +81,7 @@ const loginUser = async (req, res = response) => {
             msg: 'Login',
             uid: user.id,
             name: user.name,
+            token,
         });
     } catch (error) {
         console.log(error);
