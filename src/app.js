@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const authUser = require('./routes/auth.routes.js');
 
-
 require('./db');
 
 const server = express();
@@ -30,9 +29,7 @@ server.use((req, res, next) => {
     next();
 });
 
-
-server.use('/', authUser);
-
+server.use('/auth', authUser);
 
 // Error catching endware.
 server.use((err, req, res, next) => {
