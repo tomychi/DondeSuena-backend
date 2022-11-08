@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const authUser = require('./routes/auth.routes.js');
+const event = require('./routes/event.routes.js');
 
 require('./db');
 
@@ -30,6 +31,7 @@ server.use((req, res, next) => {
 });
 
 server.use('/auth', authUser);
+server.use('/event', event);
 
 // Error catching endware.
 server.use((err, req, res, next) => {
