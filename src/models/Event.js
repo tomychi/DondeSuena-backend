@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
     sequelize.define(
-        'place',
+        'event',
         {
             id: {
                 type: DataTypes.UUID,
@@ -14,28 +14,24 @@ module.exports = (sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            address: {
+            description: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            city: {
-                type: DataTypes.STRING,
+            start: {
+                type: DataTypes.DATE,
                 allowNull: false,
             },
-            postCode: {
-                type: DataTypes.STRING,
+            end: {
+                type: DataTypes.DATE,
                 allowNull: false,
             },
-            phone: {
-                type: DataTypes.STRING,
+            price: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            email: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            image: {
-                type: DataTypes.STRING,
+            quantity: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             state: {
