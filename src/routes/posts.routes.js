@@ -16,7 +16,7 @@ router.post('/post', async (req, res) => {
     }
 });
 
-// RUTA GET -> Traer todos los posts creados
+// RUTA GET -> Traer todos los posts creados, coso
 router.get('/posts', async (req, res) => {
     try {
         const allPosts = await Post.findAll({ include: Artist });
