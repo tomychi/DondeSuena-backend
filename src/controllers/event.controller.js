@@ -34,7 +34,9 @@ const createEvent = async (req, res = response) => {
 
 const getEvents = async (req, res = response) => {
     try {
-        const events = await Event.findAll();
+        const events = await Event.findAll({
+            where: { state: true },
+        });
 
         res.status(200).json({
             ok: true,
