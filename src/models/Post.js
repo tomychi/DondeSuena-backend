@@ -20,13 +20,5 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        likes: {
-            type: DataTypes.INTEGER,
-            allowNull: true
-        },
-        comments: {
-            type: DataTypes.ARRAY(DataTypes.STRING),
-            allowNull: true,
-        },
     });
 };
