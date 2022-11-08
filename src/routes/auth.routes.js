@@ -4,7 +4,7 @@ const { validateFields } = require('../middlewares/validate-fields');
 
 const router = Router();
 
-const { createUser } = require('../controllers/auth.controller');
+const { createUser, loginUser } = require('../controllers/auth.controller');
 
 router.post(
     '/registerUser',
@@ -33,6 +33,21 @@ router.post(
     ],
 
     createUser
+);
+
+router.post(
+    '/loginUser',
+    [
+        check('email', 'Agrega un email válido').isEmail(),
+        check(
+            'password',
+            'El password debe ser de al menos 6 caracteres'
+        ).isLength({
+            min: 6,
+        }),
+        validateFields,
+    ],
+    loginUser
 );
 
 module.exports = router;
