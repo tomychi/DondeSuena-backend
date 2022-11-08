@@ -1,6 +1,7 @@
 const { response } = require("express");
 const { User } = require("../db");
 const bcrypt = require("bcryptjs");
+const { generateJWT } = require("../helpers/jwt");
 
 const createUser = async (req, res = response) => {
   const { email, password, password2 } = req.body;
@@ -21,6 +22,7 @@ const createUser = async (req, res = response) => {
         msg: "Las contraseñas no coinciden",
       });
     }
+
     user = new User(req.body);
 
     // Encriptar contraseña
@@ -29,11 +31,15 @@ const createUser = async (req, res = response) => {
 
     await user.save();
 
+    // Generar JWT
+    const token = await generateJWT(user.id, user.name);
+
     res.status(201).json({
       ok: true,
       msg: "Usuario creado",
       uid: user.id,
       name: user.name,
+      token,
     });
   } catch (error) {
     console.log(error);
@@ -67,11 +73,15 @@ const loginUser = async (req, res = response) => {
       });
     }
 
+    // Generar JWT
+    const token = await generateJWT(user.id, user.name);
+
     res.status(201).json({
       ok: true,
       msg: "Login",
       uid: user.id,
       name: user.name,
+      token,
     });
   } catch (error) {
     console.log(error);
@@ -81,7 +91,23 @@ const loginUser = async (req, res = response) => {
     });
   }
 };
+
+const renewToken = async (req, res = response) => {
+  const { uid, name } = req;
+
+  // Generar un nuevo JWT
+  const token = await generateJWT(uid, name);
+  res.status(201).json({
+    ok: true,
+    msg: "Renew",
+    uid,
+    name,
+    token,
+  });
+};
+
 module.exports = {
   createUser,
   loginUser,
+  renewToken,
 };
