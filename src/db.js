@@ -39,17 +39,26 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Artist, Post, User, Reaction, Genre } = sequelize.models;
+const { Artist, Post, User, Reaction, Genre, Ticket } = sequelize.models;
 
-// Aca vendrian las relaciones
-Artist.hasMany(Post); // Un artista puede tener varios posteos
-Post.belongsTo(Artist); // Un posteo es de un artista
-
+// Aca vendrían las relaciones
+/*
 User.hasMany(Reaction); // Un usuario logueado puede generar muchas reacciones (likes y comentarios)
 Reaction.belongsTo(User); // Una reacción pertenece a un usuario
 
 Post.hasMany(Reaction); // Un post puede tener muchas reacciones
 Reaction.belongsTo(Post); // Una reacción pertenece a un post
+*/
+
+// Probemos...
+Artist.belongsToMany(Post, { through: "artists_posts" });
+Post.belongsToMany(Artist, { through: "artists_posts" });
+
+User.belongsToMany(Reaction, { through: "users_reactions" });
+Reaction.belongsToMany(User, { through: "users_reactions" });
+
+Post.belongsToMany(Reaction, { through: "posts_reactions" });
+Reaction.belongsToMany(Post, { through: "posts_reactions" });
 
 Artist.belongsToMany(Genre, { through: 'artists_genres' });
 Genre.belongsToMany(Artist, { through: 'artists_genres' });

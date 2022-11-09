@@ -1,9 +1,9 @@
-const { Reaction, User } = require('../db');
+const { Reaction, User, Post } = require('../db');
 
 // CREATE REACTION ---------------------------------------------------------------------
 const createReaction = async (data) => {
     try {
-        const { likes, comments, user } = data;
+        const { likes, comments, user, post } = data;
 
         const objReaction = await Reaction.create(
             {
@@ -13,11 +13,16 @@ const createReaction = async (data) => {
         );
 
         const userDB = await User.findAll({
-            where: { name: user }
+            where: { nickname: user }
         });
 
-        let newReaction = objReaction.addUser(userDB);
-        return newReaction;
+        const postDB = await Post.findAll({
+            where: { title: post }
+        });
+
+        await objReaction.addUser(userDB);
+        await objReaction.addPost(postDB);
+        return objReaction;
 
     } catch (error) {
         console.log('ERROR EN createPost', error);

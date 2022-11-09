@@ -14,7 +14,7 @@ const createPosts = async (data) => {
         );
         
         const artistsDB = await Artist.findAll({
-            where: { name: artists }
+            where: { nickname: artists }
         });
 
         let newPost = objPost.addArtist(artistsDB);
