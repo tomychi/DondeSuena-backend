@@ -2,8 +2,11 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
+// MODULARIZAR RUTAS
 const authUser = require("./routes/user.routes.js");
 const event = require("./routes/event.routes.js");
+const post = require('./routes/posts.routes.js');
+const reaction = require('./routes/reactions.routes.js');
 
 require("./db");
 

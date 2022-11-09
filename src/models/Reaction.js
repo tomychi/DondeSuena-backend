@@ -11,6 +11,7 @@ module.exports = (sequelize) => {
         likes: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: 0,
         },
         comments: {
             type: DataTypes.ARRAY(DataTypes.TEXT),

@@ -1,23 +1,23 @@
-const { Post, Artist } = require('../db');
+const { Post, Artist, Reaction } = require('../db');
+
+//ruta modularizada -> /post
 
 // CREATE POST ---------------------------------------------------------------------
-const createPosts = async (data) => { 
+const createPosts = async (data) => {
     try {
         const { title, description, image, artists } = data;
-        
-        const objPost = await Post.create(
-            {
-                title,
-                description,
-                image,
-            }
-        );
-        
+
+        const newPost = await Post.create({
+            title,
+            description,
+            image,
+        });
+
         const artistsDB = await Artist.findAll({
             where: { nickname: artists }
         });
 
-        let newPost = objPost.addArtist(artistsDB);
+        newPost.addArtist(artistsDB);
         return newPost;
 
     } catch (error) {
@@ -25,4 +25,14 @@ const createPosts = async (data) => {
     }
 };
 
-module.exports = { createPosts };
+const getPostDB = async () => {
+    try {
+        return await Post.findAll({
+            include: [{ model: Artist }, { model: Reaction }],
+        });
+    } catch (error) {
+        console.log("ERROR EN getReactionDB", error);
+    }
+};
+
+module.exports = { createPosts, getPostDB };

@@ -4,8 +4,10 @@ const { createReaction } = require('../controllers/reaction.controller');
 
 const router = Router();
 
+// Ruta modularizada -> /reaction
+
 // RUTA POST -> crear las reacciones (likes y comentarios)
-router.post('/createReaction', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const data = req.body;
         await createReaction(data);
@@ -17,7 +19,7 @@ router.post('/createReaction', async (req, res) => {
 });
 
 // RUTA PUT -> Actualizar reacciones
-router.put('/updateReaction/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const dataReaction = req.body;
@@ -33,7 +35,7 @@ router.put('/updateReaction/:id', async (req, res) => {
 });
 
 // RUTA DELETE -> Eliminar post 
-router.delete('/deleteReaction/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
