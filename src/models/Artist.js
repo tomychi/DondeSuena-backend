@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     phone: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     description: {
@@ -46,7 +46,7 @@ module.exports = (sequelize) => {
     },
     google: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      defaultValue: false,
     },
     state: {
       type: DataTypes.BOOLEAN,
