@@ -5,7 +5,7 @@ const { createReaction } = require('../controllers/reaction.controller');
 const router = Router();
 
 // RUTA POST -> crear las reacciones (likes y comentarios)
-router.post('/reaction', async (req, res) => {
+router.post('/createReaction', async (req, res) => {
     try {
         const data = req.body;
         await createReaction(data);
@@ -17,7 +17,7 @@ router.post('/reaction', async (req, res) => {
 });
 
 // RUTA PUT -> Actualizar reacciones
-router.put('/reaction/:id', async (req, res) => {
+router.put('/updateReaction/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const dataReaction = req.body;
@@ -33,7 +33,7 @@ router.put('/reaction/:id', async (req, res) => {
 });
 
 // RUTA DELETE -> Eliminar post 
-router.delete('/reaction/:id', async (req, res) => {
+router.delete('/deleteReaction/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -46,3 +46,5 @@ router.delete('/reaction/:id', async (req, res) => {
         res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /reaction/:id'}, error);
     }
 });
+
+module.exports = router;

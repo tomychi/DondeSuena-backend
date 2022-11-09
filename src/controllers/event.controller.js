@@ -1,22 +1,62 @@
 const { response } = require('express');
-const { Event } = require('../db');
-
+const { Event, Place, Artist } = require('../db');
+const { filterEvents } = require('../helpers/filterEvents');
 const createEvent = async (req, res = response) => {
-    const { name } = req.body;
+    const {
+        name,
+        description,
+        date,
+        start,
+        end,
+        price,
+        quantity,
+        placeId,
+        artistName,
+        image,
+    } = req.body;
 
     try {
-        let event = await Event.findOne({ where: { name } });
+        let eventExis = await Event.findOne({ where: { name } });
 
-        if (event) {
+        if (eventExis) {
             return res.status(400).json({
                 ok: false,
                 msg: 'El evento ya existe con ese nombre',
             });
         }
 
-        event = new Event(req.body);
+        const event = await Event.create({
+            name,
+            description,
+            date,
+            start,
+            end,
+            price,
+            quantity,
+            image,
+        });
 
-        await event.save();
+        const place = await Place.findByPk(placeId);
+        const artist = await Artist.findOne({
+            where: { nickname: artistName },
+        });
+
+        if (!place) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro lugar con ese nombre',
+            });
+        }
+
+        if (!artist) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro artista con ese nombre',
+            });
+        }
+
+        await event.addPlace(place);
+        await event.addArtist(artist);
 
         res.status(201).json({
             ok: true,
@@ -33,10 +73,35 @@ const createEvent = async (req, res = response) => {
 };
 
 const getEvents = async (req, res = response) => {
+    const filter = req.query.filter || '';
     try {
         const events = await Event.findAll({
             where: { state: true },
         });
+
+        if (!events) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontraron eventos',
+            });
+        }
+
+        if (filter) {
+            const filteredEvents = filterEvents(events, filter);
+
+            if (!filteredEvents) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No se encontraron eventos por ese filtro',
+                });
+            } else {
+                return res.status(200).json({
+                    ok: true,
+                    msg: 'Eventos encontrados',
+                    events: filteredEvents,
+                });
+            }
+        }
 
         res.status(200).json({
             ok: true,
@@ -69,6 +134,32 @@ const deleteEvent = async (req, res = response) => {
         res.status(200).json({
             ok: true,
             msg: 'Evento eliminado',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
+    }
+};
+
+const getEvent = async (req, res = response) => {
+    const { id } = req.params;
+    try {
+        const event = await Event.findByPk(id);
+
+        if (!event) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro evento con ese Id',
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Evento encontrado',
+            event,
         });
     } catch (error) {
         console.log(error);
@@ -112,18 +203,5 @@ module.exports = {
     getEvents,
     deleteEvent,
     updateEvent,
+    getEvent,
 };
-
-/*
-{
-    "name": "Evento 1",
-    "description": "Evento 1",
-    "date": "2021-08-01",
-    "start": "10:00",
-    "end": "12:00",
-    "price": 100,
-    "quantity": 100
-
-}
-
-*/

@@ -7,6 +7,9 @@ const event = require("./routes/event.routes.js");
 
 require("./db");
 
+const post = require("./routes/posts.routes.js");
+const reaction = require("./routes/reactions.routes.js");
+
 const server = express();
 const cors = require("cors");
 
@@ -29,6 +32,8 @@ server.use((req, res, next) => {
 
 server.use("/auth", authUser);
 server.use("/event", event);
+server.use("/post", post);
+server.use("/reaction", reaction);
 
 // Error catching endware.
 server.use((err, req, res, next) => {
