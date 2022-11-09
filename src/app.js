@@ -5,10 +5,9 @@ const morgan = require('morgan');
 // MODULARIZAR RUTAS
 const authUser = require('./routes/auth.routes.js');
 const event = require('./routes/event.routes.js');
-require('./db');
-
 const post = require('./routes/posts.routes.js');
 const reaction = require('./routes/reactions.routes.js');
+require('./db');
 
 
 const server = express();

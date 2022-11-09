@@ -5,12 +5,10 @@ const createReaction = async (data) => {
     try {
         const { likes, comments, user, post } = data;
 
-        const objReaction = await Reaction.create(
-            {
-                likes,
-                comments,
-            }
-        );
+        const newReaction = await Reaction.create({
+            likes,
+            comments,
+        });
 
         const userDB = await User.findAll({
             where: { nickname: user }
@@ -20,13 +18,23 @@ const createReaction = async (data) => {
             where: { title: post }
         });
 
-        await objReaction.addUser(userDB);
-        await objReaction.addPost(postDB);
-        return objReaction;
+        newReaction.addUser(userDB);
+        newReaction.addPost(postDB);
+        return newReaction;
 
     } catch (error) {
         console.log('ERROR EN createPost', error);
     }
 };
 
-module.exports = { createReaction };
+const getReactionDB = async () => {
+    try {
+        return await Reaction.findAll({
+            include: [{ model: User }, { model: Post }],
+        });
+    } catch (error) {
+        console.log("ERROR EN getReactionDB", error);
+    }
+};
+
+module.exports = { createReaction, getReactionDB };
