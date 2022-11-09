@@ -122,7 +122,7 @@ const deleteEvent = async (req, res = response) => {
     try {
         const event = await Event.findByPk(id);
 
-        if (!event) {
+        if (!event || !event.state) {
             return res.status(404).json({
                 ok: false,
                 msg: 'No se encontro evento con ese Id',
@@ -149,7 +149,7 @@ const getEvent = async (req, res = response) => {
     try {
         const event = await Event.findByPk(id);
 
-        if (!event) {
+        if (!event || !event.state) {
             return res.status(404).json({
                 ok: false,
                 msg: 'No se encontro evento con ese Id',
@@ -175,7 +175,7 @@ const updateEvent = async (req, res = response) => {
     try {
         const event = await Event.findByPk(id);
 
-        if (!event) {
+        if (!event || !event.state) {
             return res.status(404).json({
                 ok: false,
                 msg: 'No se encontro evento con ese Id',
