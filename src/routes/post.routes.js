@@ -1,12 +1,12 @@
 const { Router } = require('express');
 const { Post } = require('../db');
-const { createPosts, getPostDB } = require('../controllers/posts.controller');
+const { createPosts, getPostDB } = require('../controllers/post.controller');
 
 const router = Router();
 
 // Ruta modularizada -> /post
 
-// RUTA POST -> crear los posteos
+// RUTA POST -> Crear los posteos
 router.post('/', async (req, res) => {
     try {
         const data = req.body;
@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
             let filterPost = allPosts.filter(p => p.title.toLowerCase() === name.toLowerCase());
             filterPost.lenght
                 ? res.status(200).send(filterPost)
-                : res.status(404).send('Post Not Found')
+                : res.status(404).send('Post no existente')
         } else {
             res.status(200).send(allPosts);
         }
@@ -48,7 +48,7 @@ router.get('/:id', async (req, res) => {
             let postId = allPosts.find(p => p.id == id);
             postId
             ? res.status(200).send(postId)
-            : res.status(404).send('Post Not Found')
+            : res.status(404).send('No se encontraron detalles del Post')
         }
         // let postId = await Post.findByPk(id, {
         //     include: {

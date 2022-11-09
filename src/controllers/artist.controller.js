@@ -13,7 +13,9 @@ const createArtist = async (req, res = response) => {
     phone,
     description,
     location,
-    socialNetworks,
+    facebook,
+    instagram,
+    spotify,
     image,
     genres,
   } = req.body;
@@ -35,7 +37,7 @@ const createArtist = async (req, res = response) => {
       });
     }
 
-    const newArtist = Artist.create({
+    const newArtist = await Artist.create({
       firstName,
       lastName,
       nickname,
@@ -44,11 +46,13 @@ const createArtist = async (req, res = response) => {
       phone,
       description,
       location,
-      socialNetworks,
+      facebook,
+      instagram,
+      spotify,
       image,
     });
 
-    const genresDB = Genre.findAll({
+    const genresDB = await Genre.findAll({
       where: { name: genres },
     });
 
@@ -56,13 +60,15 @@ const createArtist = async (req, res = response) => {
 
     // Encriptar contraseña
     const salt = bcrypt.genSaltSync();
-    user.password = bcrypt.hashSync(password, salt); // me genera un hash
+    newArtist.password = bcrypt.hashSync(password, salt); // me genera un hash
+
+    await newArtist.save();
 
     res.status(201).json({
       ok: true,
       msg: "Usuario creado",
-      uid: user.id,
-      name: user.name,
+      uid: newArtist.id,
+      name: newArtist.firstName,
     });
   } catch (error) {
     console.log(error);
@@ -87,7 +93,7 @@ const loginArtist = async (req, res = response) => {
     }
 
     // Confirmar los passwords
-    const validPassword = bcrypt.compareSync(password, user.password); // me compara el password que me llega con el hash que tengo en la base de datos
+    const validPassword = bcrypt.compareSync(password, artist.password); // me compara el password que me llega con el hash que tengo en la base de datos
 
     if (!validPassword) {
       return res.status(400).json({
@@ -99,8 +105,8 @@ const loginArtist = async (req, res = response) => {
     res.status(201).json({
       ok: true,
       msg: "Login",
-      uid: user.id,
-      name: user.name,
+      uid: artist.id,
+      name: artist.firstName,
     });
   } catch (error) {
     console.log(error);

@@ -6,15 +6,15 @@ const router = Router();
 
 // Ruta modularizada -> /reaction
 
-// RUTA POST -> crear las reacciones (likes y comentarios)
+// RUTA POST -> Crear las reacciones (likes y comentarios)
 router.post('/', async (req, res) => {
     try {
         const data = req.body;
         await createReaction(data);
-        res.status(200).send({ msg: '¡Tus reacciones se subieron!'})
+        res.status(200).send({ msg: '¡Tus reacciones se subieron!'});
         
     } catch (error) {
-        res.status(400).send({ msg: 'ERROR EN RUTA POST A /reaction'}, error);
+        res.status(400).send({ msg: 'ERROR EN RUTA POST A /reaction' }, error);
     }
 });
 
@@ -30,7 +30,7 @@ router.put('/:id', async (req, res) => {
         res.send('Se actualizaron tus reacciones');
         
     } catch (error) {
-        res.status(400).send({ msg: 'ERROR EN RUTA PUT A /reaction/:id'}, error);
+        res.status(400).send({ msg: 'ERROR EN RUTA PUT A /reaction/:id' }, error);
     }
 });
 
@@ -45,7 +45,7 @@ router.delete('/:id', async (req, res) => {
         res.send('Reacciones borradas');
         
     } catch (error) {
-        res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /reaction/:id'}, error);
+        res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /reaction/:id' }, error);
     }
 });
 
