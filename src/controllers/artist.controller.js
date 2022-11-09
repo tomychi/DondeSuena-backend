@@ -1,14 +1,27 @@
 const { response } = require("express");
-const { Artist } = require("../db");
+const { Artist, Genre } = require("../db");
 const bcrypt = require("bcryptjs");
 
 const createArtist = async (req, res = response) => {
-  const { email, password, password2 } = req.body;
+  const {
+    firstName,
+    lastName,
+    nickname,
+    email,
+    password,
+    password2,
+    phone,
+    description,
+    location,
+    socialNetworks,
+    image,
+    genres,
+  } = req.body;
 
   try {
-    let artist = await Artist.findOne({ where: { email } });
+    let artistFind = await Artist.findOne({ where: { email } });
 
-    if (artist) {
+    if (artistFind) {
       return res.status(400).json({
         ok: false,
         msg: "El usuario ya existe con ese email",
@@ -21,13 +34,29 @@ const createArtist = async (req, res = response) => {
         msg: "Las contraseñas no coinciden",
       });
     }
-    artist = new Artist(req.body);
+
+    const newArtist = Artist.create({
+      firstName,
+      lastName,
+      nickname,
+      email,
+      password,
+      phone,
+      description,
+      location,
+      socialNetworks,
+      image,
+    });
+
+    const genresDB = Genre.findAll({
+      where: { name: genres },
+    });
+
+    newArtist.addGenre(genresDB);
 
     // Encriptar contraseña
     const salt = bcrypt.genSaltSync();
     user.password = bcrypt.hashSync(password, salt); // me genera un hash
-
-    await artist.save();
 
     res.status(201).json({
       ok: true,
@@ -81,7 +110,23 @@ const loginArtist = async (req, res = response) => {
     });
   }
 };
+
+const renewToken = async (req, res = response) => {
+  const { uid, name } = req;
+
+  // Generar un nuevo JWT
+  const token = await generateJWT(uid, name);
+  res.status(201).json({
+    ok: true,
+    msg: "Renew",
+    uid,
+    name,
+    token,
+  });
+};
+
 module.exports = {
   createArtist,
   loginArtist,
+  renewToken,
 };
