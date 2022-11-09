@@ -9,6 +9,9 @@ const { validateJWT } = require("../middlewares/validate-jwt");
 const {
   createArtist,
   loginArtist,
+  getArtists,
+  updateArtist,
+  deleteArtist,
   renewToken,
 } = require("../controllers/artist.controller");
 
@@ -53,6 +56,12 @@ router.post(
   ],
   loginArtist
 );
+
+router.get("/getArtists", getArtists);
+
+router.put("/updateArtist/:id", updateArtist);
+
+router.delete("/deleteArtist/:id", deleteArtist);
 
 router.get("/renew", validateJWT, renewToken);
 

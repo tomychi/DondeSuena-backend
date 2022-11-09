@@ -117,6 +117,88 @@ const loginArtist = async (req, res = response) => {
   }
 };
 
+const getArtists = async (req, res = response) => {
+  try {
+    const artists = await Artist.findAll({
+      where: { state: true },
+    });
+
+    if (!artists) {
+      return res.status(404).json({
+        ok: false,
+        msg: "No se encontraron usuarios",
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      msg: "Lista de artistas",
+      artists,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Por favor hable con el administrador",
+    });
+  }
+};
+
+const updateArtist = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+    const artist = await Artist.findByPk(id);
+
+    if (!artist) {
+      return res.status(404).json({
+        ok: false,
+        msg: "No se encontró el usuario",
+      });
+    }
+
+    await artist.update(req.body);
+
+    res.status(200).json({
+      ok: true,
+      msg: "Usuario actualizado",
+      artist,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Por favor hable con el administrador",
+    });
+  }
+};
+
+const deleteArtist = async (req, res = response) => {
+  const { id } = req.params;
+  try {
+    const artist = await Artist.findByPk(id);
+
+    if (!artist || !artist.state) {
+      return res.status(404).json({
+        ok: false,
+        msg: "No se encontro el usuario con ese Id",
+      });
+    }
+
+    await artist.update({ state: false });
+
+    res.status(200).json({
+      ok: true,
+      msg: "Usuario eliminado",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Por favor hable con el administrador",
+    });
+  }
+};
+
 const renewToken = async (req, res = response) => {
   const { uid, name } = req;
 
@@ -134,5 +216,8 @@ const renewToken = async (req, res = response) => {
 module.exports = {
   createArtist,
   loginArtist,
+  getArtists,
+  updateArtist,
+  deleteArtist,
   renewToken,
 };
