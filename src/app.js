@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const authUser = require("./routes/user.routes.js");
+const authArtist = require("./routes/artist.routes.js");
 const event = require("./routes/event.routes.js");
 
 require("./db");
@@ -31,6 +32,7 @@ server.use((req, res, next) => {
 });
 
 server.use("/auth", authUser);
+server.use("/auth", authArtist);
 server.use("/event", event);
 server.use("/post", post);
 server.use("/reaction", reaction);
