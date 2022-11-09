@@ -5,13 +5,11 @@ const morgan = require("morgan");
 // MODULARIZAR RUTAS
 const authUser = require("./routes/user.routes.js");
 const event = require("./routes/event.routes.js");
-const post = require('./routes/posts.routes.js');
-const reaction = require('./routes/reactions.routes.js');
+const post = require('./routes/post.routes.js');
+const reaction = require('./routes/reaction.routes.js');
+const ticket = require('./routes/ticket.routes.js')
 
 require("./db");
-
-const post = require("./routes/posts.routes.js");
-const reaction = require("./routes/reactions.routes.js");
 
 const server = express();
 const cors = require("cors");
@@ -37,6 +35,7 @@ server.use("/auth", authUser);
 server.use("/event", event);
 server.use("/post", post);
 server.use("/reaction", reaction);
+server.use("/ticket", ticket)
 
 // Error catching endware.
 server.use((err, req, res, next) => {
