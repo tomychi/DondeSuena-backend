@@ -3,15 +3,13 @@ const { Post, Artist } = require('../db');
 // CREATE POST ---------------------------------------------------------------------
 const createPosts = async (data) => { 
     try {
-        const { title, description, image, likes, comments, artists } = data;
+        const { title, description, image, artists } = data;
         
         const objPost = await Post.create(
             {
                 title,
                 description,
                 image,
-                likes,
-                comments,
             }
         );
         
