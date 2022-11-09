@@ -5,7 +5,7 @@ const { createPosts } = require('../controllers/posts.controller');
 const router = Router();
 
 // RUTA POST -> crear los posteos
-router.post('/post', async (req, res) => {
+router.post('/createPost', async (req, res) => {
     try {
         const data = req.body;
         await createPosts(data);
@@ -17,7 +17,7 @@ router.post('/post', async (req, res) => {
 });
 
 // RUTA GET -> Traer todos los posts creados
-router.get('/posts', async (req, res) => {
+router.get('/getPosts', async (req, res) => {
     try {
         const allPosts = await Post.findAll({ include: Reaction });
         res.status(200).send(allPosts);
@@ -28,12 +28,12 @@ router.get('/posts', async (req, res) => {
 });
 
 // RUTA GET -> Traer un post específico
-router.get('/post/:id', async (req, res) => {
+router.get('/getPost/:id', async (req, res) => {
     try {
         const { id } = req.params;
         
         let postId = await Post.findByPk(id);
-        req.status(200).send(postId)
+        res.status(200).send(postId)
         
     } catch (error) {
         res.status(400).send({ msg: 'ERROR EN RUTA GET A /post/:id'}, error);
@@ -41,7 +41,7 @@ router.get('/post/:id', async (req, res) => {
 });
 
 // RUTA PUT -> Actualizar post
-router.put('/post/:id', async (req, res) => {
+router.put('/updatePost/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const dataPost = req.body;
@@ -57,7 +57,7 @@ router.put('/post/:id', async (req, res) => {
 });
 
 // RUTA DELETE -> Eliminar post 
-router.delete('/post/:id', async (req, res) => {
+router.delete('/deletePost/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
