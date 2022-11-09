@@ -17,7 +17,7 @@ const createPosts = async (data) => {
             where: { name: artists }
         });
 
-        let newPost = objPost.addType(artistsDB);
+        let newPost = objPost.addArtist(artistsDB);
         return newPost;
 
     } catch (error) {

@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Post, Artist } = require('../db');
+const { Post, Reaction } = require('../db');
 const { createPosts } = require('../controllers/posts.controller');
 
 const router = Router();
@@ -19,7 +19,7 @@ router.post('/post', async (req, res) => {
 // RUTA GET -> Traer todos los posts creados
 router.get('/posts', async (req, res) => {
     try {
-        const allPosts = await Post.findAll({ include: Artist });
+        const allPosts = await Post.findAll({ include: Reaction });
         res.status(200).send(allPosts);
         
     } catch (error) {
@@ -49,10 +49,10 @@ router.put('/post/:id', async (req, res) => {
         await Post.update(dataPost, {
             where: { id: id }
         });
-        res.send('update in post');
+        res.send('Post actualizado');
         
     } catch (error) {
-        res.status(400).send({ msg: 'ERROR EN RUTA PUT A /posts/:id'}, error);
+        res.status(400).send({ msg: 'ERROR EN RUTA PUT A /post/:id'}, error);
     }
 });
 
@@ -64,7 +64,7 @@ router.delete('/post/:id', async (req, res) => {
         await Post.destroy({
             where: { id: id }
         });
-        res.send('post erased');
+        res.send('Post borrado');
         
     } catch (error) {
         res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /post/:id'}, error);
