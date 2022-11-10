@@ -1,5 +1,7 @@
 const { response } = require('express');
 const { Event, Place, Artist } = require('../db');
+const { Op } = require('sequelize');
+
 const createEvent = async (req, res = response) => {
     const {
         name,
@@ -72,97 +74,71 @@ const createEvent = async (req, res = response) => {
 };
 
 const getEvents = async (req, res = response) => {
-    const filter = req.query.filter || '';
+    const search = req.query.search || '';
+    const limit = Number(req.query.limit);
+    const date = req.query.date || '';
     try {
-        if (filter === 'all') {
+        if (search) {
+            // buscar por nombre del evento
             const events = await Event.findAll({
-                where: { state: true },
+                where: {
+                    name: {
+                        [Op.iLike]: `%${search}%`,
+                    },
+                },
             });
 
-            if (!events) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontraron eventos',
-                });
-            }
-
-            res.status(200).json({
+            return res.status(200).json({
                 ok: true,
-                msg: 'Lista de eventos',
-                events,
-            });
-        } else if (filter === 'date') {
-            const events = await Event.findAll({
-                where: { state: true },
-                order: [['date', 'ASC']],
-            });
-
-            if (!events) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontraron eventos',
-                });
-            }
-
-            res.status(200).json({
-                ok: true,
-                msg: 'Lista de eventos',
-                events,
-            });
-        } else if (filter === 'price-asc') {
-            const events = await Event.findAll({
-                where: { state: true },
-                order: [['price', 'ASC']],
-            });
-
-            if (!events) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontraron eventos',
-                });
-            }
-
-            res.status(200).json({
-                ok: true,
-                msg: 'Lista de eventos',
-                events,
-            });
-        } else if (filter === 'price-desc') {
-            const events = await Event.findAll({
-                where: { state: true },
-                order: [['price', 'DESC']],
-            });
-
-            if (!events) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontraron eventos',
-                });
-            }
-
-            res.status(200).json({
-                ok: true,
-                msg: 'Lista de eventos',
-                events,
-            });
-        } else {
-            const events = await Event.findAll({
-                where: { state: true },
-            });
-
-            if (!events) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontraron eventos',
-                });
-            }
-
-            res.status(200).json({
-                ok: true,
-                msg: 'Lista de eventos',
+                msg: 'Eventos encontrados',
                 events,
             });
         }
+
+        if (limit) {
+            const events = await Event.findAll({
+                limit,
+            });
+
+            return res.status(200).json({
+                ok: true,
+                msg: 'Eventos encontrados',
+                events,
+            });
+        }
+
+        if (date) {
+            const events = await Event.findAll({
+                where: {
+                    date: {
+                        [Op.iLike]: `%${date}%`,
+                    },
+                },
+            });
+
+            return res.status(200).json({
+                ok: true,
+                msg: 'Eventos encontrados',
+                events,
+            });
+        }
+
+        const events = await Event.findAll({
+            where: { state: true },
+        });
+
+        if (!events) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontraron eventos',
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Lista de eventos',
+            events,
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
