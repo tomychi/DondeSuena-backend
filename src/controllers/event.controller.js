@@ -1,6 +1,5 @@
 const { response } = require('express');
 const { Event, Place, Artist } = require('../db');
-const { filterEvents } = require('../helpers/filterEvents');
 const createEvent = async (req, res = response) => {
     const {
         name,
@@ -84,23 +83,6 @@ const getEvents = async (req, res = response) => {
                 ok: false,
                 msg: 'No se encontraron eventos',
             });
-        }
-
-        if (filter) {
-            const filteredEvents = filterEvents(events, filter);
-
-            if (!filteredEvents) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontraron eventos por ese filtro',
-                });
-            } else {
-                return res.status(200).json({
-                    ok: true,
-                    msg: 'Eventos encontrados',
-                    events: filteredEvents,
-                });
-            }
         }
 
         res.status(200).json({
