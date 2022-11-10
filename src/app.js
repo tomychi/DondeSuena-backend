@@ -2,9 +2,18 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const authUser = require('./routes/auth.routes.js');
+// MODULARIZAR RUTAS
 
-require('./db');
+const authUser = require("./routes/user.routes.js");
+const authArtist = require("./routes/artist.routes.js");
+const event = require("./routes/event.routes.js");
+const post = require('./routes/post.routes.js');
+const reaction = require('./routes/reaction.routes.js');
+const ticket = require('./routes/ticket.routes.js')
+const place = require('./routes/place.routes.js');
+
+require("./db");
+
 
 const server = express();
 const cors = require('cors');
@@ -29,7 +38,14 @@ server.use((req, res, next) => {
     next();
 });
 
-server.use('/auth', authUser);
+server.use("/auth", authUser);
+server.use("/auth", authArtist);
+server.use("/event", event);
+server.use("/post", post);
+server.use("/reaction", reaction);
+server.use("/ticket", ticket)
+server.use('/place', place);
+
 
 // Error catching endware.
 server.use((err, req, res, next) => {

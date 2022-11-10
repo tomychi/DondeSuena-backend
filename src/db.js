@@ -39,9 +39,42 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
+const { Artist, Post, User, Event, Place, Reaction, Genre, Ticket } = sequelize.models;
 
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);
+// Aca vendrían las relaciones
+/*
+User.hasMany(Reaction); // Un usuario logueado puede generar muchas reacciones (likes y comentarios)
+Reaction.belongsTo(User); // Una reacción pertenece a un usuario
+
+Post.hasMany(Reaction); // Un post puede tener muchas reacciones
+Reaction.belongsTo(Post); // Una reacción pertenece a un post
+*/
+
+// Probemos...
+Artist.belongsToMany(Post, { through: "artists_posts" });
+Post.belongsToMany(Artist, { through: "artists_posts" });
+
+User.belongsToMany(Reaction, { through: "users_reactions" });
+Reaction.belongsToMany(User, { through: "users_reactions" });
+
+Post.belongsToMany(Reaction, { through: "posts_reactions" });
+Reaction.belongsToMany(Post, { through: "posts_reactions" });
+
+Artist.belongsToMany(Genre, { through: 'artists_genres' });
+Genre.belongsToMany(Artist, { through: 'artists_genres' });
+
+Event.belongsToMany(Artist, { through: 'events_artists' });
+Artist.belongsToMany(Event, { through: 'events_artists' });
+
+Event.belongsToMany(Place, { through: 'events_places' });
+Place.belongsToMany(Event, { through: 'events_places' });
+
+Event.belongsToMany(Ticket, { through: 'events_tickets' });
+Ticket.belongsToMany(Event, { through: 'events_tickets' });
+
+User.belongsToMany(Ticket, { through: 'users_tickets' });
+Ticket.belongsToMany(User, { through: 'users_tickets' });
+
 
 module.exports = {
     ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
