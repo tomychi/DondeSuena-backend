@@ -75,6 +75,7 @@ const createEvent = async (req, res = response) => {
 
 const getEvents = async (req, res = response) => {
   const nameArtist = req.query.nameArtist || "";
+  const location = req.query.location || "";
   const limit = Number(req.query.limit);
   const date = req.query.date || "";
   try {
@@ -98,6 +99,36 @@ const getEvents = async (req, res = response) => {
             model: Artist,
             where: { id: artist.id },
             attributes: ["nickname"],
+          },
+        ],
+      });
+
+      return res.status(200).json({
+        ok: true,
+        msg: "Eventos encontrados",
+        events,
+      });
+    }
+
+    if (location) {
+      const place = await Place.findOne({
+        where: { city: location },
+      });
+
+      if (!place || !place.state) {
+        return res.status(404).json({
+          ok: false,
+          msg: "No se encontro lugar con ese nombre",
+        });
+      }
+
+      const events = await Event.findAll({
+        where: { state: true },
+        include: [
+          {
+            model: Place,
+            where: { id: place.id },
+            attributes: ["city"],
           },
         ],
       });
