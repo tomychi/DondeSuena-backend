@@ -11,7 +11,7 @@ const createEvent = async (req, res = response) => {
         end,
         price,
         quantity,
-        placeId,
+        placeName,
         artistName,
         image,
     } = req.body;
@@ -37,7 +37,7 @@ const createEvent = async (req, res = response) => {
             image,
         });
 
-        const place = await Place.findByPk(placeId);
+        const place = await Place.findOne({ where: { name: placeName } });
         const artist = await Artist.findOne({
             where: { nickname: artistName },
         });
@@ -74,18 +74,32 @@ const createEvent = async (req, res = response) => {
 };
 
 const getEvents = async (req, res = response) => {
-    const search = req.query.search || '';
+    const nameArtist = req.query.nameArtist || '';
     const limit = Number(req.query.limit);
     const date = req.query.date || '';
     try {
-        if (search) {
-            // buscar por nombre del evento
+        // buscar eventos por nombre del artista
+        if (nameArtist) {
+            const artist = await Artist.findOne({
+                where: { nickname: nameArtist },
+            });
+
+            if (!artist || !artist.state) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No se encontro artista con ese nombre',
+                });
+            }
+
             const events = await Event.findAll({
-                where: {
-                    name: {
-                        [Op.iLike]: `%${search}%`,
+                where: { state: true },
+                include: [
+                    {
+                        model: Artist,
+                        where: { id: artist.id },
+                        attributes: ['nickname'],
                     },
-                },
+                ],
             });
 
             return res.status(200).json({
@@ -98,6 +112,9 @@ const getEvents = async (req, res = response) => {
         if (limit) {
             const events = await Event.findAll({
                 limit,
+                where: {
+                    state: true,
+                },
             });
 
             return res.status(200).json({
@@ -113,6 +130,7 @@ const getEvents = async (req, res = response) => {
                     date: {
                         [Op.iLike]: `%${date}%`,
                     },
+                    state: true,
                 },
             });
 
