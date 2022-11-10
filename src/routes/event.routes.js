@@ -17,9 +17,17 @@ router.post(
     [
         check('name', 'El nombre es obligatorio').not().isEmpty(),
         check('description', 'La descripción es obligatoria').not().isEmpty(),
-        check('date', 'La fecha es obligatoria').not().isEmpty(),
-        check('start', 'La fecha de inicio es obligatoria').not().isEmpty(),
-        check('end', 'La fecha de finalización es obligatoria').not().isEmpty(),
+        check('date', 'La fecha es obligatoria')
+            .not()
+            .isEmpty()
+            .custom((value) => {
+                const date = new Date(value);
+                if (date < new Date()) {
+                    throw new Error('La fecha debe ser mayor a la actual');
+                }
+                return true;
+            }),
+        check('start', 'La hora de inicio es obligatoria').not().isEmpty(),
         check('price', 'El precio es obligatorio').not().isEmpty(),
         check('quantity', 'La cantidad es obligatoria').not().isEmpty(),
         validateFields,
