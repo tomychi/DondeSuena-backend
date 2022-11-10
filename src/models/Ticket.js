@@ -8,11 +8,11 @@ module.exports = (sequelize) => {
             allowNull: false,
             primaryKey: true,
         },
-        priceTotal: { 
+        priceTotal: { // Suma el precio de todas las entradas para el Usuario
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        quantity: {
+        quantity: { // Cantidad de tickets para el Usuario (min1)
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 1
