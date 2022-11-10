@@ -74,22 +74,95 @@ const createEvent = async (req, res = response) => {
 const getEvents = async (req, res = response) => {
     const filter = req.query.filter || '';
     try {
-        const events = await Event.findAll({
-            where: { state: true },
-        });
+        if (filter === 'all') {
+            const events = await Event.findAll({
+                where: { state: true },
+            });
 
-        if (!events) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontraron eventos',
+            if (!events) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No se encontraron eventos',
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                msg: 'Lista de eventos',
+                events,
+            });
+        } else if (filter === 'date') {
+            const events = await Event.findAll({
+                where: { state: true },
+                order: [['date', 'ASC']],
+            });
+
+            if (!events) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No se encontraron eventos',
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                msg: 'Lista de eventos',
+                events,
+            });
+        } else if (filter === 'price-asc') {
+            const events = await Event.findAll({
+                where: { state: true },
+                order: [['price', 'ASC']],
+            });
+
+            if (!events) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No se encontraron eventos',
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                msg: 'Lista de eventos',
+                events,
+            });
+        } else if (filter === 'price-desc') {
+            const events = await Event.findAll({
+                where: { state: true },
+                order: [['price', 'DESC']],
+            });
+
+            if (!events) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No se encontraron eventos',
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                msg: 'Lista de eventos',
+                events,
+            });
+        } else {
+            const events = await Event.findAll({
+                where: { state: true },
+            });
+
+            if (!events) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No se encontraron eventos',
+                });
+            }
+
+            res.status(200).json({
+                ok: true,
+                msg: 'Lista de eventos',
+                events,
             });
         }
-
-        res.status(200).json({
-            ok: true,
-            msg: 'Lista de eventos',
-            events,
-        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
