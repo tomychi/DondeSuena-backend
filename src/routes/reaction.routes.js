@@ -27,7 +27,7 @@ router.put('/:id', async (req, res) => {
         await Reaction.update(dataReaction, {
             where: { id: id }
         });
-        res.send('Se actualizaron tus reacciones');
+        res.send({ msg: 'Se actualizaron tus reacciones' });
         
     } catch (error) {
         res.status(400).send({ msg: 'ERROR EN RUTA PUT A /reaction/:id' }, error);
@@ -42,7 +42,7 @@ router.delete('/:id', async (req, res) => {
         await Reaction.destroy({
             where: { id: id }
         });
-        res.send('Reacciones borradas');
+        res.send({ msg: 'Reacciones borradas'});
         
     } catch (error) {
         res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /reaction/:id' }, error);

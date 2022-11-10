@@ -75,7 +75,7 @@ router.put('/:id', async (req, res) => {
         await Post.update(dataPost, {
             where: { id: id }
         });
-        res.send('Post actualizado');
+        res.send({ msg: 'Post actualizado' });
 
     } catch (error) {
         res.status(400).send({ msg: 'ERROR EN RUTA PUT A /post/:id' }, error);
@@ -90,7 +90,7 @@ router.delete('/:id', async (req, res) => {
         await Post.destroy({
             where: { id: id }
         });
-        res.send('Post borrado');
+        res.send({ msg: 'Post borrado' });
 
     } catch (error) {
         res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /post/:id' }, error);
