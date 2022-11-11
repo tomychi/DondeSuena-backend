@@ -82,7 +82,11 @@ const getEvents = async (req, res = response) => {
         // buscar eventos por nombre del artista
         if (nameArtist) {
             const artist = await Artist.findOne({
-                where: { nickname: nameArtist },
+                where: {
+                    nickname: {
+                        [Op.iLike]: `%${nameArtist}%`,
+                    },
+                },
             });
 
             if (!artist || !artist.state) {

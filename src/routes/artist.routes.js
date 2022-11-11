@@ -13,6 +13,8 @@ const {
   updateArtist,
   deleteArtist,
   renewToken,
+  getArtistByName,
+  getArtistById,
 } = require("../controllers/artist.controller");
 
 const { Post, Like, Comment } = require('../db');
@@ -36,7 +38,6 @@ router.post(
       }
     ),
     check("phone", "El teléfono es obligatorio").not().isEmpty(),
-    check("location", "La locacion es obligatoria").not().isEmpty(),
     check("description", "La descripcion es obligatoria").not().isEmpty(),
     check("genres", "Los generos son obligatorios").not().isEmpty(),
 
@@ -61,6 +62,10 @@ router.post(
 );
 
 router.get("/getArtists", getArtists);
+
+router.get("/getArtistByName", getArtistByName);
+
+router.get("/getArtistById/:id", getArtistById);
 
 router.put("/updateArtist/:id", updateArtist);
 

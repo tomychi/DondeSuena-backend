@@ -8,6 +8,7 @@ const {
   createUser,
   loginUser,
   renewToken,
+  googleSignIn,
 } = require("../controllers/user.controller");
 
 const { validateJWT } = require("../middlewares/validate-jwt");
@@ -31,6 +32,7 @@ router.post(
     ),
     check("phone", "El teléfono es obligatorio").not().isEmpty(),
     check("birthday", "La fecha de nacimiento es obligatoria").not().isEmpty(),
+    check("dni", "El dni es obligatorio").not().isEmpty(),
 
     validateFields,
   ],
@@ -50,6 +52,15 @@ router.post(
     validateFields,
   ],
   loginUser
+);
+
+router.post(
+  "/google",
+  [
+    check("token", "El token de Google es obligatorio").not().isEmpty(),
+    validateFields,
+  ],
+  googleSignIn
 );
 
 router.get("/renew", validateJWT, renewToken);
