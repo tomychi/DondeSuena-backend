@@ -31,6 +31,7 @@ router.post(
     ),
     check("phone", "El teléfono es obligatorio").not().isEmpty(),
     check("birthday", "La fecha de nacimiento es obligatoria").not().isEmpty(),
+    check("dni", "El dni es obligatorio").not().isEmpty(),
 
     validateFields,
   ],
