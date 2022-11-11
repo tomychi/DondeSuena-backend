@@ -43,11 +43,23 @@ const { Artist, Post, User, Event, Place, Reaction, Genre, Ticket } = sequelize.
 
 // Aca vendrían las relaciones
 /*
-User.hasMany(Reaction); // Un usuario logueado puede generar muchas reacciones (likes y comentarios)
-Reaction.belongsTo(User); // Una reacción pertenece a un usuario
+Artist.hasMany(Post) // Artista muchos post
+Post.belongsTo(Artist) // Un Post pertenece a un artista
 
-Post.hasMany(Reaction); // Un post puede tener muchas reacciones
-Reaction.belongsTo(Post); // Una reacción pertenece a un post
+User.hasMany(Reaction); // Usuario logueado muchas reacciones (likes y comentarios)
+Reaction.belongsTo(User); // Una Reacción pertenece a un usuario
+
+Post.hasMany(Reaction); // Post muchas reacciones
+Reaction.belongsTo(Post); // Una Reacción pertenece a un post
+
+Place.hasMany(Event); // Lugar muchos eventos
+Event.belongTo(Place); // Un Evento pertenece a un lugar
+
+Event.hasMany(Ticket); // Evento muchos tickets
+Ticket.belongsTo(Event); // Un Ticket pertenece a un evento
+
+User.hasMany(Ticket); // Usuario muchos tickets
+Ticket.belongTo(User); // Un Ticket pertenece a un usuario 
 */
 
 // Probemos...

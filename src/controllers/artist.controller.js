@@ -1,7 +1,8 @@
 const { response } = require("express");
-const { Artist, Genre } = require("../db");
+const { Artist, Genre, Event } = require("../db");
 const bcrypt = require("bcryptjs");
 
+// CREAR ARTISTA ----------------------------------------------------------------------
 const createArtist = async (req, res = response) => {
   const {
     firstName,
@@ -12,8 +13,7 @@ const createArtist = async (req, res = response) => {
     password2,
     phone,
     description,
-    location,
-    facebook,
+    twitter,
     instagram,
     spotify,
     image,
@@ -45,8 +45,7 @@ const createArtist = async (req, res = response) => {
       password,
       phone,
       description,
-      location,
-      facebook,
+      twitter,
       instagram,
       spotify,
       image,
@@ -79,6 +78,7 @@ const createArtist = async (req, res = response) => {
   }
 };
 
+// LOGUEAR ARTISTA ----------------------------------------------------------------------
 const loginArtist = async (req, res = response) => {
   const { email, password } = req.body;
 
@@ -117,6 +117,7 @@ const loginArtist = async (req, res = response) => {
   }
 };
 
+// VER ARTISTAS ----------------------------------------------------------------------
 const getArtists = async (req, res = response) => {
   try {
     const artists = await Artist.findAll({
@@ -144,6 +145,81 @@ const getArtists = async (req, res = response) => {
   }
 };
 
+// BUSCAR ARTISTA POR QUERY----------------------------------------------------------------------
+const getArtistByName = async (req, res = response) => {
+  try {
+    const { name } = req.query;
+
+    if (name) {
+      const artistName = await Artist.findOne({
+        where: { nickname: name.toLowerCase() },
+      });
+
+      if (!artistName || !artistName.state) {
+        return res.status(404).json({
+          ok: false,
+          msg: "No se encontró el usuario",
+        });
+      }
+
+      const eventsOfArtist = await Event.findAll({
+        where: { state: true },
+        include: [
+          {
+            model: Artist,
+            where: { id: artistName.id },
+          },
+        ],
+      });
+
+      return res.status(200).json({
+        ok: true,
+        msg: "Eventos encontrados",
+        eventsOfArtist,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Por favor hable con el administrador",
+    });
+  }
+};
+
+// VER ARTISTA POR ID ----------------------------------------------------------------------
+const getArtistById = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+
+    if (id) {
+      const artistID = await Artist.findOne({
+        where: { id: id },
+      });
+
+      if (!artistID || !artistID.state) {
+        return res.status(404).json({
+          ok: false,
+          msg: "No se encontró el usuario",
+        });
+      }
+
+      return res.status(200).json({
+        ok: true,
+        msg: "Usuario encontrado",
+        artistID,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Por favor hable con el administrador",
+    });
+  }
+};
+
+// ACTUALIZAR INFORMACION ARTISTAS ----------------------------------------------------------------------
 const updateArtist = async (req, res = response) => {
   try {
     const { id } = req.params;
@@ -172,6 +248,7 @@ const updateArtist = async (req, res = response) => {
   }
 };
 
+// BORRAR ARTISTA ----------------------------------------------------------------------
 const deleteArtist = async (req, res = response) => {
   const { id } = req.params;
   try {
@@ -199,6 +276,7 @@ const deleteArtist = async (req, res = response) => {
   }
 };
 
+// TOKEN ----------------------------------------------------------------------
 const renewToken = async (req, res = response) => {
   const { uid, name } = req;
 
@@ -220,4 +298,6 @@ module.exports = {
   updateArtist,
   deleteArtist,
   renewToken,
+  getArtistByName,
+  getArtistById,
 };
