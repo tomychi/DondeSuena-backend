@@ -146,46 +146,48 @@ const getArtists = async (req, res = response) => {
 };
 
 // BUSCAR ARTISTA POR QUERY----------------------------------------------------------------------
-const getArtistByName = async (req, res = response) => {
-  try {
-    const { name } = req.query;
+// const getArtistByName = async (req, res = response) => {
+//   try {
+//     const { name } = req.query;
 
-    if (name) {
-      const artistName = await Artist.findOne({
-        where: { nickname: name.toLowerCase() },
-      });
+//     if (name) {
+//       let nameArtist = name.toLowerCase();
+//       console.log(nameArtist);
+//       const artistName = await Artist.findOne({
+//         where: { firstName: nameArtist },
+//       });
 
-      if (!artistName || !artistName.state) {
-        return res.status(404).json({
-          ok: false,
-          msg: "No se encontró el usuario",
-        });
-      }
+//       if (!artistName || !artistName.state) {
+//         return res.status(404).json({
+//           ok: false,
+//           msg: "No se encontró el usuario",
+//         });
+//       }
 
-      const eventsOfArtist = await Event.findAll({
-        where: { state: true },
-        include: [
-          {
-            model: Artist,
-            where: { id: artistName.id },
-          },
-        ],
-      });
+//       const eventsOfArtist = await Event.findAll({
+//         where: { state: true },
+//         include: [
+//           {
+//             model: Artist,
+//             where: { id: artistName.id },
+//           },
+//         ],
+//       });
 
-      return res.status(200).json({
-        ok: true,
-        msg: "Eventos encontrados",
-        eventsOfArtist,
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      ok: false,
-      msg: "Por favor hable con el administrador",
-    });
-  }
-};
+//       return res.status(200).json({
+//         ok: true,
+//         msg: "Eventos encontrados",
+//         eventsOfArtist,
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       ok: false,
+//       msg: "Por favor hable con el administrador",
+//     });
+//   }
+// };
 
 // VER ARTISTA POR ID ----------------------------------------------------------------------
 const getArtistById = async (req, res = response) => {
