@@ -39,18 +39,24 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Artist, Post, User, Event, Place, Reaction, Genre, Ticket } = sequelize.models;
+const { Artist, User, Event, Place, Genre, Post, Like, Comment, Ticket } = sequelize.models;
 
 // Aca vendrían las relaciones
 /*
 Artist.hasMany(Post) // Artista muchos post
 Post.belongsTo(Artist) // Un Post pertenece a un artista
 
-User.hasMany(Reaction); // Usuario logueado muchas reacciones (likes y comentarios)
-Reaction.belongsTo(User); // Una Reacción pertenece a un usuario
+User.hasMany(Like); // Usuario logueado muchos likes
+Like.belongsTo(User); // Un Like pertenece a un usuario
 
-Post.hasMany(Reaction); // Post muchas reacciones
-Reaction.belongsTo(Post); // Una Reacción pertenece a un post
+User.hasMany(Comment); // Usuario logueado muchos comentarios
+Comment.belongsTo(User); // Un Comentario pertenece a un usuario
+
+Post.hasMany(Like); // Post muchos likes
+Like.belongsTo(Post); // Un Like pertenece a un post
+
+Post.hasMany(Comment); // Post muchos comentarios
+Comment.belongsTo(Post); // Un Comentario pertenece a un post
 
 Place.hasMany(Event); // Lugar muchos eventos
 Event.belongTo(Place); // Un Evento pertenece a un lugar
@@ -66,11 +72,17 @@ Ticket.belongTo(User); // Un Ticket pertenece a un usuario
 Artist.belongsToMany(Post, { through: "artists_posts" });
 Post.belongsToMany(Artist, { through: "artists_posts" });
 
-User.belongsToMany(Reaction, { through: "users_reactions" });
-Reaction.belongsToMany(User, { through: "users_reactions" });
+User.belongsToMany(Like, { through: "users_likes" });
+Like.belongsToMany(User, { through: "users_likes" });
 
-Post.belongsToMany(Reaction, { through: "posts_reactions" });
-Reaction.belongsToMany(Post, { through: "posts_reactions" });
+User.belongsToMany(Comment, { through: "users_comments" });
+Comment.belongsToMany(User, { through: "users_comments" });
+
+Post.belongsToMany(Like, { through: "posts_likes" });
+Like.belongsToMany(Post, { through: "posts_likes" });
+
+Post.belongsToMany(Comment, { through: "posts_comments" });
+Comment.belongsToMany(Post, { through: "posts_comments" });
 
 Artist.belongsToMany(Genre, { through: 'artists_genres' });
 Genre.belongsToMany(Artist, { through: 'artists_genres' });
