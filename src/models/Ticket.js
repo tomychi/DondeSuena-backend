@@ -5,17 +5,17 @@ module.exports = (sequelize) => {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
-            allowNull: false,
             primaryKey: true,
+            allowNull: false,
         },
         priceTotal: { // Suma el precio de todas las entradas para el Usuario
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        quantity: { // Cantidad de tickets para el Usuario (min1)
+        quantity: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 1
+            defaultValue: 1,
+            allowNull: false
         }
     },
         {

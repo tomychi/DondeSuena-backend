@@ -10,7 +10,7 @@ const createEvent = async (req, res = response) => {
         start,
         end,
         price,
-        quantity,
+        quotas,
         placeName,
         artistName,
         image,
@@ -33,7 +33,7 @@ const createEvent = async (req, res = response) => {
             start,
             end,
             price,
-            quantity,
+            quotas,
             image,
         });
 

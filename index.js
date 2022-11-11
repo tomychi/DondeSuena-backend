@@ -7,7 +7,6 @@ const {
     loadPlaces,
     loadArtists,
     loadGenres,
-    loadPosts,
 } = require('./src/controllers/loadsDatabase');
 
 const port = process.env.PORT || 3000;
@@ -18,7 +17,6 @@ conn.sync({ force: false }).then(async () => {
     loadArtists();
     loadPlaces();
     loadGenres();
-    loadPosts();
     server.listen(port, () => {
         console.log(`servidor corriendo en puerto: ${port}`); // eslint-disable-line no-console
     });

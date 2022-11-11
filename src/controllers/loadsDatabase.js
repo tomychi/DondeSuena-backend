@@ -3,7 +3,6 @@ const { Event } = require('../db');
 const { Place } = require('../db');
 const { Artist } = require('../db');
 const { Genre } = require('../db');
-const { Post } = require('../db');
 const path = require('path');
 const fs = require('fs');
 /* 
@@ -119,6 +118,7 @@ const loadGenres = async () => {
     }
 };
 
+
 const loadPosts = async () => {
     // leemos los posts del Posts.json
 
@@ -146,5 +146,4 @@ module.exports = {
     loadPlaces,
     loadArtists,
     loadGenres,
-    loadPosts,
 };
