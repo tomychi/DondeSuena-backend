@@ -1,22 +1,18 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define('reaction', {
+    sequelize.define('like', {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
-            allowNull: false,
             primaryKey: true,
+            allowNull: false,
         },
-        likes: {
+        like: {
             type: DataTypes.INTEGER,
+            defaultValue: 1,
             allowNull: false,
-            defaultValue: 0,
         },
-        comments: {
-            type: DataTypes.ARRAY(DataTypes.TEXT),
-            allowNull: false,
-        }
     },
         {
             timestamps: false,

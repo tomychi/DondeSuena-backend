@@ -3,7 +3,6 @@ const { Event } = require('../db');
 const { Place } = require('../db');
 const { Artist } = require('../db');
 const { Genre } = require('../db');
-const { Post } = require('../db');
 const path = require('path');
 const fs = require('fs');
 /* 
@@ -86,25 +85,10 @@ const loadGenres = async () => {
     }
 };
 
-const loadPosts = async () => {
-    // leemos los posts del Posts.json
-
-    try {
-        const posts = JSON.parse(
-            fs.readFileSync(path.join(__dirname, '../database/Posts.json'))
-        );
-        await Post.bulkCreate(posts);
-        console.log('posts cargados');
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 module.exports = {
     loadUsers,
     loadEvents,
     loadPlaces,
     loadArtists,
     loadGenres,
-    loadPosts,
 };

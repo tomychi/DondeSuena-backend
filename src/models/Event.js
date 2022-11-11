@@ -31,11 +31,11 @@ module.exports = (sequelize) => {
                 allowNull: false,
             },
             price: {
-                type: DataTypes.STRING,
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
-            quantity: {
-                type: DataTypes.STRING,
+            quotas: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
             },
             image: {

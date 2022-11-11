@@ -2,13 +2,11 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-// MODULARIZAR RUTAS
 
+// MODULARIZAR RUTAS
 const authUser = require('./routes/user.routes.js');
 const authArtist = require('./routes/artist.routes.js');
 const event = require('./routes/event.routes.js');
-const post = require('./routes/post.routes.js');
-const reaction = require('./routes/reaction.routes.js');
 const ticket = require('./routes/ticket.routes.js');
 const place = require('./routes/place.routes.js');
 
@@ -40,8 +38,6 @@ server.use((req, res, next) => {
 server.use('/auth', authUser);
 server.use('/auth', authArtist);
 server.use('/event', event);
-server.use('/post', post);
-server.use('/reaction', reaction);
 server.use('/ticket', ticket);
 server.use('/place', place);
 
