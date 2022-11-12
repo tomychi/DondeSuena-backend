@@ -7,7 +7,6 @@ const morgan = require('morgan');
 const authUser = require('./routes/user.routes.js');
 const authArtist = require('./routes/artist.routes.js');
 const event = require('./routes/event.routes.js');
-const ticket = require('./routes/ticket.routes.js');
 const place = require('./routes/place.routes.js');
 
 require('./db');
@@ -38,7 +37,6 @@ server.use((req, res, next) => {
 server.use('/auth', authUser);
 server.use('/auth', authArtist);
 server.use('/event', event);
-server.use('/ticket', ticket);
 server.use('/place', place);
 
 // Error catching endware.
