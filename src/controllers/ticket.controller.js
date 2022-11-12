@@ -1,13 +1,12 @@
 const { Ticket, Event, User } = require('../db');
 
-// CREATE TICKET ---------------------------------------------------------------------
 const createTicket = async (data) => {
     try {
         const { priceTotal, quantity, event, user } = data;
 
         const newTicket = await Ticket.create({
-            priceTotal, // relacionar con cantidad de entradas (ej: 1 ticket = $200// 2 tickets x $200 = $400)
-            quantity, // relacionar con quantity de tickets en el Evento
+            priceTotal,
+            quantity, 
         });
 
         const eventDB = await Event.findAll({
@@ -15,7 +14,7 @@ const createTicket = async (data) => {
         });
 
         const userDB = await User.findAll({
-            where: { nickname: user }
+            where: { firstName: user }
         });
 
         newTicket.addEvent(eventDB);
