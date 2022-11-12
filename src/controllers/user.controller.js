@@ -109,19 +109,19 @@ const renewToken = async (req, res = response) => {
 
 const googleSignIn = async (req, res = response) => {
     const { id_token } = req.body;
-
     try {
-        const { firstName, email, image, nickname, lastName } =
-            await googleVerify(id_token);
+        const { firstName, email, image } = await googleVerify(id_token);
 
         let user = await User.findOne({ where: { email } });
 
         if (!user) {
             // Crear usuario
             const data = {
+                lastName: firstName,
+                birthday: '1990-01-01',
+                phone: '123456789',
+                dni: '12345678',
                 firstName,
-                lastName,
-                nickname,
                 email,
                 password: 'xD',
                 image,
@@ -146,8 +146,7 @@ const googleSignIn = async (req, res = response) => {
         res.status(201).json({
             ok: true,
             msg: 'Google Sign In',
-            uid: user.id,
-            name: user.nickname,
+            user,
             token,
         });
     } catch (error) {
