@@ -1,4 +1,29 @@
-const { Comment, User, Post } = require('../db');
+const { Like, Comment, User, Post } = require('../db');
+
+const createLike = async (data) => {
+    try {
+        const { like, user, post } = data;
+
+        const newLike = await Like.create({
+            like,
+        });
+
+        const userDB = await User.findAll({
+            where: { firstName: user }
+        });
+
+        const postDB = await Post.findAll({
+            where: { title: post }
+        });
+
+        newLike.addUser(userDB);
+        newLike.addPost(postDB);
+        return newLike;
+
+    } catch (error) {
+        console.log('ERROR EN createLike', error);
+    }
+};
 
 const createComment = async (data) => {
     try {
@@ -9,7 +34,7 @@ const createComment = async (data) => {
         });
 
         const userDB = await User.findAll({
-            where: { nickname: user }
+            where: { firstName: user }
         });
 
         const postDB = await Post.findAll({
@@ -35,4 +60,4 @@ const createComment = async (data) => {
 //     }
 // };
 
-module.exports = { createComment };
+module.exports = { createLike, createComment };

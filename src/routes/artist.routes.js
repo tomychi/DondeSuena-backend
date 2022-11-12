@@ -17,8 +17,7 @@ const {
   getArtistById,
 } = require("../controllers/artist.controller");
 
-const { Post, Like, Comment } = require('../db');
-const { createPosts, getPostDB } = require('../controllers/post.controller');
+const { createPosts, getAllPosts, getPostById, editPost, deletePost } = require('../controllers/post.controller');
 
 router.post(
   "/registerArtist",
@@ -74,108 +73,19 @@ router.delete("/deleteArtist/:id", deleteArtist);
 router.get("/renew", validateJWT, renewToken);
 
 
-// RUTA POST -> Crear los posteos
-router.post('/artist/createPost', async (req, res) => {
-  try {
-    const data = req.body;
-    await createPosts(data);
-    res.status(200).send({ msg: '¡Tu post ha sido creado!' })
+// Artista crear post
+router.post('/artist/createPost', createPosts);
 
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA POST A /posts' }, error);
-  }
-});
+// Ver todos los posteos de los Artistas o buscar posteos por Artista (query) 
+router.get('/artist/getPosts', getAllPosts);
 
-// RUTA GET -> Traer todos los posts creados & por query 
-router.get('/artist/getPosts', async (req, res) => {
-  try {
-    const { name } = req.query;
+// Artista ve sus posteos por (id)
+router.get('/artist/getPost/:id', getPostById)
 
-    if (name) {
-      const findPost = await Post.findOne({
-        where: { title: name },
-        include: {
-          model: Like,
-          model: Comment,
-          // attibutes: ['nickname'],
-          // through: {
-          //   attibutes: [],
-          // },
-        }
-      });
-      findPost
-        ? res.status(200).send(findPost)
-        : res.status(404).send({ msg: 'Ese Post no existe' })
-    }
+// Actualizar post
+router.put('/artist/editPost/:id', editPost);
 
-    const allPosts = await Post.findAll({
-      include: [
-        { model: Like },
-        { model: Comment }
-        // attibutes: ['nickname'],
-        // through: {
-        //   attibutes: [],
-        // },
-      ]
-    });
-    res.status(200).send(allPosts)
-
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA GET A /posts' }, error);
-  }
-});
-
-// RUTA GET -> Traer un post específico
-router.get('/artist/getPost/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    let postId = await Post.findByPk(id, {
-      include: [
-        { model: Like },
-        { model: Comment }
-        // attibutes: ['nickname'],
-        // through: {
-        //   attibutes: [],
-        // },
-      ]
-    });
-    res.status(200).send(postId)
-
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA GET A /post/:id' }, error);
-  }
-});
-
-// RUTA PUT -> Actualizar post
-router.put('/artist/editPost/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const dataPost = req.body;
-
-    await Post.update(dataPost, {
-      where: { id: id }
-    });
-    res.send({ msg: 'Post actualizado' });
-
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA PUT A /post/:id' }, error);
-  }
-});
-
-// RUTA DELETE -> Eliminar post 
-router.delete('/artist/deletePost/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    await Post.destroy({
-      where: { id: id }
-    });
-    res.send({ msg: 'Post borrado' });
-
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /post/:id' }, error);
-  }
-});
+// Eliminar post 
+router.delete('/artist/deletePost/:id', deletePost);
 
 module.exports = router;

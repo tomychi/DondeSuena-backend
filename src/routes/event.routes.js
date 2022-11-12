@@ -48,19 +48,20 @@ router.put('/updateEvent/:id', updateEvent);
 router.put('/quitTickets/:id', async (req, res) => {
     try {
         let { id } = req.params;
-        let data = req.body;
+        let quantity = req.body.quantity;
         let event = await Event.findByPk(id);
 
-        if (event.quotas <= 0) {
-            res.status(404).send('No hay más tickets');
-        } else {
-            await event.update(data, {
-                // Arreglar esto
-                ...event,
-                quotas: event.quotas - data,
-            });
-            res.send('Update');
+        // if (event.quotas <= 0) {
+        //     res.status(404).send("No hay más tickets");
+        // }
+        // else {
+
+        await event.update(quantity, {
+            ...event,
+            quotas: event.quotas - quantity,
         }
+        );
+        res.send("Update");
     } catch (error) {
         res.status(400).send(
             { msg: 'ERROR EN RUTA PUT A /event/quitTickets/:id' },
