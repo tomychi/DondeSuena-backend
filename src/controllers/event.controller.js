@@ -67,9 +67,9 @@ const createEvent = async (req, res = response) => {
 
 const getEvents = async (req, res = response) => {
     const filter = req.query.filter || '';
-    const options = req.query.options || '';
+    // const options = req.query.options || '';
     try {
-        const events = await filterAllEvents(filter, options);
+        const events = await filterAllEvents(filter);
 
         if (events.length === 0) {
             return res.status(404).json({
