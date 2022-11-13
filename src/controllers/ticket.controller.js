@@ -1,12 +1,13 @@
+const { response } = require('express');
 const { Ticket, Event, User } = require('../db');
 
-const createTicket = async (data) => {
+const createTicket = async (req, res = response) => {
     try {
         const { priceTotal, quantity, event, user } = data;
 
         const newTicket = await Ticket.create({
             priceTotal,
-            quantity, 
+            quantity,
         });
 
         const eventDB = await Event.findAll({
@@ -19,11 +20,34 @@ const createTicket = async (data) => {
 
         newTicket.addEvent(eventDB);
         newTicket.addUser(userDB);
-        return newTicket;
+
+        res.status(201).json({
+            msg: `Tenés ${quantity} tickets para ir a ${event} `,
+            newTicket,
+        });
 
     } catch (error) {
-        console.log('ERROR EN createTicket', error);
+        res.status(500).send({ msg: 'Hable con el administrador' }, error);
     }
 };
 
-module.exports = { createTicket };
+const getTicket = async (req, res = response) => {
+    const { id } = req.params;
+
+    let ticketId = await Ticket.findByPk(id, {
+        include: {
+            model: Event,
+            attibutes: ['name'],
+            through: {
+                attributes: []
+            },
+        }
+    });
+    res.status(200).json({
+        msg: 'Estos son tus tickets',
+        ticketId,
+    });
+
+};
+
+module.exports = { createTicket, getTicket };

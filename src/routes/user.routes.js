@@ -16,6 +16,9 @@ const { validateJWT } = require('../middlewares/validate-jwt');
 const { Like, Comment } = require('../db');
 const { createLike, createComment } = require('../controllers/reactions.controller');
 
+const { createLike, createComment, deleteComment, deleteLike, editComment } = require('../controllers/reactions.controller');
+const { createTicket, getTicket } = require('../controllers/ticket.controller');
+
 router.post(
     '/registerUser',
     [
@@ -140,5 +143,28 @@ router.put('/user/editComment/:id', async (req, res) => {
     res.status(400).send({ msg: 'ERROR EN RUTA PUT A /user/editComment/:id' }, error);
   }
 });
+
+
+// Crear likes y comentarios
+router.post('/user/createLike', createLike);
+
+router.post('/user/createComment', createComment);
+
+// Eliminar like y comentario
+router.delete('/user/deleteLike/:id', deleteLike);
+
+router.delete('/user/deleteComment/:id', deleteComment);
+
+// Actualizar comentario
+router.put('/user/editComment/:id', editComment);
+
+// Crear ticket
+router.post('/user/createTicket', createTicket);
+
+// Ver ticket específico y su evento
+router.get('/user/getTicket/:id', getTicket);
+
+// Usuario ve todos sus tickets con sus eventos
+// router.get('/user/getTickets/:id', getTickets);
 
 module.exports = router;

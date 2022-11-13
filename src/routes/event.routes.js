@@ -62,6 +62,7 @@ router.put('/quitTickets/:id', async (req, res) => {
         }
         );
         res.send("Update");
+
     } catch (error) {
         res.status(400).send(
             { msg: 'ERROR EN RUTA PUT A /event/quitTickets/:id' },
