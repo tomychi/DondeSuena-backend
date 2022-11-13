@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Event, Place, Artist } = require('../db');
+const { Event, Artist } = require('../db');
 const { filterAllEvents } = require('../helpers/filterAllEvents');
 
 const createEvent = async (req, res = response) => {
@@ -11,9 +11,10 @@ const createEvent = async (req, res = response) => {
         end,
         price,
         quotas,
-        placeName,
         artistName,
         image,
+        city,
+        address,
     } = req.body;
 
     try {
@@ -26,6 +27,17 @@ const createEvent = async (req, res = response) => {
             });
         }
 
+        const artist = await Artist.findOne({
+            where: { nickname: artistName },
+        });
+
+        if (!artist) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro artista con ese nombre',
+            });
+        }
+
         const event = await Event.create({
             name,
             description,
@@ -35,30 +47,10 @@ const createEvent = async (req, res = response) => {
             price,
             quotas,
             image,
+            address,
+            city,
         });
-
-        const place = await Place.findOne({ where: { name: placeName } });
-        const artist = await Artist.findOne({
-            where: { nickname: artistName },
-        });
-
-        if (!place) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontro lugar con ese nombre',
-            });
-        }
-
-        if (!artist) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontro artista con ese nombre',
-            });
-        }
-
-        await event.addPlace(place);
         await event.addArtist(artist);
-
         res.status(201).json({
             ok: true,
             msg: 'Evento creado',
