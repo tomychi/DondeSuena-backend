@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/validate-fields');
-const { isDate } = require('../helpers/isDate');
+const { isDate, isFormatValid } = require('../helpers/isDate');
 const router = Router();
 
 const {
@@ -19,16 +19,13 @@ router.post(
     [
         check('name', 'El nombre es obligatorio').not().isEmpty(),
         check('description', 'La descripción es obligatoria').not().isEmpty(),
-        check('date', 'La fecha es obligatoria')
-            .not()
-            .isEmpty()
-            .custom((value) => {
-                const date = new Date(value);
-                if (date < new Date()) {
-                    throw new Error('La fecha debe ser mayor a la actual');
-                }
-                return true;
-            }),
+        check('date', 'La fecha es obligatoria').not().isEmpty(),
+        check('date', 'La fecha debe ser mayor a la fecha actual').custom(
+            isDate
+        ),
+        check('date', 'El formato de la fecha es incorrecto').custom(
+            isFormatValid
+        ),
         check('start', 'La hora de inicio es obligatoria').not().isEmpty(),
         check('price', 'El precio es obligatorio').not().isEmpty(),
         check('quotas', 'La cantidad es obligatoria').not().isEmpty(),
