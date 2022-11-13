@@ -19,14 +19,8 @@ module.exports = (sequelize) => {
                 allowNull: false,
             },
             date: {
-                type: DataTypes.DATE,
+                type: DataTypes.DATEONLY,
                 allowNull: false,
-                // get() {
-                //     return new Date(this.getDataValue('date'));
-                // },
-                // set(date) {
-                //     this.setDataValue('date', date.toISOString().split('T')[0]);
-                // },
             },
             start: {
                 type: DataTypes.TIME,
@@ -51,6 +45,14 @@ module.exports = (sequelize) => {
             state: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: true,
+            },
+            address: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            city: {
+                type: DataTypes.STRING,
+                allowNull: false,
             },
         },
 
