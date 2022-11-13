@@ -21,12 +21,12 @@ module.exports = (sequelize) => {
             date: {
                 type: DataTypes.DATE,
                 allowNull: false,
-                get() {
-                    return new Date(this.getDataValue('date'));
-                },
-                set(date) {
-                    this.setDataValue('date', date.toISOString().split('T')[0]);
-                },
+                // get() {
+                //     return new Date(this.getDataValue('date'));
+                // },
+                // set(date) {
+                //     this.setDataValue('date', date.toISOString().split('T')[0]);
+                // },
             },
             start: {
                 type: DataTypes.TIME,

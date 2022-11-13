@@ -11,6 +11,10 @@ module.exports = (sequelize) => {
         comment: {
             type: DataTypes.TEXT,
             allowNull: false,
+        },
+        enabled: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
         }
     },
         {

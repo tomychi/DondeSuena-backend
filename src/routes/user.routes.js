@@ -13,8 +13,8 @@ const {
 
 const { validateJWT } = require('../middlewares/validate-jwt');
 
-const { Like, Comment } = require('../db');
-const { createLike, createComment } = require('../controllers/reactions.controller');
+const { createLike, createComment, deleteComment, deleteLike, editComment } = require('../controllers/reactions.controller');
+const { createTicket, getTicket, getTickets } = require('../controllers/ticket.controller');
 
 router.post(
     '/registerUser',
@@ -73,72 +73,26 @@ router.post(
 router.get('/renew', validateJWT, renewToken);
 
 
-// RUTAS POST -> Crear likes y comentarios
-router.post('/user/createLike', async (req, res) => {
-  try {
-    const data = req.body;
-    await createLike(data);
-    res.status(200).send({ msg: '¡Me gusta!' });
+// Crear likes y comentarios
+router.post('/user/createLike', createLike);
 
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA POST A /user/createLike' }, error);
-  }
-});
+router.post('/user/createComment', createComment);
 
-router.post('/user/createComment', async (req, res) => {
-  try {
-    const data = req.body;
-    await createComment(data);
-    res.status(200).send({ msg: '¡Acabas de comentar!' });
+// Eliminar like y comentario
+router.delete('/user/deleteLike/:id', deleteLike);
 
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA POST A /user/createComment' }, error);
-  }
-});
+router.delete('/user/deleteComment/:id', deleteComment);
 
-// RUTAS DELETE -> Eliminar like y comentarios
-router.delete('/user/deleteLike/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
+// Actualizar comentario
+router.put('/user/editComment/:id', editComment);
 
-    await Like.destroy({
-      where: { id: id }
-    });
-    res.send({ msg: 'No me gusta' });
+// Crear ticket
+router.post('/user/createTicket', createTicket);
 
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /user/deleteLike/:id' }, error);
-  }
-});
+// Ver ticket específico y su evento
+router.get('/user/getTicket/:id', getTicket);
 
-router.delete('/user/deleteComment/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    await Comment.destroy({
-      where: { id: id }
-    });
-    res.send({ msg: 'Comentario eliminado' });
-
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA DELETE A /user/deleteComment/:id' }, error);
-  }
-});
-
-// RUTA PUT -> Actualizar comentario
-router.put('/user/editComment/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const edit = req.body;
-
-    await Comment.update(edit, {
-      where: { id: id }
-    });
-    res.send({ msg: 'Comentario editado' });
-
-  } catch (error) {
-    res.status(400).send({ msg: 'ERROR EN RUTA PUT A /user/editComment/:id' }, error);
-  }
-});
+// Usuario ve todos sus tickets con sus eventos
+router.get('/user/getTickets/:id', getTickets);
 
 module.exports = router;

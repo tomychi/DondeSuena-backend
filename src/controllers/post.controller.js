@@ -23,7 +23,7 @@ const createPosts = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' });
+        res.status(500).send({ msg: 'Hable con el administrador' }, error);
     }
 };
 
@@ -65,8 +65,6 @@ const getAllPosts = async (req, res = response) => {
         }
 
         else {
-
-
             const allPosts = await Post.findAll(
                 //{ where: { status: true } },
                 {
@@ -88,7 +86,6 @@ const getAllPosts = async (req, res = response) => {
                         }
                     ]
                 });
-
             res.status(200).json({
                 msg: 'Todos los post de los artistas',
                 allPosts,
@@ -96,7 +93,7 @@ const getAllPosts = async (req, res = response) => {
         }
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' });
+        res.status(500).send({ msg: 'Hable con el administrador' }, error);
     }
 };
 
@@ -135,7 +132,7 @@ const getPostById = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' });
+        res.status(500).send({ msg: 'Hable con el administrador' }, error);
     }
 };
 
@@ -164,7 +161,7 @@ const editPost = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' });
+        res.status(500).send({ msg: 'Hable con el administrador' }, error);
     }
 };
 
@@ -181,10 +178,10 @@ const deletePost = async (req, res = response) => {
         }
 
         await post.update({ enabled: false });
-        res.status(200).send({ msg: 'Post eliminado' });
+        res.status(201).send({ msg: 'Post eliminado' });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' });
+        res.status(500).send({ msg: 'Hable con el administrador' }, error);
     }
 };
 
