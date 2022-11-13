@@ -65,8 +65,6 @@ const getAllPosts = async (req, res = response) => {
         }
 
         else {
-
-
             const allPosts = await Post.findAll(
                 //{ where: { status: true } },
                 {
@@ -88,7 +86,6 @@ const getAllPosts = async (req, res = response) => {
                         }
                     ]
                 });
-
             res.status(200).json({
                 msg: 'Todos los post de los artistas',
                 allPosts,
