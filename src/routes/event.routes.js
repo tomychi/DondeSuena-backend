@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/validate-fields');
-const { Ticket, Event } = require('../db');
 
 const router = Router();
 
@@ -12,6 +11,8 @@ const {
     updateEvent,
     deleteEvent,
 } = require('../controllers/event.controller');
+
+// const { updateStockTickets } = require('../controllers/ticket.controller');
 
 router.post(
     '/createEvent',
@@ -44,31 +45,7 @@ router.delete('/deleteEvent/:id', deleteEvent);
 
 router.put('/updateEvent/:id', updateEvent);
 
-// RUTA PUT -> Actualizar cantidad de tickets del Evento
-router.put('/quitTickets/:id', async (req, res) => {
-    try {
-        let { id } = req.params;
-        let quantity = req.body.quantity;
-        let event = await Event.findByPk(id);
-
-        // if (event.quotas <= 0) {
-        //     res.status(404).send("No hay más tickets");
-        // }
-        // else {
-
-        await event.update(quantity, {
-            ...event,
-            quotas: event.quotas - quantity,
-        }
-        );
-        res.send("Update");
-
-    } catch (error) {
-        res.status(400).send(
-            { msg: 'ERROR EN RUTA PUT A /event/quitTickets/:id' },
-            error
-        );
-    }
-});
+// Actualizar cantidad de tickets del Evento
+// router.put('/updateStock/:id', updateStockTickets);
 
 module.exports = router;

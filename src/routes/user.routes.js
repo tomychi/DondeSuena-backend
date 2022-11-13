@@ -17,7 +17,7 @@ const { Like, Comment } = require('../db');
 const { createLike, createComment } = require('../controllers/reactions.controller');
 
 const { createLike, createComment, deleteComment, deleteLike, editComment } = require('../controllers/reactions.controller');
-const { createTicket, getTicket } = require('../controllers/ticket.controller');
+const { createTicket, getTicket, getTickets } = require('../controllers/ticket.controller');
 
 router.post(
     '/registerUser',
@@ -165,6 +165,6 @@ router.post('/user/createTicket', createTicket);
 router.get('/user/getTicket/:id', getTicket);
 
 // Usuario ve todos sus tickets con sus eventos
-// router.get('/user/getTickets/:id', getTickets);
+router.get('/user/getTickets/:id', getTickets);
 
 module.exports = router;

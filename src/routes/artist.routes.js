@@ -18,6 +18,7 @@ const {
 } = require("../controllers/artist.controller");
 
 const { createPosts, getAllPosts, getPostById, editPost, deletePost } = require('../controllers/post.controller');
+const { getEventsByTickets } = require('../controllers/ticket.controller');
 
 router.post(
   "/registerArtist",
@@ -87,5 +88,8 @@ router.put('/artist/editPost/:id', editPost);
 
 // Eliminar post 
 router.delete('/artist/deletePost/:id', deletePost);
+
+// Artista ve todos sus Eventos y los tickets
+router.get('/artist/getEvents', getEventsByTickets);
 
 module.exports = router;
