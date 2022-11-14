@@ -118,5 +118,17 @@
         "image": "https://loremflickr.com/640/480/business",
         "address": "Calle 10",
         "city": "La Plata"
+    },
+    {
+        "name": "Cosquin",
+        "description": "rock",
+        "date": "2022-11-14",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "561",
+        "quotas": "10",
+        "image": "https://loremflickr.com/640/480/business",
+        "address": "Calle 10",
+        "city": "La Plata"
     }
 ]
