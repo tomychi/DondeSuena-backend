@@ -1,7 +1,6 @@
 const { response } = require('express');
 const { Event, Artist } = require('../db');
 const { filterAllEvents } = require('../helpers/filterAllEvents');
-
 const createEvent = async (req, res = response) => {
     const {
         name,
@@ -69,6 +68,11 @@ const getEvents = async (req, res = response) => {
     const filter = req.query.filter || '';
     // const options = req.query.options || '';
     try {
+        const format = require('date-fns/format');
+        const addDays = require('date-fns/addDays');
+        // agregar 1 dia , 7 dias , 30 dias
+        const date = format(addDays(new Date(), 1), 'yyyy-MM-dd-HH:mm:ss');
+        console.log(date);
         const events = await filterAllEvents(filter);
 
         if (events.length === 0) {
