@@ -26,9 +26,13 @@ router.post(
         check('date', 'El formato de la fecha es incorrecto').custom(
             isFormatValid
         ),
+        check('genres', 'Los generos son obligatorios').not().isEmpty(),
         check('start', 'La hora de inicio es obligatoria').not().isEmpty(),
         check('price', 'El precio es obligatorio').not().isEmpty(),
         check('quotas', 'La cantidad es obligatoria').not().isEmpty(),
+        check('artistName', 'El nombre del artista es obligatorio')
+            .not()
+            .isEmpty(),
         validateFields,
     ],
     createEvent
