@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       date: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATEONLY,
         allowNull: false,
       },
       start: {
@@ -45,6 +45,14 @@ module.exports = (sequelize) => {
       state: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
 

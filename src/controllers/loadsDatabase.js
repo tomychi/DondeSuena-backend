@@ -118,28 +118,6 @@ const loadGenres = async () => {
     }
 };
 
-
-const loadPosts = async () => {
-    // leemos los posts del Posts.json
-
-    try {
-        // si ya hay posts en la base de datos, no cargar nada
-        const posts2 = await Post.findAll();
-        if (posts2.length) {
-            console.log('ya hay posts');
-            return;
-        }
-
-        const posts = JSON.parse(
-            fs.readFileSync(path.join(__dirname, '../database/Posts.json'))
-        );
-        await Post.bulkCreate(posts);
-        console.log('posts cargados');
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 module.exports = {
     loadUsers,
     loadEvents,
