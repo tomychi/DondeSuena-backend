@@ -9,10 +9,39 @@ const filterAllEvents = async ({
     city,
     address,
     artist,
+    // search,
 }) =>
     // { limit, offset }
     {
         let where = {};
+
+        // if (search) {
+        //     where = {
+        //         [Op.or]: [
+        //             {
+        //                 name: {
+        //                     [Op.iLike]: `%${search}%`,
+        //                 },
+        //             },
+        //             {
+        //                 description: {
+        //                     [Op.iLike]: `%${search}%`,
+        //                 },
+        //             },
+        //             {
+        //                 city: {
+        //                     [Op.iLike]: `%${search}%`,
+        //                 },
+        //             },
+        //             {
+        //                 address: {
+        //                     [Op.iLike]: `%${search}%`,
+        //                 },
+        //             },
+        //         ],
+        //     };
+        // }
+
         if (name) {
             where.name = {
                 [Op.iLike]: `%${name}%`,
