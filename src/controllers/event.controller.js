@@ -1,7 +1,6 @@
 const { response } = require('express');
-const { Event, Place, Artist } = require('../db');
-const { Op } = require('sequelize');
-
+const { Event, Artist } = require('../db');
+const { filterAllEvents } = require('../helpers/filterAllEvents');
 const createEvent = async (req, res = response) => {
     const {
         name,
@@ -11,9 +10,10 @@ const createEvent = async (req, res = response) => {
         end,
         price,
         quotas,
-        placeName,
         artistName,
         image,
+        city,
+        address,
     } = req.body;
 
     try {
@@ -26,6 +26,17 @@ const createEvent = async (req, res = response) => {
             });
         }
 
+        const artist = await Artist.findOne({
+            where: { nickname: artistName },
+        });
+
+        if (!artist) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro artista con ese nombre',
+            });
+        }
+
         const event = await Event.create({
             name,
             description,
@@ -35,30 +46,10 @@ const createEvent = async (req, res = response) => {
             price,
             quotas,
             image,
+            address,
+            city,
         });
-
-        const place = await Place.findOne({ where: { name: placeName } });
-        const artist = await Artist.findOne({
-            where: { nickname: artistName },
-        });
-
-        if (!place) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontro lugar con ese nombre',
-            });
-        }
-
-        if (!artist) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontro artista con ese nombre',
-            });
-        }
-
-        await event.addPlace(place);
         await event.addArtist(artist);
-
         res.status(201).json({
             ok: true,
             msg: 'Evento creado',
@@ -74,122 +65,26 @@ const createEvent = async (req, res = response) => {
 };
 
 const getEvents = async (req, res = response) => {
-    const nameArtist = req.query.nameArtist || '';
-    const location = req.query.location || '';
-    const limit = Number(req.query.limit);
-    const date = req.query.date || '';
+    const filter = req.query.filter || '';
+    // const options = req.query.options || '';
     try {
-        // buscar eventos por nombre del artista
-        if (nameArtist) {
-            const artist = await Artist.findOne({
-                where: {
-                    nickname: {
-                        [Op.iLike]: `%${nameArtist}%`,
-                    },
-                },
-            });
+        const format = require('date-fns/format');
+        const addDays = require('date-fns/addDays');
+        // agregar 1 dia , 7 dias , 30 dias
+        const date = format(addDays(new Date(), 1), 'yyyy-MM-dd-HH:mm:ss');
+        console.log(date);
+        const events = await filterAllEvents(filter);
 
-            if (!artist || !artist.state) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontro artista con ese nombre',
-                });
-            }
-
-            const events = await Event.findAll({
-                where: { state: true },
-                include: [
-                    {
-                        model: Artist,
-                        where: { id: artist.id },
-                        attributes: ['nickname'],
-                    },
-                ],
-            });
-
-            return res.status(200).json({
-                ok: true,
-                msg: 'Eventos encontrados',
-                events,
-            });
-        }
-
-        if (location) {
-            const place = await Place.findOne({
-                where: { city: location },
-            });
-
-            if (!place || !place.state) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontro lugar con ese nombre',
-                });
-            }
-
-            const events = await Event.findAll({
-                where: { state: true },
-                include: [
-                    {
-                        model: Place,
-                        where: { id: place.id },
-                        attributes: ['city'],
-                    },
-                ],
-            });
-
-            return res.status(200).json({
-                ok: true,
-                msg: 'Eventos encontrados',
-                events,
-            });
-        }
-
-        if (limit) {
-            const events = await Event.findAll({
-                limit,
-                where: {
-                    state: true,
-                },
-            });
-
-            return res.status(200).json({
-                ok: true,
-                msg: 'Eventos encontrados',
-                events,
-            });
-        }
-
-        if (date) {
-            const events = await Event.findAll({
-                where: {
-                    date: {
-                        [Op.iLike]: `%${date}%`,
-                    },
-                    state: true,
-                },
-            });
-
-            return res.status(200).json({
-                ok: true,
-                msg: 'Eventos encontrados',
-                events,
-            });
-        }
-
-        const events = await Event.findAll({
-            where: { state: true },
-        });
-
-        if (!events) {
+        if (events.length === 0) {
             return res.status(404).json({
                 ok: false,
                 msg: 'No se encontraron eventos',
             });
         }
 
-        res.status(200).json({
+        return res.status(200).json({
             ok: true,
-            msg: 'Lista de eventos',
+            msg: 'Eventos encontrados',
             events,
         });
     } catch (error) {
