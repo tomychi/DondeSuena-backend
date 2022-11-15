@@ -11,14 +11,20 @@ const {
   loginArtist,
   getArtists,
   updateArtist,
+  patchArtist,
   deleteArtist,
   renewToken,
-  getArtistByName,
   getArtistById,
 } = require("../controllers/artist.controller");
 
-const { createPosts, getAllPosts, getPostById, editPost, deletePost } = require('../controllers/post.controller');
-const { getEventsByTickets } = require('../controllers/ticket.controller');
+const {
+  createPosts,
+  getAllPosts,
+  getPostById,
+  editPost,
+  deletePost,
+} = require("../controllers/post.controller");
+const { getEventsByTickets } = require("../controllers/ticket.controller");
 
 router.post(
   "/registerArtist",
@@ -63,33 +69,32 @@ router.post(
 
 router.get("/getArtists", getArtists);
 
-router.get("/getArtistByName", getArtistByName);
-
 router.get("/getArtistById/:id", getArtistById);
 
 router.put("/updateArtist/:id", updateArtist);
+
+router.patch("/updateArtist/:id", patchArtist);
 
 router.delete("/deleteArtist/:id", deleteArtist);
 
 router.get("/renew", validateJWT, renewToken);
 
-
 // Artista crear post
-router.post('/artist/createPost', createPosts);
+router.post("/artist/createPost", createPosts);
 
-// Ver todos los posteos de los Artistas o buscar posteos por Artista (query) 
-router.get('/artist/getPosts', getAllPosts);
+// Ver todos los posteos de los Artistas o buscar posteos por Artista (query)
+router.get("/artist/getPosts", getAllPosts);
 
 // Artista ve sus posteos por (id)
-router.get('/artist/getPost/:id', getPostById)
+router.get("/artist/getPost/:id", getPostById);
 
 // Actualizar post
-router.put('/artist/editPost/:id', editPost);
+router.put("/artist/editPost/:id", editPost);
 
-// Eliminar post 
-router.delete('/artist/deletePost/:id', deletePost);
+// Eliminar post
+router.delete("/artist/deletePost/:id", deletePost);
 
 // Artista ve todos sus Eventos y los tickets
-router.get('/artist/getEvents', getEventsByTickets);
+router.get("/artist/getEvents", getEventsByTickets);
 
 module.exports = router;
