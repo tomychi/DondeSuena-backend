@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Event, Artist } = require('../db');
+const { Event, Artist, Genre } = require('../db');
 const { filterAllEvents } = require('../helpers/filterAllEvents');
 const createEvent = async (req, res = response) => {
     const {
@@ -11,13 +11,14 @@ const createEvent = async (req, res = response) => {
         price,
         quotas,
         artistName,
+        genres,
         image,
         city,
         address,
     } = req.body;
 
     try {
-        let eventExis = await Event.findOne({ where: { name } });
+        let eventExis = await Event.findOne({ where: { name }, state: true });
 
         if (eventExis) {
             return res.status(400).json({
@@ -29,6 +30,17 @@ const createEvent = async (req, res = response) => {
         const artist = await Artist.findOne({
             where: { nickname: artistName },
         });
+
+        const genresDb = await Genre.findAll({
+            where: { name: genres.map((g) => g) },
+        });
+
+        if (genresDb === null || genresDb.length === 0) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'El genero no existe',
+            });
+        }
 
         if (!artist) {
             return res.status(404).json({
@@ -50,6 +62,7 @@ const createEvent = async (req, res = response) => {
             city,
         });
         await event.addArtist(artist);
+        await event.addGenres(genresDb);
         res.status(201).json({
             ok: true,
             msg: 'Evento creado',
@@ -68,11 +81,6 @@ const getEvents = async (req, res = response) => {
     const filter = req.query.filter || '';
     // const options = req.query.options || '';
     try {
-        const format = require('date-fns/format');
-        const addDays = require('date-fns/addDays');
-        // agregar 1 dia , 7 dias , 30 dias
-        const date = format(addDays(new Date(), 1), 'yyyy-MM-dd-HH:mm:ss');
-        console.log(date);
         const events = await filterAllEvents(filter);
 
         if (events.length === 0) {

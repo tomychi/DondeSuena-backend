@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { Event, Artist } = require('../db');
+const { Event, Artist, Genre } = require('../db');
 
 const filterAllEvents = async ({
     name,
@@ -9,6 +9,7 @@ const filterAllEvents = async ({
     city,
     address,
     artist,
+    genre,
     // search,
 }) =>
     // { limit, offset }
@@ -113,6 +114,29 @@ const filterAllEvents = async ({
             }
         }
 
+        // buscamos el genero por su nombre en la tabla genre
+        if (genre) {
+            const genreFound = await Genre.findOne({
+                where: { name: genre, state: true },
+            });
+            if (genreFound) {
+                where.state = true;
+                const events = await Event.findAll({
+                    where,
+                    include: [
+                        {
+                            model: Genre,
+                            where: { id: genreFound.id },
+                            attributes: ['name'],
+                        },
+                    ],
+                    // limit,
+                    // offset,
+                });
+                return events;
+            }
+        }
+
         // si no viene ningun filtro, se devuelve todos los eventos
         if (
             !name &&
@@ -121,6 +145,7 @@ const filterAllEvents = async ({
             !endDate &&
             !city &&
             !address &&
+            !genre &&
             !artist
         ) {
             where = { state: true };
