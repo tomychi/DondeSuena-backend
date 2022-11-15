@@ -145,50 +145,6 @@ const getArtists = async (req, res = response) => {
   }
 };
 
-// BUSCAR ARTISTA POR QUERY----------------------------------------------------------------------
-const getArtistByName = async (req, res = response) => {
-  try {
-    const { name } = req.query;
-
-    if (name) {
-      let nameArtist = name.toLowerCase();
-      console.log(nameArtist);
-      const artistName = await Artist.findOne({
-        where: { firstName: nameArtist },
-      });
-
-      if (!artistName || !artistName.state) {
-        return res.status(404).json({
-          ok: false,
-          msg: "No se encontró el usuario",
-        });
-      }
-
-      const eventsOfArtist = await Event.findAll({
-        where: { state: true },
-        include: [
-          {
-            model: Artist,
-            where: { id: artistName.id },
-          },
-        ],
-      });
-
-      return res.status(200).json({
-        ok: true,
-        msg: "Eventos encontrados",
-        eventsOfArtist,
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      ok: false,
-      msg: "Por favor hable con el administrador",
-    });
-  }
-};
-
 // VER ARTISTA POR ID ----------------------------------------------------------------------
 const getArtistById = async (req, res = response) => {
   try {
@@ -223,6 +179,34 @@ const getArtistById = async (req, res = response) => {
 
 // ACTUALIZAR INFORMACION ARTISTAS ----------------------------------------------------------------------
 const updateArtist = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+    const artist = await Artist.findByPk(id);
+
+    if (!artist) {
+      return res.status(404).json({
+        ok: false,
+        msg: "No se encontró el usuario",
+      });
+    }
+
+    await artist.update(req.body);
+
+    res.status(200).json({
+      ok: true,
+      msg: "Usuario actualizado",
+      artist,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Por favor hable con el administrador",
+    });
+  }
+};
+
+const patchArtist = async (req, res = response) => {
   try {
     const { id } = req.params;
     const artist = await Artist.findByPk(id);
@@ -298,8 +282,8 @@ module.exports = {
   loginArtist,
   getArtists,
   updateArtist,
+  patchArtist,
   deleteArtist,
   renewToken,
-  getArtistByName,
   getArtistById,
 };

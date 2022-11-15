@@ -2,12 +2,12 @@ const { DataTypes, UUIDV4 } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define("favorite", {
-    // id: {
-    //   type: DataTypes.UUID,
-    //   defaultValue: UUIDV4,
-    //   primaryKey: true,
-    //   allowNull: false,
-    // },
+    id: {
+      type: DataTypes.STRING,
+      defaultValue: UUIDV4,
+      primaryKey: true,
+      allowNull: false,
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,

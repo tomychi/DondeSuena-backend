@@ -163,14 +163,7 @@ const artistFavorite = async (req, res = response) => {
   try {
     let artistFind = await Artist.findOne({ where: { id: id } });
 
-    if (artistFind) {
-      return res.status(400).json({
-        ok: false,
-        msg: "Este artista favorito ya existe",
-      });
-    }
-
-    const newFavorite = await Favorite.bulkCreate(artistFind.artistID);
+    const newFavorite = new Favorite(artistFind.dataValues);
 
     await newFavorite.save();
 
@@ -178,8 +171,39 @@ const artistFavorite = async (req, res = response) => {
       ok: true,
       msg: "Artista favorito creado",
       uid: newFavorite.id,
-      name: newArtist.firstName,
+      name: newFavorite.firstName,
     });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Por favor hable con el administrador",
+    });
+  }
+};
+
+const getFavoritesById = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+
+    if (id) {
+      const artistID = await Favorite.findOne({
+        where: { id: id },
+      });
+
+      if (!artistID || !artistID.state) {
+        return res.status(404).json({
+          ok: false,
+          msg: "No se encontró el usuario",
+        });
+      }
+
+      return res.status(200).json({
+        ok: true,
+        msg: "Usuario encontrado",
+        artistID,
+      });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -195,4 +219,5 @@ module.exports = {
   googleSignIn,
   renewToken,
   artistFavorite,
+  getFavoritesById,
 };
