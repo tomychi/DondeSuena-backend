@@ -157,7 +157,7 @@ const googleSignIn = async (req, res = response) => {
   }
 };
 
-const artistFavorite = async (req, res = response) => {
+const postFavoriteArtist = async (req, res = response) => {
   const { id } = req.params;
 
   try {
@@ -172,6 +172,31 @@ const artistFavorite = async (req, res = response) => {
       msg: "Artista favorito creado",
       uid: newFavorite.id,
       name: newFavorite.firstName,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Por favor hable con el administrador",
+    });
+  }
+};
+
+const getFavoritesArtists = async (req, res = response) => {
+  try {
+    const artistsFind = await Favorite.findAll();
+
+    if (!artistsFind) {
+      return res.status(404).json({
+        ok: false,
+        msg: "No se encontroraron los artistas favoritos",
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      msg: "Lista de artistas favoritos",
+      artistsFind,
     });
   } catch (error) {
     console.log(error);
@@ -218,6 +243,7 @@ module.exports = {
   loginUser,
   googleSignIn,
   renewToken,
-  artistFavorite,
+  postFavoriteArtist,
+  getFavoritesArtists,
   getFavoritesById,
 };

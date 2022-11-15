@@ -9,7 +9,8 @@ const {
   loginUser,
   renewToken,
   googleSignIn,
-  artistFavorite,
+  postFavoriteArtist,
+  getFavoritesArtists,
   getFavoritesById,
 } = require("../controllers/user.controller");
 
@@ -78,9 +79,11 @@ router.post(
   googleSignIn
 );
 
-router.post("/artistFavorite/:id", artistFavorite);
+router.post("/postFavoriteArtist/:id", postFavoriteArtist);
 
-router.get("/artistFavorite/:id", getFavoritesById);
+router.get("/getFavoritesArtists", getFavoritesArtists);
+
+router.get("/getFavoritesById/:id", getFavoritesById);
 
 router.get("/renew", validateJWT, renewToken);
 
