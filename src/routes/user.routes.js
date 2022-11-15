@@ -10,6 +10,7 @@ const {
   renewToken,
   googleSignIn,
   artistFavorite,
+  getFavoritesById,
 } = require("../controllers/user.controller");
 
 const { validateJWT } = require("../middlewares/validate-jwt");
@@ -78,6 +79,8 @@ router.post(
 );
 
 router.post("/artistFavorite/:id", artistFavorite);
+
+router.get("/artistFavorite/:id", getFavoritesById);
 
 router.get("/renew", validateJWT, renewToken);
 
