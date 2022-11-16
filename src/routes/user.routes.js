@@ -9,12 +9,25 @@ const {
     loginUser,
     renewToken,
     googleSignIn,
+    confirmationToken,
+    getUsers,
+    getUser,
 } = require('../controllers/user.controller');
 
 const { validateJWT } = require('../middlewares/validate-jwt');
 
-const { createLike, createComment, deleteComment, deleteLike, editComment } = require('../controllers/reactions.controller');
-const { createTicket, getTicket, getTickets } = require('../controllers/ticket.controller');
+const {
+    createLike,
+    createComment,
+    deleteComment,
+    deleteLike,
+    editComment,
+} = require('../controllers/reactions.controller');
+const {
+    createTicket,
+    getTicket,
+    getTickets,
+} = require('../controllers/ticket.controller');
 
 router.post(
     '/registerUser',
@@ -72,6 +85,11 @@ router.post(
 
 router.get('/renew', validateJWT, renewToken);
 
+router.get('/confirmation/:token', confirmationToken);
+
+router.get('/getUsers', getUsers);
+
+router.get('/getUser/:id', getUser);
 
 // Crear likes y comentarios
 router.post('/user/createLike', createLike);

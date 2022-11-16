@@ -3,6 +3,7 @@ const { User } = require('../db');
 const bcrypt = require('bcryptjs');
 const { generateJWT } = require('../helpers/jwt');
 const { googleVerify } = require('../helpers/google-verify');
+const nodemailer = require('nodemailer');
 
 const createUser = async (req, res = response) => {
     const { email, password, password2 } = req.body;
@@ -35,6 +36,35 @@ const createUser = async (req, res = response) => {
         // Generar JWT
         const token = await generateJWT(user.id, user.name);
 
+        // Enviar email de confirmación
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD,
+            },
+            port: 465,
+            host: 'smtp.gmail.com',
+            secure: true,
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: email,
+            subject: 'Confirmación de registro',
+            html: `<h1>Gracias por registrarte en DondeSuena</h1>
+            <p>Para confirmar tu registro haz click en el siguiente enlace</p>
+            <a href="http://localhost:3000/confirm/${token}">Confirmar registro</a>`,
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
         res.status(201).json({
             ok: true,
             msg: 'Usuario creado',
@@ -61,6 +91,13 @@ const loginUser = async (req, res = response) => {
             return res.status(400).json({
                 ok: false,
                 msg: 'El usuario no existe con ese email',
+            });
+        }
+
+        if (!user.confirmed) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'El usuario no ha confirmado su email',
             });
         }
 
@@ -157,9 +194,98 @@ const googleSignIn = async (req, res = response) => {
     }
 };
 
+const confirmationToken = async (req, res = response) => {
+    const { token } = req.params;
+
+    try {
+        const { uid } = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findByPk(uid);
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Usuario no existe',
+            });
+        }
+
+        if (user.confirmed) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Usuario ya confirmado',
+            });
+        }
+
+        user.confirmed = true;
+
+        await user.save();
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario confirmado',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
+const getUsers = async (req, res = response) => {
+    try {
+        const users = await User.findAll({
+            attributes: ['id', 'firstName', 'lastName', 'email', 'image'],
+        });
+
+        res.status(200).json({
+            ok: true,
+            users,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
+const getUser = async (req, res = response) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findByPk(id, {
+            attributes: ['id', 'firstName', 'lastName', 'email', 'image'],
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+
+                msg: 'Usuario no existe',
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            user,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
 module.exports = {
     createUser,
     loginUser,
     googleSignIn,
     renewToken,
+    confirmationToken,
+    getUsers,
+    getUser,
 };
