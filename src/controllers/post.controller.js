@@ -23,7 +23,11 @@ const createPosts = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
     }
 };
 
