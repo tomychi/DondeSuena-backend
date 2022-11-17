@@ -96,22 +96,13 @@ const loginUser = async (req, res = response) => {
             });
         }
 
-        if (!user.confirmed) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'El usuario no ha confirmado su email',
-            });
-        }
-
-        if (!artist.confirmed) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'El usuario no ha confirmado su email',
-            });
-        }
-
-        if (artist) {
-            // Confirmar los passwords
+        if (!!artist) {
+            if (!artist.confirmed) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El usuario no ha confirmado su email',
+                });
+            }
             const validPassword = bcrypt.compareSync(password, artist.password); // me compara el password que me llega con el hash que tengo en la base de datos
 
             if (!validPassword) {
@@ -133,24 +124,34 @@ const loginUser = async (req, res = response) => {
             });
         }
 
-        if (!validPassword) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'Contraseña incorrecta',
+        if (!!user) {
+            if (!user.confirmed) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El usuario no ha confirmado su email',
+                });
+            }
+            const validPassword = bcrypt.compareSync(password, user.password); // me compara el password que me llega con el hash que tengo en la base de datos
+
+            if (!validPassword) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Contraseña incorrecta',
+                });
+            }
+
+            // Generar JWT
+            const token = await generateJWT(user.id, user.email);
+
+            return res.status(201).json({
+                ok: true,
+                msg: 'Login',
+                uid: user.id,
+                email: user.email,
+                artista: false,
+                token,
             });
         }
-
-        // Generar JWT
-        const token = await generateJWT(user.id, user.email);
-
-        return res.status(201).json({
-            ok: true,
-            msg: 'Login',
-            uid: user.id,
-            email: user.email,
-            artista: false,
-            token,
-        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
