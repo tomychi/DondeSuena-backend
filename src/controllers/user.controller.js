@@ -87,8 +87,9 @@ const loginUser = async (req, res = response) => {
 
     try {
         const user = await User.findOne({ where: { email } });
+        const artist = await Artist.findOne({ where: { email } });
 
-        if (!user) {
+        if (!user && !artist) {
             return res.status(400).json({
                 ok: false,
                 msg: 'El usuario no existe con ese email',
@@ -102,8 +103,35 @@ const loginUser = async (req, res = response) => {
             });
         }
 
-        // Confirmar los passwords
-        const validPassword = bcrypt.compareSync(password, user.password); // me compara el password que me llega con el hash que tengo en la base de datos
+        if (!artist.confirmed) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'El usuario no ha confirmado su email',
+            });
+        }
+
+        if (artist) {
+            // Confirmar los passwords
+            const validPassword = bcrypt.compareSync(password, artist.password); // me compara el password que me llega con el hash que tengo en la base de datos
+
+            if (!validPassword) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Contraseña incorrecta',
+                });
+            }
+            // Generar JWT
+            const token = await generateJWT(user.id, artist.email);
+
+            return res.status(201).json({
+                ok: true,
+                msg: 'Login',
+                uid: artist.id,
+                email: artist.email,
+                artista: true,
+                token,
+            });
+        }
 
         if (!validPassword) {
             return res.status(400).json({
@@ -115,11 +143,12 @@ const loginUser = async (req, res = response) => {
         // Generar JWT
         const token = await generateJWT(user.id, user.email);
 
-        res.status(201).json({
+        return res.status(201).json({
             ok: true,
             msg: 'Login',
             uid: user.id,
             email: user.email,
+            artista: false,
             token,
         });
     } catch (error) {
