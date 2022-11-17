@@ -2,7 +2,13 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const authUser = require('./routes/auth.routes.js');
+
+// MODULARIZAR RUTAS
+const authUser = require('./routes/user.routes.js');
+const authArtist = require('./routes/artist.routes.js');
+const event = require('./routes/event.routes.js');
+const place = require('./routes/place.routes.js');
+const genres = require('./routes/genres.routes.js');
 
 require('./db');
 
@@ -16,7 +22,7 @@ server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());
 server.use(morgan('dev'));
 server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // update to match the domain you will make the request from
+    res.header('Access-Control-Allow-Origin', '*'); // update to match the domain you will make the request from
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header(
         'Access-Control-Allow-Headers',
@@ -30,6 +36,10 @@ server.use((req, res, next) => {
 });
 
 server.use('/auth', authUser);
+server.use('/auth', authArtist);
+server.use('/event', event);
+server.use('/place', place);
+server.use('/genres', genres);
 
 // Error catching endware.
 server.use((err, req, res, next) => {

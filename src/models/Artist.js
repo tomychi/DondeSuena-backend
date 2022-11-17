@@ -1,12 +1,12 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, UUIDV4 } = require('sequelize');
 
 module.exports = (sequelize) => {
-    sequelize.define('user', {
+    sequelize.define('artist', {
         id: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            allowNull: false,
+            defaultValue: UUIDV4,
             primaryKey: true,
+            allowNull: false,
         },
         firstName: {
             type: DataTypes.STRING,
@@ -16,38 +16,45 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        nickname: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false,
-        },
-        birthday: {
-            type: DataTypes.DATEONLY,
             allowNull: false,
         },
         phone: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        dni: {
+        description: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        isAdmin: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
+        twitter: {
+            type: DataTypes.STRING,
+            allowNull: true,
         },
-        google: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
+        instagram: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        spotify: {
+            type: DataTypes.STRING,
+            allowNull: true,
         },
         image: {
             type: DataTypes.STRING,
             allowNull: true,
+        },
+        google: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
         },
         state: {
             type: DataTypes.BOOLEAN,
