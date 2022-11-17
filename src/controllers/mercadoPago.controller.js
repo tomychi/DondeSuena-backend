@@ -5,6 +5,9 @@ const ruta_local = "http://localhost:3000/home";
 
 const crearOrden = async (req, res) => {
   // TOKEN VENDEDOR = TEST-278149704679461-111714-b31cf592f6bb901fa094f5dd10e62ff2-1241379948
+
+  const { quantity, priceTotal } = req.body;
+
   mercadopago.configure({
     access_token: ACCESS_TOKEN,
   });
@@ -13,9 +16,9 @@ const crearOrden = async (req, res) => {
     items: [
       {
         title: "Ticket",
-        quantity: 1,
+        quantity: quantity,
         currency_id: "ARS",
-        unit_price: 10,
+        unit_price: priceTotal,
       },
     ],
     back_urls: {
