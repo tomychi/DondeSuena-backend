@@ -9,6 +9,7 @@ const authArtist = require("./routes/artist.routes.js");
 const event = require("./routes/event.routes.js");
 const place = require("./routes/place.routes.js");
 const genres = require("./routes/genres.routes.js");
+const payment = require("./routes/mercadoPago.routes");
 
 require("./db");
 
@@ -37,6 +38,7 @@ server.use("/auth", authArtist);
 server.use("/event", event);
 server.use("/place", place);
 server.use("/genres", genres);
+server.use("/payment", payment);
 
 // Error catching endware.
 server.use((err, req, res, next) => {
