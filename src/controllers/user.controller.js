@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const { generateJWT } = require('../helpers/jwt');
 const { googleVerify } = require('../helpers/google-verify');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const createUser = async (req, res = response) => {
     const { email, password, password2 } = req.body;
@@ -34,7 +35,7 @@ const createUser = async (req, res = response) => {
         await user.save();
 
         // Generar JWT
-        const token = await generateJWT(user.id, user.name);
+        const token = await generateJWT(user.id, user.email);
 
         // Enviar email de confirmación
         const transporter = nodemailer.createTransport({
@@ -61,7 +62,7 @@ const createUser = async (req, res = response) => {
             if (error) {
                 console.log(error);
             } else {
-                console.log('Email sent: ' + info.response);
+                console.log('Email enviado');
             }
         });
 
@@ -69,7 +70,7 @@ const createUser = async (req, res = response) => {
             ok: true,
             msg: 'Usuario creado',
             uid: user.id,
-            name: user.name,
+            email: user.email,
             token,
         });
     } catch (error) {
@@ -78,7 +79,7 @@ const createUser = async (req, res = response) => {
             ok: false,
             msg: 'Por favor hable con el administrador',
         });
-  }
+    }
 };
 
 const loginUser = async (req, res = response) => {
@@ -112,13 +113,13 @@ const loginUser = async (req, res = response) => {
         }
 
         // Generar JWT
-        const token = await generateJWT(user.id, user.name);
+        const token = await generateJWT(user.id, user.email);
 
         res.status(201).json({
             ok: true,
             msg: 'Login',
             uid: user.id,
-            name: user.name,
+            email: user.email,
             token,
         });
     } catch (error) {
@@ -131,148 +132,148 @@ const loginUser = async (req, res = response) => {
 };
 
 const renewToken = async (req, res = response) => {
-  const { uid, name } = req;
+    const { uid, name } = req;
 
-  // Generar un nuevo JWT
-  const token = await generateJWT(uid, name);
-  res.status(201).json({
-    ok: true,
-    msg: "Renew",
-    uid,
-    name,
-    token,
-  });
+    // Generar un nuevo JWT
+    const token = await generateJWT(uid, name);
+    res.status(201).json({
+        ok: true,
+        msg: 'Renew',
+        uid,
+        name,
+        token,
+    });
 };
 
 const googleSignIn = async (req, res = response) => {
-  const { id_token } = req.body;
-  try {
-    const { firstName, email, image } = await googleVerify(id_token);
+    const { id_token } = req.body;
+    try {
+        const { firstName, email, image } = await googleVerify(id_token);
 
-    let user = await User.findOne({ where: { email } });
+        let user = await User.findOne({ where: { email } });
 
-    if (!user) {
-      // Crear usuario
-      const data = {
-        lastName: firstName,
-        birthday: "1990-01-01",
-        phone: "123456789",
-        dni: "12345678",
-        firstName,
-        email,
-        password: "xD",
-        image,
-        google: true,
-      };
+        if (!user) {
+            // Crear usuario
+            const data = {
+                lastName: firstName,
+                birthday: '1990-01-01',
+                phone: '123456789',
+                dni: '12345678',
+                firstName,
+                email,
+                password: 'xD',
+                image,
+                google: true,
+            };
 
-      user = new User(data);
-      await user.save();
+            user = new User(data);
+            await user.save();
+        }
+
+        // Si el usuario en DB
+        if (!user.state) {
+            return res.status(401).json({
+                ok: false,
+                msg: 'Hable con el administrador, usuario bloqueado',
+            });
+        }
+
+        // Generar JWT
+        const token = await generateJWT(user.id, user.nickname);
+        return res.status(201).json({
+            ok: true,
+            msg: 'Google Sign In',
+            user,
+            token,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({
+            ok: false,
+            msg: 'Token de Google no es válido',
+        });
     }
-
-    // Si el usuario en DB
-    if (!user.state) {
-      return res.status(401).json({
-        ok: false,
-        msg: "Hable con el administrador, usuario bloqueado",
-      });
-    }
-
-    // Generar JWT
-    const token = await generateJWT(user.id, user.nickname);
-    return res.status(201).json({
-      ok: true,
-      msg: "Google Sign In",
-      user,
-      token,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      ok: false,
-      msg: "Token de Google no es válido",
-    });
-  }
 };
 
 const postFavoriteArtist = async (req, res = response) => {
-  const { id } = req.params;
+    const { id } = req.params;
 
-  try {
-    let artistFind = await Artist.findOne({ where: { id: id } });
+    try {
+        let artistFind = await Artist.findOne({ where: { id: id } });
 
-    const newFavorite = new Favorite(artistFind.dataValues);
+        const newFavorite = new Favorite(artistFind.dataValues);
 
-    await newFavorite.save();
+        await newFavorite.save();
 
-    res.status(201).json({
-      ok: true,
-      msg: "Artista favorito creado",
-      uid: newFavorite.id,
-      name: newFavorite.firstName,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      ok: false,
-      msg: "Por favor hable con el administrador",
-    });
-  }
+        res.status(201).json({
+            ok: true,
+            msg: 'Artista favorito creado',
+            uid: newFavorite.id,
+            name: newFavorite.firstName,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
+    }
 };
 
 const getFavoritesArtists = async (req, res = response) => {
-  try {
-    const artistsFind = await Favorite.findAll();
+    try {
+        const artistsFind = await Favorite.findAll();
 
-    if (!artistsFind) {
-      return res.status(404).json({
-        ok: false,
-        msg: "No se encontroraron los artistas favoritos",
-      });
+        if (!artistsFind) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontroraron los artistas favoritos',
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Lista de artistas favoritos',
+            artistsFind,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
     }
-
-    res.status(200).json({
-      ok: true,
-      msg: "Lista de artistas favoritos",
-      artistsFind,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      ok: false,
-      msg: "Por favor hable con el administrador",
-    });
-  }
 };
 
 const getFavoritesById = async (req, res = response) => {
-  try {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    if (id) {
-      const artistID = await Favorite.findOne({
-        where: { id: id },
-      });
+        if (id) {
+            const artistID = await Favorite.findOne({
+                where: { id: id },
+            });
 
-      if (!artistID || !artistID.state) {
-        return res.status(404).json({
-          ok: false,
-          msg: "No se encontró el usuario",
+            if (!artistID || !artistID.state) {
+                return res.status(404).json({
+                    ok: false,
+                    msg: 'No se encontró el usuario',
+                });
+            }
+
+            return res.status(200).json({
+                ok: true,
+                msg: 'Usuario encontrado',
+                artistID,
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
         });
-      }
-
-      return res.status(200).json({
-        ok: true,
-        msg: "Usuario encontrado",
-        artistID,
-      });
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      ok: false,
-      msg: "Por favor hable con el administrador",
-    });
-  }
 };
 
 const confirmationToken = async (req, res = response) => {
@@ -303,6 +304,7 @@ const confirmationToken = async (req, res = response) => {
         res.status(200).json({
             ok: true,
             msg: 'Usuario confirmado',
+            user,
         });
     } catch (error) {
         console.log(error);
@@ -361,6 +363,103 @@ const getUser = async (req, res = response) => {
     }
 };
 
+const forgetPassword = async (req, res = response) => {
+    const { email } = req.body;
+    if (!email) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'nombre del usuario es requerido',
+        });
+    }
+    let verificationLink;
+    try {
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Usuario no existe',
+            });
+        }
+
+        const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+            expiresIn: '15m',
+        });
+        verificationLink = `http://localhost:3000/reset-password/${token}`;
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD,
+            },
+            port: 465,
+            host: 'smtp.gmail.com',
+            secure: true,
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: email,
+            subject: 'Reset Password',
+            html: `<h1>Click the link to reset your password</h1>
+            <a href=${verificationLink}>${verificationLink}</a>`,
+        };
+
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(info);
+            }
+        });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Email enviado',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
+const createNewPassword = async (req, res = response) => {
+    const { password } = req.body;
+    const { token } = req.params;
+
+    try {
+        const { id } = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Usuario no existe',
+            });
+        }
+
+        const salt = bcrypt.genSaltSync();
+        user.password = bcrypt.hashSync(password, salt);
+
+        await user.save();
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Contraseña actualizada',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
 module.exports = {
     createUser,
     loginUser,
@@ -372,4 +471,6 @@ module.exports = {
     postFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
+    forgetPassword,
+    createNewPassword,
 };
