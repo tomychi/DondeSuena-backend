@@ -15,7 +15,7 @@ const {
     postFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
-    
+    sendInvoice,
 } = require('../controllers/user.controller');
 
 const { validateJWT } = require("../middlewares/validate-jwt");
@@ -119,5 +119,8 @@ router.get("/user/getTicket/:id", getTicket);
 
 // Usuario ve todos sus tickets con sus eventos
 router.get("/user/getTickets/:id", getTickets);
+
+// Enviar correo con comprobante de compra
+router.post("/user/sendInvoice", sendInvoice);
 
 module.exports = router;

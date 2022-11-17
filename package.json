@@ -24,11 +24,8 @@
     "google-auth-library": "^8.7.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-<<<<<<< HEAD
     "nodemon": "^2.0.20",
-=======
     "nodemailer": "^6.8.0",
->>>>>>> 03e9638b835656648a0853b0a1a85a34f9129770
     "pg": "^8.8.0",
     "sequelize": "^6.25.5"
   },

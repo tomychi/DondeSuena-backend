@@ -361,6 +361,50 @@ const getUser = async (req, res = response) => {
     }
 };
 
+const sendInvoice = async (req, res = response) => {
+    const { name, email, ticket } = req.body;
+    try {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true,
+          auth: {
+              user: process.env.EMAIL,
+              pass: process.env.PASSWORD,
+          }
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: email,
+            subject: "Confirmación de Compra - Donde Suena?",
+            text: `
+                <h4>Hola ${name}!,</h4>
+                <p>Estamos muy agradecidos por tu compra en <b>DondeSuena?</b>, aquí estan los detalles de tu compra:</p>
+                `
+        }
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if(error){
+              res.status(500).send(error.message);
+          } else {
+              console.log("Email enviado");
+              res.status(200).json({
+                ok: true,
+                msg: info
+              })
+          }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+          ok: false,
+          msg: 'Hable con el administrador',
+        });
+    }
+}
+
 module.exports = {
     createUser,
     loginUser,
@@ -372,4 +416,5 @@ module.exports = {
     postFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
+    sendInvoice,
 };
