@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        nickname: {
+        dni: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -47,11 +47,15 @@ module.exports = (sequelize) => {
         },
         image: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         state: {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
+        },
+        confirmed: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
         },
     });
 };
