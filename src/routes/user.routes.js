@@ -15,6 +15,7 @@ const {
     postFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
+    sendInvoice,
     forgetPassword,
     createNewPassword,
 } = require('../controllers/user.controller');
@@ -128,5 +129,8 @@ router.get('/user/getTickets/:id', getTickets);
 router.put('/forget-password', forgetPassword);
 
 router.put('/new-password', createNewPassword);
+
+// Enviar correo con comprobante de compra
+router.post("/user/sendInvoice", sendInvoice);
 
 module.exports = router;
