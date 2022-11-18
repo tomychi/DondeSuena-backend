@@ -469,10 +469,15 @@ const forgetPassword = async (req, res = response) => {
             port: 465,
             host: 'smtp.gmail.com',
             secure: true,
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: email,
             subject: 'Reset Password',
             html: `<h1>Click the link to reset your password</h1>
             <a href=${verificationLink}>${verificationLink}</a>`,
-        })
+        };
 
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
