@@ -1,12 +1,12 @@
 const mercadopago = require("mercadopago");
 require("dotenv").config();
 const { ACCESS_TOKEN } = process.env;
-const ruta_local = "http://localhost:3000/home";
+const ruta_local = "http://localhost:3000/details/";
 
 const crearOrden = async (req, res) => {
   // TOKEN VENDEDOR = TEST-278149704679461-111714-b31cf592f6bb901fa094f5dd10e62ff2-1241379948
 
-  const { quantity, priceTotal } = req.body;
+  const { quantity, priceTotal, id } = req.body;
 
   mercadopago.configure({
     access_token: ACCESS_TOKEN,
@@ -22,9 +22,9 @@ const crearOrden = async (req, res) => {
       },
     ],
     back_urls: {
-      success: ruta_local,
-      failure: ruta_local,
-      pending: ruta_local,
+      success: `${ruta_local}${id}`,
+      failure: `${ruta_local}${id}`,
+      pending: `${ruta_local}${id}`,
     },
   };
 
