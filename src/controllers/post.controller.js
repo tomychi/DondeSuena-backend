@@ -23,11 +23,7 @@ const createPosts = async (req, res = response) => {
         });
 
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Hable con el administrador',
-        });
+        res.status(500).send({ msg: 'Hable con el administrador' }, error);
     }
 };
 
@@ -63,7 +59,7 @@ const getAllPosts = async (req, res = response) => {
                 ]
             });
             res.status(200).json({
-                msg: 'Estos son tus posteos',
+                msg: `Estos son los posteos de ${name}`,
                 findPosts
             })
         }
