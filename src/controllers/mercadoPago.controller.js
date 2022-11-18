@@ -26,6 +26,10 @@ const crearOrden = async (req, res) => {
       failure: `${ruta_local}${id}`,
       pending: `${ruta_local}${id}`,
     },
+    auto_return: "approved",
+    payment_methods: {
+      installments: 1
+    },
   };
 
   mercadopago.preferences
