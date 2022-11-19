@@ -130,23 +130,25 @@ const getEventsByTickets = async (req, res = response) => {
 
 const updateStockTickets = async (req, res = response) => {
     try {
-        let { id } = req.params;
-        let { quantity } = req.body;
+        let { quantity, id } = req.body;
         let event = await Event.findByPk(id);
 
-        if (event.quotas <= 0) {
+        if (parseInt(event.quotas) <= 0) {
             return res.status(404).send("No hay más tickets para el evento");
         }
 
         await event.update({
             ...event,
-            quotas: event.quotas - quantity, // - number
+            quotas: parseInt(event.quotas) - quantity, // - number
         });
 
         return res.status(201).send({ msg: "Se actualizó el stock de tickets para el Evento" });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        res.status(500).json({
+            msg: 'Hable con el administrador',
+            error
+        });
     }
 };
 

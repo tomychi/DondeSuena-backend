@@ -23,7 +23,7 @@ const crearOrden = async (req, res) => {
     ],
     back_urls: {
       success: `${ruta_local}${id}?purchasedQuantity=${quantity}`,
-      failure: `${ruta_local}${id}`,
+      failure: `${ruta_local}${id}?purchasedQuantity=${quantity}`,
       pending: `${ruta_local}${id}`,
     },
     auto_return: "approved",
