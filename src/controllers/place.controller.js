@@ -38,12 +38,11 @@ const createPlace = async (req, res = response) => {
 };
 
 const getPlaces = async (req, res = response) => {
-  const places = await Place.findAll({ where: { state: true } });
-
-  res.json({
-    ok: true,
-    places,
-  });
+    const places = await Place.findAll({ where: { state: true } });
+    res.json({
+        ok: true,
+        places,
+    });
 };
 
 const getPlace = async (req, res = response) => {
