@@ -59,7 +59,7 @@ const getAllPosts = async (req, res = response) => {
                 ]
             });
             res.status(200).json({
-                msg: 'Estos son tus posteos',
+                msg: `Estos son los posteos de ${name}`,
                 findPosts
             })
         }

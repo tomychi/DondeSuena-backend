@@ -88,7 +88,7 @@ const getTickets = async (req, res = response) => {
     }
 };
 
-// Artista ve todos sus eventos y tickets comprados
+// Artista ve todos sus eventos y tickets comprados (agregar usuarios)
 const getEventsByTickets = async (req, res = response) => {
     try {
         const { id } = req.params;
@@ -108,6 +108,12 @@ const getEventsByTickets = async (req, res = response) => {
                                 attributes: []
                             },
                         },
+                        {
+                            model: User, // funcionará?
+                            through: {
+                                attributes: []
+                            },
+                        }
                     ]
                 }
             ]
@@ -122,26 +128,27 @@ const getEventsByTickets = async (req, res = response) => {
     }
 };
 
-const updateStockTickets = async (req, res = response) => { // Probar
+const updateStockTickets = async (req, res = response) => {
     try {
-        let { id } = req.params;
-        let quantity = req.body.quantity;
+        let { quantity, id } = req.body;
         let event = await Event.findByPk(id);
 
-        if (event.quotas <= 0) {
-            res.status(404).send("No hay más tickets");
+        if (parseInt(event.quotas) <= 0) {
+            return res.status(404).send("No hay más tickets para el evento");
         }
-        else {
 
-            await event.update(quantity, {
-                ...event,
-                quotas: event.quotas - quantity,
-            }
-            );
-            res.status(200).send({ msg: "Se actualizó el stock de tickets para el Evento"});
-        }
+        await event.update({
+            ...event,
+            quotas: parseInt(event.quotas) - quantity, // - number
+        });
+
+        return res.status(201).send({ msg: "Se actualizó el stock de tickets para el Evento" });
+
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        res.status(500).json({
+            msg: 'Hable con el administrador',
+            error
+        });
     }
 };
 

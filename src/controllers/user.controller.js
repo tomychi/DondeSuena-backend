@@ -55,7 +55,9 @@ const createUser = async (req, res = response) => {
             subject: 'Confirmación de registro',
             html: `<h1>Gracias por registrarte en DondeSuena</h1>
             <p>Para confirmar tu registro haz click en el siguiente enlace</p>
-            <a href="http://localhost:3000/confirm/${token}">Confirmar registro</a>`,
+            <a href="${
+                process.env.FRONT_URL || 'http://localhost:3000'
+            }/confirm/${token}">Confirmar registro</a>`,
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -393,6 +395,50 @@ const getUser = async (req, res = response) => {
     }
 };
 
+const sendInvoice = async (req, res = response) => {
+    const { name, email, ticket } = req.body;
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL,
+            to: email,
+            subject: 'Confirmación de Compra - Donde Suena?',
+            text: `
+                <h4>Hola ${name}!,</h4>
+                <p>Estamos muy agradecidos por tu compra en <b>DondeSuena?</b>, aquí estan los detalles de tu compra:</p>
+                    `,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                res.status(500).send(error.message);
+            } else {
+                console.log('Email enviado');
+                res.status(200).json({
+                    ok: true,
+                    msg: info,
+                });
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
 const forgetPassword = async (req, res = response) => {
     const { email } = req.body;
     if (!email) {
@@ -415,7 +461,9 @@ const forgetPassword = async (req, res = response) => {
         const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: '15m',
         });
-        verificationLink = `http://localhost:3000/reset-password/${token}`;
+        // si existe FRONTEND_URL en el .env se usa, sino se usa localhost:3000
+        const url = process.env.FRONT_URL || 'http://localhost:3000';
+        verificationLink = `${url}/reset-password/${token}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -501,6 +549,7 @@ module.exports = {
     postFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
+    sendInvoice,
     forgetPassword,
     createNewPassword,
 };
