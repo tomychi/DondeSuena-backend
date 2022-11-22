@@ -275,7 +275,6 @@ const renewToken = async (req, res = response) => {
 
 module.exports = {
     createArtist,
-    loginArtist,
     getArtists,
     updateArtist,
     patchArtist,
