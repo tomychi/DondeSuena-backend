@@ -119,7 +119,7 @@ router.post("/user/createTicket", createTicket);
 // Ver ticket específico y su evento
 router.get("/user/getTicket/:id", getTicket);
 
-// Usuario ve todos sus tickets con sus eventos
+// Usuario ve todos sus tickets con los eventos
 router.get("/user/getTickets/:id", getTickets);
 
 router.put("/forget-password", forgetPassword);

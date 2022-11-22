@@ -27,7 +27,8 @@ const createTicket = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN createTicket", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
@@ -50,7 +51,8 @@ const getTicket = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN getTicket", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
@@ -84,11 +86,12 @@ const getTickets = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN getTickets", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
-// Artista ve todos sus eventos y tickets comprados
+// Artista ve todos sus eventos y tickets comprados (agregar usuarios)
 const getEventsByTickets = async (req, res = response) => {
     try {
         const { id } = req.params;
@@ -108,6 +111,12 @@ const getEventsByTickets = async (req, res = response) => {
                                 attributes: []
                             },
                         },
+                        {
+                            model: User, // funcionará?
+                            through: {
+                                attributes: []
+                            },
+                        }
                     ]
                 }
             ]
@@ -118,31 +127,52 @@ const getEventsByTickets = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN getEventsByTickets", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
-const updateStockTickets = async (req, res = response) => { // Probar
+const updateStockTickets = async (req, res = response) => {
     try {
-        let { id } = req.params;
-        let quantity = req.body.quantity;
+        let { quantity, id } = req.body;
         let event = await Event.findByPk(id);
 
-        if (event.quotas <= 0) {
-            res.status(404).send("No hay más tickets");
+        if (parseInt(event.quotas) <= 0) {
+            return res.status(404).send({
+                msg: "No hay más tickets para el evento"
+            });
         }
-        else {
 
-            await event.update(quantity, {
-                ...event,
-                quotas: event.quotas - quantity,
-            }
-            );
-            res.status(200).send({ msg: "Se actualizó el stock de tickets para el Evento"});
-        }
+        await event.update({
+            ...event,
+            quotas: parseInt(event.quotas) - quantity,
+        });
+
+        res.status(201).send({ msg: "Se actualizó el stock de tickets para el Evento" });
+
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN updateStockTickets", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
-module.exports = { createTicket, getTicket, getTickets, getEventsByTickets, updateStockTickets };
+const getStockTickets = async (req, res = response) => {
+    try {
+        let { id } = req.params;
+
+        let stock = await Event.findByPk(id, {
+            attributes: ['quotas']
+        });
+        res.status(200).json({
+            msg: 'Stock de tickets',
+            stock,
+        });
+
+
+    } catch (error) {
+        console.log("ERROR EN getStockTickets", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
+    }
+};
+
+module.exports = { createTicket, getTicket, getTickets, getEventsByTickets, updateStockTickets, getStockTickets };

@@ -3,7 +3,7 @@ const { Post, Artist, Like, Comment } = require('../db');
 
 const createPosts = async (req, res = response) => {
     try {
-        const { title, description, image, artists } = req.body;
+        const { title, description, image, artists } = req.body; 
 
         const post = await Post.create({
             title,
@@ -11,7 +11,7 @@ const createPosts = async (req, res = response) => {
             image,
         });
 
-        const artistsDB = await Artist.findAll({
+        const artistsDB = await Artist.findAll({ // artists debería ser por id
             where: { nickname: artists }
         });
 
@@ -23,11 +23,8 @@ const createPosts = async (req, res = response) => {
         });
 
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Hable con el administrador',
-        });
+        console.log("ERROR EN createPosts", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
@@ -62,8 +59,8 @@ const getAllPosts = async (req, res = response) => {
                     }
                 ]
             });
-            res.status(200).json({
-                msg: 'Estos son tus posteos',
+            return res.status(200).json({
+                msg: `Estos son los posteos de ${name}`,
                 findPosts
             })
         }
@@ -90,14 +87,15 @@ const getAllPosts = async (req, res = response) => {
                         }
                     ]
                 });
-            res.status(200).json({
+            return res.status(200).json({
                 msg: 'Todos los post de los artistas',
                 allPosts,
             });
         }
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN getAllPosts", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
@@ -136,7 +134,8 @@ const getPostById = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN getPostById", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
@@ -165,7 +164,8 @@ const editPost = async (req, res = response) => {
         });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN editPost", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
@@ -185,7 +185,8 @@ const deletePost = async (req, res = response) => {
         res.status(201).send({ msg: 'Post eliminado' });
 
     } catch (error) {
-        res.status(500).send({ msg: 'Hable con el administrador' }, error);
+        console.log("ERROR EN deletePost", error);
+        res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 

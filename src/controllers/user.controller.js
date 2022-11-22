@@ -55,7 +55,9 @@ const createUser = async (req, res = response) => {
       subject: "Confirmación de registro",
       html: `<h1>Gracias por registrarte en DondeSuena</h1>
             <p>Para confirmar tu registro haz click en el siguiente enlace</p>
-            <a href="http://localhost:3000/confirm/${token}">Confirmar registro</a>`,
+            <a href="${
+              process.env.FRONT_URL || "http://localhost:3000"
+            }/confirm/${token}">Confirmar registro</a>`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {

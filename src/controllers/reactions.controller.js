@@ -9,7 +9,7 @@ const createLike = async (req, res = response) => {
       like,
     });
 
-    const userDB = await User.findAll({
+    const userDB = await User.findAll({ // debería ser por id
       where: { firstName: user },
     });
 
@@ -24,8 +24,10 @@ const createLike = async (req, res = response) => {
       msg: "¡Me gusta!",
       newLike,
     });
+
   } catch (error) {
-    res.status(500).send({ msg: "Hable con el administrador" }, error);
+    console.log("ERROR EN createLike", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
 
@@ -37,7 +39,7 @@ const createComment = async (req, res = response) => {
       comment,
     });
 
-    const userDB = await User.findAll({
+    const userDB = await User.findAll({ // debería ser por id
       where: { firstName: user },
     });
 
@@ -52,8 +54,10 @@ const createComment = async (req, res = response) => {
       msg: "¡Acabas de comentar!",
       newComment,
     });
+
   } catch (error) {
-    res.status(500).send({ msg: "Hable con el administrador" }, error);
+    console.log("ERROR EN createLike", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
 
@@ -61,23 +65,27 @@ const deleteLike = async (req, res = response) => {
   try {
     const { id } = req.params;
 
-    await Like.destroy({
-      where: { id: id },
-    });
-    res.status(201).send({ msg: "No me gusta" });
+    await Like.destroy({ where: { id: id } });
+    res.status(201).send({ msg: "Ya no te gusta" });
+
   } catch (error) {
-    res.status(500).send({ msg: "Hable con el administrador" }, error);
+    console.log("ERROR EN deleteLike", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
 
+// Borrado lógico
 const deleteComment = async (req, res = response) => {
   try {
     const { id } = req.params;
+    let comment = await Comment.findByPk(id);
 
-    await Comment.update({ enabled: false });
+    await comment.update({ enabled: false });
     res.status(201).send({ msg: "Comentario eliminado" });
+
   } catch (error) {
-    res.status(500).send({ msg: "Hable con el administrador" }, error);
+    console.log("ERROR EN deleteComment", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
 
@@ -85,7 +93,6 @@ const editComment = async (req, res = response) => {
   try {
     const { id } = req.params;
     const { comment } = req.body;
-
     const edit = await Comment.findByPk(id);
 
     if (!edit) {
@@ -94,15 +101,15 @@ const editComment = async (req, res = response) => {
       });
     }
 
-    await edit.update({
-      comment,
-    });
+    await edit.update({ comment });
     res.status(201).json({
       msg: "Comentario editado",
       edit,
     });
+
   } catch (error) {
-    res.status(500).send({ msg: "Hable con el administrador" }, error);
+    console.log("ERROR EN editComment", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
 
