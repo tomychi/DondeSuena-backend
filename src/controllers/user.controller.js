@@ -102,7 +102,7 @@ const loginUser = async (req, res = response) => {
             if (!artist.confirmed) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'El usuario no ha confirmado su email',
+                    msg: 'El Artista no ha confirmado su email',
                 });
             }
             const validPassword = bcrypt.compareSync(password, artist.password); // me compara el password que me llega con el hash que tengo en la base de datos
@@ -114,13 +114,20 @@ const loginUser = async (req, res = response) => {
                 });
             }
             // Generar JWT
-            const token = await generateJWT(user.id, artist.email);
+            const token = await generateJWT(artist.id, artist.email);
 
             return res.status(201).json({
                 ok: true,
                 msg: 'Login',
                 uid: artist.id,
                 email: artist.email,
+                image: artist.image,
+                spotify: artist.spotify,
+                twitter: artist.twitter,
+                instagram: artist.instagram,
+                nickname: artist.nickname,
+                description: artist.description,
+                phone: artist.phone,
                 artista: true,
                 token,
             });
@@ -150,6 +157,9 @@ const loginUser = async (req, res = response) => {
                 msg: 'Login',
                 uid: user.id,
                 email: user.email,
+                image: user.image,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 artista: false,
                 token,
             });
@@ -461,7 +471,6 @@ const forgetPassword = async (req, res = response) => {
         const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: '15m',
         });
-        // si existe FRONTEND_URL en el .env se usa, sino se usa localhost:3000
         const url = process.env.FRONT_URL || 'http://localhost:3000';
         verificationLink = `${url}/reset-password/${token}`;
 
