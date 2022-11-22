@@ -172,7 +172,6 @@ const loginUser = async (req, res = response) => {
         });
     }
 };
-
 const renewToken = async (req, res = response) => {
     const { uid, name } = req;
 
@@ -239,13 +238,17 @@ const googleSignIn = async (req, res = response) => {
 
 const postFavoriteArtist = async (req, res = response) => {
     const { id } = req.params;
+    const userId = req.query.userId;
 
     try {
         let artistFind = await Artist.findOne({ where: { id: id } });
+        let userFind = await User.findOne({ where: { id: userId } });
 
         const newFavorite = new Favorite(artistFind.dataValues);
 
         await newFavorite.save();
+
+        await userFind.addFavorite(newFavorite);
 
         res.status(201).json({
             ok: true,
@@ -471,8 +474,7 @@ const forgetPassword = async (req, res = response) => {
         const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: '15m',
         });
-        const url = process.env.FRONT_URL || 'http://localhost:3000';
-        verificationLink = `${url}/reset-password/${token}`;
+        verificationLink = `http://localhost:3000/reset-password/${token}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
