@@ -3,11 +3,12 @@ const { Ticket, Event, User, Artist } = require('../db');
 
 const createTicket = async (req, res = response) => {
     try {
-        const { priceTotal, quantity, event, user } = req.body;
+        const { priceTotal, quantity, date, event, user } = req.body;
 
         const newTicket = await Ticket.create({
             priceTotal,
             quantity,
+            date,
         });
 
         const eventDB = await Event.findAll({
@@ -61,17 +62,18 @@ const getTickets = async (req, res = response) => {
         const { id } = req.params;
 
         let allTickets = await User.findByPk(id, {
+            attributes: ['firstName'],
             include: [
                 {
                     model: Ticket,
-                    attributes: ["priceTotal", "quantity"],
+                    attributes: ["priceTotal", "quantity", "date"],
                     through: {
                         attributes: []
                     },
                     include: [
                         {
                             model: Event,
-                            attributes: ["name"],
+                            attributes: ["name", "date"],
                             through: {
                                 attributes: []
                             },
@@ -97,10 +99,11 @@ const getEventsByTickets = async (req, res = response) => {
         const { id } = req.params;
 
         let events = await Artist.findByPk(id, {
+            attributes: ["nickname"],
             include: [
                 {
                     model: Event,
-                    attributes: ["name"],
+                    attributes: ["name", "date"],
                     through: {
                         attributes: []
                     },
@@ -167,7 +170,6 @@ const getStockTickets = async (req, res = response) => {
             msg: 'Stock de tickets',
             stock,
         });
-
 
     } catch (error) {
         console.log("ERROR EN getStockTickets", error);
