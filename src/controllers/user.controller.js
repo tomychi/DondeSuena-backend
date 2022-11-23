@@ -475,18 +475,30 @@ const forgetPassword = async (req, res = response) => {
     let verificationLink;
     try {
         const user = await User.findOne({ where: { email } });
+        const artist = await Artist.findOne({ where: { email } });
 
-        if (!user) {
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
+        let token;
+        if (user) {
+            token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+                expiresIn: '15m',
+            });
+            verificationLink = process.env.FRONT_URL || 'http://localhost:3000';
+        }
 
-        const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: '15m',
-        });
-        verificationLink = `http://localhost:3000/reset-password/${token}`;
+        if (artist) {
+            token = await jwt.sign({ id: artist.id }, process.env.JWT_SECRET, {
+                expiresIn: '15m',
+            });
+            verificationLink = process.env.FRONT_URL || 'http://localhost:3000';
+        }
+
+        verificationLink = `${verificationLink}/reset-password/${token}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -504,14 +516,14 @@ const forgetPassword = async (req, res = response) => {
             to: email,
             subject: 'Reset Password',
             html: `<h1>Click the link to reset your password</h1>
-            <a href=${verificationLink}>${verificationLink}</a>`,
+            <a href=${verificationLink}>Click Here</a>`,
         };
 
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err);
             } else {
-                console.log(info);
+                console.log('Email enviado');
             }
         });
 
@@ -535,18 +547,26 @@ const createNewPassword = async (req, res = response) => {
     try {
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findByPk(id);
+        const artist = await Artist.findByPk(id);
 
-        if (!user) {
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
 
-        const salt = bcrypt.genSaltSync();
-        user.password = bcrypt.hashSync(password, salt);
+        if (user) {
+            const salt = bcrypt.genSaltSync();
+            user.password = bcrypt.hashSync(password, salt);
+            await user.save();
+        }
 
-        await user.save();
+        if (artist) {
+            const salt = bcrypt.genSaltSync();
+            artist.password = bcrypt.hashSync(password, salt);
+            await artist.save();
+        }
 
         res.status(200).json({
             ok: true,
