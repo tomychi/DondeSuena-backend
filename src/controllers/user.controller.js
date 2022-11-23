@@ -102,7 +102,7 @@ const loginUser = async (req, res = response) => {
             if (!artist.confirmed) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'El usuario no ha confirmado su email',
+                    msg: 'El Artista no ha confirmado su email',
                 });
             }
             const validPassword = bcrypt.compareSync(password, artist.password); // me compara el password que me llega con el hash que tengo en la base de datos
@@ -114,13 +114,20 @@ const loginUser = async (req, res = response) => {
                 });
             }
             // Generar JWT
-            const token = await generateJWT(user.id, artist.email);
+            const token = await generateJWT(artist.id, artist.email);
 
             return res.status(201).json({
                 ok: true,
                 msg: 'Login',
                 uid: artist.id,
                 email: artist.email,
+                image: artist.image,
+                spotify: artist.spotify,
+                twitter: artist.twitter,
+                instagram: artist.instagram,
+                nickname: artist.nickname,
+                description: artist.description,
+                phone: artist.phone,
                 artista: true,
                 token,
             });
@@ -150,6 +157,9 @@ const loginUser = async (req, res = response) => {
                 msg: 'Login',
                 uid: user.id,
                 email: user.email,
+                image: user.image,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 artista: false,
                 token,
             });
@@ -162,7 +172,6 @@ const loginUser = async (req, res = response) => {
         });
     }
 };
-
 const renewToken = async (req, res = response) => {
     const { uid, name } = req;
 
@@ -229,13 +238,17 @@ const googleSignIn = async (req, res = response) => {
 
 const postFavoriteArtist = async (req, res = response) => {
     const { id } = req.params;
+    const userId = req.query.userId;
 
     try {
         let artistFind = await Artist.findOne({ where: { id: id } });
+        let userFind = await User.findOne({ where: { id: userId } });
 
         const newFavorite = new Favorite(artistFind.dataValues);
 
         await newFavorite.save();
+
+        await userFind.addFavorite(newFavorite);
 
         res.status(201).json({
             ok: true,
@@ -461,9 +474,7 @@ const forgetPassword = async (req, res = response) => {
         const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
             expiresIn: '15m',
         });
-        // si existe FRONTEND_URL en el .env se usa, sino se usa localhost:3000
-        const url = process.env.FRONT_URL || 'http://localhost:3000';
-        verificationLink = `${url}/reset-password/${token}`;
+        verificationLink = `http://localhost:3000/reset-password/${token}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
