@@ -11,6 +11,7 @@ const event = require("./routes/event.routes.js");
 const place = require("./routes/place.routes.js");
 const genres = require("./routes/genres.routes.js");
 const payment = require("./routes/mercadoPago.routes");
+const team = require("./routes/team.routes");
 
 require("./db");
 
@@ -40,6 +41,7 @@ server.use("/event", event);
 server.use("/place", place);
 server.use("/genres", genres);
 server.use("/payment", payment);
+server.use("/team", team);
 
 // Error catching endware.
 server.use((err, req, res, next) => {

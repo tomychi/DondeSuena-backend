@@ -1,0 +1,82 @@
+[
+    {
+        "firstName": "Alexis",
+        "lastName": "Uriarte",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/96738027?v=4",
+        "urlGithub":"https://github.com/Auriarte20",
+        "urlLinkedin": "https://www.linkedin.com/in/aouriarte/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Diamela",
+        "lastName": "Lares",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/102709669?v=4",
+        "urlGithub":"https://github.com/diamecjs",
+        "urlLinkedin": "https://www.linkedin.com/in/diamela-lares-/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Ezequiel",
+        "lastName": "Ramirez",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/99307067?v=4",
+        "urlGithub":"https://github.com/Eze-lp",
+        "urlLinkedin": "https://www.linkedin.com/in/ezequiel-agust%C3%ADn-ramirez-02761821b/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Lautaro",
+        "lastName": "Santillan",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/95645590?v=4",
+        "urlGithub":"https://github.com/LautiSantillan",
+        "urlLinkedin": "https://www.linkedin.com/in/lauti-santillan/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Martin",
+        "lastName": "Fernandez",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/80604716?v=4",
+        "urlGithub":"https://github.com/martinsosafer",
+        "urlLinkedin": "https://www.linkedin.com/in/martin-fernandez-53917b245/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Martin",
+        "lastName": "Canolik",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/103837223?v=4",
+        "urlGithub":"https://github.com/MartinCanolik",
+        "urlLinkedin": "https://www.linkedin.com/in/martin-canolik/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Tomas",
+        "lastName": "Arconstanzo",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/68086535?v=4",
+        "urlGithub":"https://github.com/tomychi",
+        "urlLinkedin": "https://www.linkedin.com/in/tom%C3%A1s-arcostanzo-4a1b50162/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Willians",
+        "lastName": "Jimenez",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/97689379?v=4",
+        "urlGithub":"https://github.com/williansaaid007",
+        "urlLinkedin": "https://www.linkedin.com/in/willians-jimenez-0a6bb8248/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    }
+]
