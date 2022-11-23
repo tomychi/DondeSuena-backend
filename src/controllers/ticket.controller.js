@@ -99,10 +99,11 @@ const getEventsByTickets = async (req, res = response) => {
         const { id } = req.params;
 
         let events = await Artist.findByPk(id, {
+            attributes: ["nickname"],
             include: [
                 {
                     model: Event,
-                    attributes: ["name"],
+                    attributes: ["name", "date"],
                     through: {
                         attributes: []
                     },
