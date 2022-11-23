@@ -1,6 +1,8 @@
 const { response } = require('express');
 const { Artist, Genre, Event } = require('../db');
 const bcrypt = require('bcryptjs');
+const { generateJWT } = require('../helpers/jwt');
+const nodemailer = require('nodemailer');
 
 // CREAR ARTISTA ----------------------------------------------------------------------
 const createArtist = async (req, res = response) => {
