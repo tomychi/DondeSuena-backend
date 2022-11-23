@@ -168,7 +168,6 @@ const getStockTickets = async (req, res = response) => {
             stock,
         });
 
-
     } catch (error) {
         console.log("ERROR EN getStockTickets", error);
         res.status(500).send({ msg: "Hable con el administrador" });
