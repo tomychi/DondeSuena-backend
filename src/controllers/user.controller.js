@@ -327,24 +327,36 @@ const confirmationToken = async (req, res = response) => {
     try {
         const { uid } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findByPk(uid);
+        const artist = await Artist.findByPk(uid);
 
-        if (!user) {
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
 
-        if (user.confirmed) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'Usuario ya confirmado',
-            });
+        if (user) {
+            if (user.confirmed) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Usuario ya confirmado',
+                });
+            }
+            user.confirmed = true;
+            await user.save();
         }
 
-        user.confirmed = true;
-
-        await user.save();
+        if (artist) {
+            if (artist.confirmed) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Artista ya confirmado',
+                });
+            }
+            artist.confirmed = true;
+            await artist.save();
+        }
 
         res.status(200).json({
             ok: true,
