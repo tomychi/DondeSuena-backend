@@ -12,15 +12,15 @@
         "city": "Lima"
     },
     {
-        "name": "Cuarteto de Nos",
+        "name": "Songkick",
         "description": "Customer",
-        "date": "2022-11-27",
+        "date": "2022-12-02",
         "start": "22:00",
         "end": "13:49",
         "price": "3000",
         "quotas": "50",
-        "image": "https://loremflickr.com/640/480/business",
-        "address": "Calle 2",
+        "image": "https://www.lunapark.com.ar/images/eventos/home/8221.jpg",
+        "address": "Luna Park",
         "city": "Cali"
     },
     {

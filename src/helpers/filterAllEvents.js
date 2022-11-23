@@ -91,24 +91,22 @@ const filterAllEvents = async ({
             where.state = true;
         }
 
-        // buscamos el artista por su nickname en la tabla artist
+        // buscamos el artista por su id en la tabla artist
         if (artist) {
-            const artistFound = await Artist.findOne({
-                where: { nickname: artist, state: true },
+            const artistId = await Artist.findOne({
+                where: { id: artist, state: true },
             });
-            if (artistFound) {
+
+            if (artistId) {
                 where.state = true;
                 const events = await Event.findAll({
                     where,
                     include: [
                         {
                             model: Artist,
-                            where: { id: artistFound.id },
-                            attributes: ['nickname'],
+                            where: { id: artistId.id },
                         },
                     ],
-                    // limit,
-                    // offset,
                 });
                 return events;
             }
