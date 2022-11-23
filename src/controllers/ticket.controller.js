@@ -114,12 +114,12 @@ const getEventsByTickets = async (req, res = response) => {
                                 attributes: []
                             },
                         },
-                        {
-                            model: User, // funcionará?
-                            through: {
-                                attributes: []
-                            },
-                        }
+                        // {
+                        //     model: User, // funcionará?
+                        //     through: {
+                        //         attributes: []
+                        //     },
+                        // }
                     ]
                 }
             ]
