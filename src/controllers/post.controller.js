@@ -35,6 +35,7 @@ const getAllPosts = async (req, res = response) => {
         if (name) {
             const findPosts = await Artist.findOne({
                 where: { nickname: name },
+                attributes: ["nickname"],
                 include: [
                     {
                         model: Post,
@@ -104,6 +105,7 @@ const getPostById = async (req, res = response) => {
         const { id } = req.params;
 
         let postId = await Artist.findByPk(id, {
+            attributes: ["nickname"],
             include: [
                 {
                     model: Post,

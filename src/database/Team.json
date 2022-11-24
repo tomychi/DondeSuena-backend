@@ -1,0 +1,82 @@
+[
+    {
+        "firstName": "Alexis",
+        "lastName": "Uriarte",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/96738027?v=4",
+        "urlGithub":"https://github.com/Auriarte20",
+        "urlLinkedin": "https://www.linkedin.com/in/aouriarte/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Diamela",
+        "lastName": "Lares",
+        "tittle": "Full Stack Developer",
+        "image": "https://media-exp1.licdn.com/dms/image/C4E03AQEd3SDsDIoBzA/profile-displayphoto-shrink_800_800/0/1657664220580?e=1674691200&v=beta&t=a7TgIEWalzG6Yml-jg5XnFYb1uRRsY74VztKlLk2JNE",
+        "urlGithub":"https://github.com/diamecjs",
+        "urlLinkedin": "https://www.linkedin.com/in/diamela-lares-/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Ezequiel",
+        "lastName": "Ramirez",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/99307067?v=4",
+        "urlGithub":"https://github.com/Eze-lp",
+        "urlLinkedin": "https://www.linkedin.com/in/ezequiel-agust%C3%ADn-ramirez-02761821b/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Lautaro",
+        "lastName": "Santillan",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/95645590?v=4",
+        "urlGithub":"https://github.com/LautiSantillan",
+        "urlLinkedin": "https://www.linkedin.com/in/lauti-santillan/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Martin",
+        "lastName": "Fernandez",
+        "tittle": "Full Stack Developer",
+        "image": "https://cdn.discordapp.com/attachments/753696696797757530/1045075758588104704/image.png",
+        "urlGithub":"https://github.com/martinsosafer",
+        "urlLinkedin": "https://www.linkedin.com/in/martin-fernandez-53917b245/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Martin",
+        "lastName": "Canolik",
+        "tittle": "Full Stack Developer",
+        "image": "https://cdn.discordapp.com/attachments/753696696797757530/1045114445598314526/IMG_20221123_200941.jpg",
+        "urlGithub":"https://github.com/MartinCanolik",
+        "urlLinkedin": "https://www.linkedin.com/in/martin-canolik/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Tomas",
+        "lastName": "Arconstanzo",
+        "tittle": "Full Stack Developer",
+        "image": "https://media-exp1.licdn.com/dms/image/C4D03AQFwUKPZVBTcMA/profile-displayphoto-shrink_800_800/0/1640533809831?e=1674691200&v=beta&t=UTfewx4rV9ObNd5Ad_KluMiYc8iq8_uUY2sHw3OaPdE",
+        "urlGithub":"https://github.com/tomychi",
+        "urlLinkedin": "https://www.linkedin.com/in/tom%C3%A1s-arcostanzo-4a1b50162/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    },
+    {
+        "firstName": "Willians",
+        "lastName": "Jimenez",
+        "tittle": "Full Stack Developer",
+        "image": "https://avatars.githubusercontent.com/u/97689379?v=4",
+        "urlGithub":"https://github.com/williansaaid007",
+        "urlLinkedin": "https://www.linkedin.com/in/willians-jimenez-0a6bb8248/",
+        "iconGithub": "https://cdn-icons-png.flaticon.com/128/5968/5968866.png",
+        "iconLinkedin": "https://cdn-icons-png.flaticon.com/128/3536/3536505.png"
+    }
+]

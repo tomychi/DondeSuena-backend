@@ -3,11 +3,12 @@ const { Ticket, Event, User, Artist } = require('../db');
 
 const createTicket = async (req, res = response) => {
     try {
-        const { priceTotal, quantity, event, user } = req.body;
+        const { priceTotal, quantity, date, event, user } = req.body;
 
         const newTicket = await Ticket.create({
             priceTotal,
             quantity,
+            date,
         });
 
         const eventDB = await Event.findAll({
@@ -61,17 +62,18 @@ const getTickets = async (req, res = response) => {
         const { id } = req.params;
 
         let allTickets = await User.findByPk(id, {
+            attributes: ['firstName'],
             include: [
                 {
                     model: Ticket,
-                    attributes: ["priceTotal", "quantity"],
+                    attributes: ["priceTotal", "quantity", "date"],
                     through: {
                         attributes: []
                     },
                     include: [
                         {
                             model: Event,
-                            attributes: ["name"],
+                            attributes: ["name", "date"],
                             through: {
                                 attributes: []
                             },
@@ -87,47 +89,6 @@ const getTickets = async (req, res = response) => {
 
     } catch (error) {
         console.log("ERROR EN getTickets", error);
-        res.status(500).send({ msg: "Hable con el administrador" });
-    }
-};
-
-// Artista ve todos sus eventos y tickets comprados (agregar usuarios)
-const getEventsByTickets = async (req, res = response) => {
-    try {
-        const { id } = req.params;
-
-        let events = await Artist.findByPk(id, {
-            include: [
-                {
-                    model: Event,
-                    attributes: ["name"],
-                    through: {
-                        attributes: []
-                    },
-                    include: [
-                        {
-                            model: Ticket,
-                            through: {
-                                attributes: []
-                            },
-                        },
-                        {
-                            model: User, // funcionará?
-                            through: {
-                                attributes: []
-                            },
-                        }
-                    ]
-                }
-            ]
-        });
-        res.status(200).json({
-            msg: 'Todos los tickets comprados',
-            events,
-        });
-
-    } catch (error) {
-        console.log("ERROR EN getEventsByTickets", error);
         res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
@@ -168,11 +129,10 @@ const getStockTickets = async (req, res = response) => {
             stock,
         });
 
-
     } catch (error) {
         console.log("ERROR EN getStockTickets", error);
         res.status(500).send({ msg: "Hable con el administrador" });
     }
 };
 
-module.exports = { createTicket, getTicket, getTickets, getEventsByTickets, updateStockTickets, getStockTickets };
+module.exports = { createTicket, getTicket, getTickets, updateStockTickets, getStockTickets };

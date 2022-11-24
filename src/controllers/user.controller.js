@@ -327,29 +327,61 @@ const confirmationToken = async (req, res = response) => {
     try {
         const { uid } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findByPk(uid);
-
-        if (!user) {
+        const artist = await Artist.findByPk(uid);
+        const usuario = {};
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
 
-        if (user.confirmed) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'Usuario ya confirmado',
-            });
+        if (user) {
+            if (user.confirmed) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Usuario ya confirmado',
+                });
+            }
+            user.confirmed = true;
+            await user.save();
+            usuario.id = user.id;
+            usuario.email = user.email;
+            usuario.firstName = user.firstName;
+            usuario.lastName = user.lastName;
+            usuario.image = user.image;
+            usuario.confirmed = user.confirmed;
+            usuario.artista = false;
         }
 
-        user.confirmed = true;
-
-        await user.save();
+        if (artist) {
+            if (artist.confirmed) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Artista ya confirmado',
+                });
+            }
+            artist.confirmed = true;
+            await artist.save();
+            usuario.id = artist.id;
+            usuario.email = artist.email;
+            usuario.firstName = artist.firstName;
+            usuario.lastName = artist.lastName;
+            usuario.image = artist.image;
+            usuario.confirmed = artist.confirmed;
+            usuario.spotify = artist.spotify;
+            usuario.twitter = artist.twitter;
+            usuario.instagram = artist.instagram;
+            usuario.nickname = artist.nickname;
+            usuario.description = artist.description;
+            usuario.phone = artist.phone;
+            usuario.artista = true;
+        }
 
         res.status(200).json({
             ok: true,
             msg: 'Usuario confirmado',
-            user,
+            usuario,
         });
     } catch (error) {
         console.log(error);
@@ -463,18 +495,30 @@ const forgetPassword = async (req, res = response) => {
     let verificationLink;
     try {
         const user = await User.findOne({ where: { email } });
+        const artist = await Artist.findOne({ where: { email } });
 
-        if (!user) {
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
+        let token;
+        if (user) {
+            token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+                expiresIn: '15m',
+            });
+            verificationLink = process.env.FRONT_URL || 'http://localhost:3000';
+        }
 
-        const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: '15m',
-        });
-        verificationLink = `http://localhost:3000/reset-password/${token}`;
+        if (artist) {
+            token = await jwt.sign({ id: artist.id }, process.env.JWT_SECRET, {
+                expiresIn: '15m',
+            });
+            verificationLink = process.env.FRONT_URL || 'http://localhost:3000';
+        }
+
+        verificationLink = `${verificationLink}/reset-password/${token}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -492,14 +536,14 @@ const forgetPassword = async (req, res = response) => {
             to: email,
             subject: 'Reset Password',
             html: `<h1>Click the link to reset your password</h1>
-            <a href=${verificationLink}>${verificationLink}</a>`,
+            <a href=${verificationLink}>Click Here</a>`,
         };
 
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err);
             } else {
-                console.log(info);
+                console.log('Email enviado');
             }
         });
 
@@ -523,18 +567,26 @@ const createNewPassword = async (req, res = response) => {
     try {
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findByPk(id);
+        const artist = await Artist.findByPk(id);
 
-        if (!user) {
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
 
-        const salt = bcrypt.genSaltSync();
-        user.password = bcrypt.hashSync(password, salt);
+        if (user) {
+            const salt = bcrypt.genSaltSync();
+            user.password = bcrypt.hashSync(password, salt);
+            await user.save();
+        }
 
-        await user.save();
+        if (artist) {
+            const salt = bcrypt.genSaltSync();
+            artist.password = bcrypt.hashSync(password, salt);
+            await artist.save();
+        }
 
         res.status(200).json({
             ok: true,
