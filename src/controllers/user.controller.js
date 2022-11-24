@@ -328,7 +328,7 @@ const confirmationToken = async (req, res = response) => {
         const { uid } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findByPk(uid);
         const artist = await Artist.findByPk(uid);
-
+        const usuario = {};
         if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
@@ -345,6 +345,13 @@ const confirmationToken = async (req, res = response) => {
             }
             user.confirmed = true;
             await user.save();
+            usuario.id = user.id;
+            usuario.email = user.email;
+            usuario.firstName = user.firstName;
+            usuario.lastName = user.lastName;
+            usuario.image = user.image;
+            usuario.confirmed = user.confirmed;
+            usuario.artista = false;
         }
 
         if (artist) {
@@ -356,12 +363,25 @@ const confirmationToken = async (req, res = response) => {
             }
             artist.confirmed = true;
             await artist.save();
+            usuario.id = artist.id;
+            usuario.email = artist.email;
+            usuario.firstName = artist.firstName;
+            usuario.lastName = artist.lastName;
+            usuario.image = artist.image;
+            usuario.confirmed = artist.confirmed;
+            usuario.spotify = artist.spotify;
+            usuario.twitter = artist.twitter;
+            usuario.instagram = artist.instagram;
+            usuario.nickname = artist.nickname;
+            usuario.description = artist.description;
+            usuario.phone = artist.phone;
+            usuario.artista = true;
         }
 
         res.status(200).json({
             ok: true,
             msg: 'Usuario confirmado',
-            user,
+            usuario,
         });
     } catch (error) {
         console.log(error);
