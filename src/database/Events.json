@@ -126,7 +126,7 @@
         "start": "22:00",
         "end": "13:59",
         "price": "561",
-        "quotas": "1",
+        "quotas": "10",
         "image": "https://loremflickr.com/640/480/business",
         "address": "Calle 10",
         "city": "La Plata"
