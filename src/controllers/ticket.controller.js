@@ -108,7 +108,7 @@ const updateStockTickets = async (req, res = response) => {
             ...event,
             quotas: parseInt(event.quotas) - quantity,
         });
-
+        console.log(event.quotas);
         res.status(201).send({ msg: "Se actualizó el stock de tickets para el Evento" });
 
     } catch (error) {
