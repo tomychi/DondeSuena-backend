@@ -352,6 +352,7 @@ const confirmationToken = async (req, res = response) => {
             usuario.image = user.image;
             usuario.confirmed = user.confirmed;
             usuario.artista = false;
+            usuario.token = token;
         }
 
         if (artist) {
@@ -376,6 +377,7 @@ const confirmationToken = async (req, res = response) => {
             usuario.description = artist.description;
             usuario.phone = artist.phone;
             usuario.artista = true;
+            usuario.token = token;
         }
 
         res.status(200).json({
