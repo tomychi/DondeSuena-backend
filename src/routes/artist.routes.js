@@ -80,7 +80,5 @@ router.put('/artist/editPost/:id', editPost);
 // Eliminar post
 router.delete('/artist/deletePost/:id', deletePost);
 
-// Artista ve todos sus Eventos y los tickets
-router.get('/artist/getEvents/:id', getEventsByTickets);
 
 module.exports = router;

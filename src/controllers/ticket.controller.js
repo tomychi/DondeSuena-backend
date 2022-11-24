@@ -93,48 +93,6 @@ const getTickets = async (req, res = response) => {
     }
 };
 
-// Artista ve todos sus eventos y tickets comprados (agregar usuarios)
-const getEventsByTickets = async (req, res = response) => {
-    try {
-        const { id } = req.params;
-
-        let events = await Artist.findByPk(id, {
-            attributes: ["nickname"],
-            include: [
-                {
-                    model: Event,
-                    attributes: ["name", "date"],
-                    through: {
-                        attributes: []
-                    },
-                    include: [
-                        {
-                            model: Ticket,
-                            through: {
-                                attributes: []
-                            },
-                        },
-                        // {
-                        //     model: User, // funcionará?
-                        //     through: {
-                        //         attributes: []
-                        //     },
-                        // }
-                    ]
-                }
-            ]
-        });
-        res.status(200).json({
-            msg: 'Todos los tickets comprados',
-            events,
-        });
-
-    } catch (error) {
-        console.log("ERROR EN getEventsByTickets", error);
-        res.status(500).send({ msg: "Hable con el administrador" });
-    }
-};
-
 const updateStockTickets = async (req, res = response) => {
     try {
         let { quantity, id } = req.body;
@@ -177,4 +135,4 @@ const getStockTickets = async (req, res = response) => {
     }
 };
 
-module.exports = { createTicket, getTicket, getTickets, getEventsByTickets, updateStockTickets, getStockTickets };
+module.exports = { createTicket, getTicket, getTickets, updateStockTickets, getStockTickets };
