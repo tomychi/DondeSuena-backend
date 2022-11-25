@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Ticket, Event, User, Artist } = require('../db');
+const { Ticket, Event, User } = require('../db');
 
 const createTicket = async (req, res = response) => {
     try {

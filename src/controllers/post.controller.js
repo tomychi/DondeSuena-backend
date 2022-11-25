@@ -3,15 +3,14 @@ const { Post, Artist, Like, Comment } = require('../db');
 
 const createPosts = async (req, res = response) => {
     try {
-        const { title, description, image, artists } = req.body; 
+        const { description, image, artists } = req.body; 
 
         const post = await Post.create({
-            title,
             description,
             image,
         });
 
-        const artistsDB = await Artist.findAll({ // artists debería ser por id
+        const artistsDB = await Artist.findAll({
             where: { nickname: artists }
         });
 
@@ -144,7 +143,7 @@ const getPostById = async (req, res = response) => {
 const editPost = async (req, res = response) => {
     try {
         const { id } = req.params;
-        const { title, description, image } = req.body;
+        const { description, image } = req.body;
 
         const post = await Post.findByPk(id);
 
@@ -155,7 +154,6 @@ const editPost = async (req, res = response) => {
         }
 
         await post.update({
-            title,
             description,
             image,
         });
