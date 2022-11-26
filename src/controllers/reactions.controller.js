@@ -3,10 +3,11 @@ const { Like, Comment, User, Post } = require("../db");
 
 const createLike = async (req, res = response) => {
   try {
-    const { like, user, post } = req.body;
+    const { like, user, date, post } = req.body;
 
     const newLike = await Like.create({
       like,
+      date
     });
 
     const userDB = await User.findAll({ // debería ser por id
@@ -33,10 +34,11 @@ const createLike = async (req, res = response) => {
 
 const createComment = async (req, res = response) => {
   try {
-    const { comment, user, post } = req.body;
+    const { comment, date, user, post } = req.body;
 
     const newComment = await Comment.create({
       comment,
+      date
     });
 
     const userDB = await User.findAll({ // debería ser por id
