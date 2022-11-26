@@ -16,6 +16,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: true
         },
+        parent: {
+            type: DataTypes.INTEGER,
+            defaultValue: null,
+        },
         enabled: {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
