@@ -41,7 +41,7 @@ const createLike = async (req, res = response) => {
 
 const createComment = async (req, res = response) => {
   try {
-    const { comment, date, user, artist, post } = req.body;
+    const { comment, date, user, artist, postId } = req.body;
 
     const newComment = await Comment.create({
       comment,
@@ -58,8 +58,8 @@ const createComment = async (req, res = response) => {
       where: { firstName: artist },
     });
 
-    const postDB = await Post.findAll({
-      where: { title: post },
+    const postDB = await Post.findByPk({
+      where: { id: postId },
     });
 
     newComment.addUser(userDB);
