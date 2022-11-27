@@ -1,30 +1,85 @@
 const { response } = require("express");
 const { Like, Comment, User, Artist, Post } = require("../db");
 
-const createLike = async (req, res = response) => {
+const createLikeUser = async (req, res = response) => {
   try {
-    const { like, user, artist, date, post } = req.body;
+    const { like, user, date, postId } = req.body;
 
     const newLike = await Like.create({
       like,
       date
     });
 
-    // Usuario
     const userDB = await User.findAll({
       where: { firstName: user },
     });
 
-    // o artista
-    const artistDB = await Artist.findAll({
-      where: { firstName: artist },
-    });
-
     const postDB = await Post.findAll({
-      where: { title: post },
+      where: { id: postId },
     });
 
     newLike.addUser(userDB);
+    newLike.addPost(postDB);
+
+    res.status(201).json({
+      msg: "¡Me gusta!",
+      newLike,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN createLikeUser", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
+
+const createCommentUser = async (req, res = response) => {
+  try {
+    const { comment, date, user, postId } = req.body;
+
+    const newComment = await Comment.create({
+      comment,
+      date
+    });
+
+    const userDB = await User.findAll({
+      where: { firstName: user },
+    });
+
+    const postDB = await Post.findAll({
+      where: { id: postId },
+    });
+
+    newComment.addUser(userDB);
+    newComment.addPost(postDB);
+
+    res.status(201).json({
+      msg: "¡Acabas de comentar!",
+      newComment,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN createCommentArtist", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
+
+const createLikeArtist = async (req, res = response) => {
+  try {
+    const { like, user, date, postId } = req.body;
+
+    const newLike = await Like.create({
+      like,
+      date
+    });
+
+    const artistDB = await Artist.findAll({
+      where: { nickname: user },
+    });
+
+    const postDB = await Post.findAll({
+      where: { id: postId },
+    });
+
     newLike.addArtist(artistDB);
     newLike.addPost(postDB);
 
@@ -34,35 +89,28 @@ const createLike = async (req, res = response) => {
     });
 
   } catch (error) {
-    console.log("ERROR EN createLike", error);
+    console.log("ERROR EN createLikeArtist", error);
     res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
 
-const createComment = async (req, res = response) => {
+const createCommentArtist = async (req, res = response) => {
   try {
-    const { comment, date, user, artist, postId } = req.body;
+    const { comment, date, user, postId } = req.body;
 
     const newComment = await Comment.create({
       comment,
       date
     });
 
-    // Usuario
-    const userDB = await User.findAll({
-      where: { firstName: user },
-    });
-
-    // o Artista
     const artistDB = await Artist.findAll({
-      where: { firstName: artist },
+      where: { nickname: user },
     });
 
-    const postDB = await Post.findByPk({
+    const postDB = await Post.findAll({
       where: { id: postId },
     });
 
-    newComment.addUser(userDB);
     newComment.addArtist(artistDB);
     newComment.addPost(postDB);
 
@@ -72,10 +120,15 @@ const createComment = async (req, res = response) => {
     });
 
   } catch (error) {
-    console.log("ERROR EN createLike", error);
+    console.log("ERROR EN createCommentUser", error);
     res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
+
+
+
+
+
 
 const addComment = async (req, res = response) => {
   try {
@@ -169,8 +222,10 @@ const editComment = async (req, res = response) => {
 
 
 module.exports = {
-  createLike,
-  createComment,
+  createLikeUser,
+  createCommentUser,
+  createLikeArtist,
+  createCommentArtist,
   deleteLike,
   deleteComment,
   editComment,

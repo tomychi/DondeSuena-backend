@@ -24,6 +24,7 @@ const {
     deletePost,
 } = require('../controllers/post.controller');
 const { getEventsByTickets } = require('../controllers/ticket.controller');
+const { createLikeArtist, createCommentArtist } = require('../controllers/reactions.controller');
 
 router.post(
     '/registerArtist',
@@ -67,6 +68,11 @@ router.get('/renew', validateJWT, renewToken);
 
 // Artista crear post
 router.post('/artist/createPost', createPosts);
+
+// Artista comenta y da like
+router.post('/artist/createLike', createLikeArtist);
+
+router.post('/artist/createComment', createCommentArtist);
 
 // Ver todos los posteos de los Artistas o buscar posteos por Artista (query)
 router.get('/artist/getPosts', getAllPosts);
