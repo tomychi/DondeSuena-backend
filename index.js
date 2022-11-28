@@ -2,7 +2,6 @@ const server = require("./src/app.js");
 const { conn } = require("./src/db.js");
 require("dotenv").config();
 const {
-  loadUsers,
   loadEvents,
   loadPlaces,
   loadArtists,
@@ -13,7 +12,6 @@ const {
 const port = process.env.PORT || 3000;
 // Syncing all the models at once.
 conn.sync({ force: true }).then(async () => {
-  loadUsers();
   loadEvents();
   loadArtists();
   loadPlaces();
