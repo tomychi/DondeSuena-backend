@@ -220,6 +220,48 @@ const editComment = async (req, res = response) => {
   }
 };
 
+const getComments = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+
+    let allComments = await Post.findByPk(id, {
+      include: [
+        {
+          model: Comment,
+          //where: { enabled: true },
+          through: {
+            attributes: []
+          },
+          include: [
+            {
+              model: User,
+              attributes: ['firstName', 'image'],
+              through: {
+                attributes: []
+              },
+            },
+            {
+              model: Artist,
+              attributes: ['nickname', 'image'],
+              through: {
+                attributes: []
+              },
+            }
+
+          ]
+        }
+      ]
+    });
+    res.status(200).json({
+      msg: 'Comentarios del post',
+      allComments,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN getComments", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
 
 module.exports = {
   createLikeUser,
@@ -229,4 +271,5 @@ module.exports = {
   deleteLike,
   deleteComment,
   editComment,
+  getComments
 };
