@@ -19,7 +19,9 @@ const createEvent = async (req, res = response) => {
     } = req.body;
 
     try {
-        let eventExis = await Event.findOne({ where: { name }, state: true });
+        let eventExis = await Event.findOne({
+            where: { name, state: true },
+        });
 
         if (eventExis) {
             return res.status(400).json({
