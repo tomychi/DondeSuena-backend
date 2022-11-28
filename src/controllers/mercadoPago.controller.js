@@ -13,7 +13,7 @@ const crearOrden = async (req, res) => {
   let preference = {
     items: [
       {
-        title: "Ticket",
+        title: "Tickets",
         quantity: quantity,
         currency_id: "ARS",
         unit_price: priceTotal,
