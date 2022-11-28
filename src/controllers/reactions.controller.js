@@ -1,5 +1,5 @@
 const { response } = require("express");
-const { Like, Comment, User, Artist, Post } = require("../db");
+const { Like, Comment, Response, User, Artist, Post } = require("../db");
 
 const createLikeUser = async (req, res = response) => {
   try {
@@ -125,45 +125,67 @@ const createCommentArtist = async (req, res = response) => {
   }
 };
 
+const addCommentUser = async (req, res = response) => {
+  try {
+    const { body, date, user, commentId } = req.body;
 
-// const addComment = async (req, res = response) => {
-//   try {
-//     const { id } = req.params;
-//     const { comment, user, artist, date } = req.body;
-//     const commentDB = await Comment.findByPk(id);
+    const newResponse = await Response.create({
+      body,
+      date
+    });
 
-//     const add = await Comment.create({
-//       comment,
-//       date,
-//     });
+    const userDB = await User.findAll({
+      where: { firstName: user },
+    });
 
-//     // Usuario
-//     const userDB = await User.findAll({
-//       where: { firstName: user },
-//     });
+    const commentDB = await Comment.findAll({
+      where: { id: commentId },
+    });
 
-//     // o Artista
-//     const artistDB = await Artist.findAll({
-//       where: { firstName: artist },
-//     });
+    newResponse.addUser(userDB);
+    newResponse.addComment(commentDB);
 
-//     // parent comentario al que se comenta
-//     // const commentDB = await Comment.findByPk(id)
+    res.status(201).json({
+      msg: "Respondiste como usuario",
+      newResponse,
+    });
 
+  } catch (error) {
+    console.log("ERROR EN createResponseUser", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
 
+const addCommentArtist = async (req, res = response) => {
+  try {
+    const { body, date, user, commentId } = req.body;
 
+    const newResponse = await Response.create({
+      body,
+      date
+    });
 
-//     res.status(201).json({
-//       msg: "Comentario agregado",
-//       add,
-//     });
+    const userDB = await Artist.findAll({
+      where: { nickname: user },
+    });
 
-//   } catch (error) {
-//     console.log("ERROR EN addComment", error);
-//     res.status(500).send({ msg: "Hable con el administrador" });
-//   }
-// };
+    const commentDB = await Comment.findAll({
+      where: { id: commentId },
+    });
 
+    newResponse.addUser(userDB);
+    newResponse.addComment(commentDB);
+
+    res.status(201).json({
+      msg: "Respondiste como artista",
+      newResponse,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN createResponseArtista", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
 
 const deleteLike = async (req, res = response) => {
   try {
@@ -217,46 +239,7 @@ const editComment = async (req, res = response) => {
   }
 };
 
-const getAllComments = async (req, res = response) => {
-  try {
-
-    let allComments = await Post.findAll(
-      {
-        model: Comment,
-        through: {
-          attributes: []
-        },
-        include: [
-          {
-            model: User,
-            attributes: ['firstName', 'image'],
-            through: {
-              attributes: []
-            },
-          },
-          {
-            model: Artist,
-            attributes: ['nickname', 'image'],
-            through: {
-              attributes: []
-            },
-          }
-
-        ]
-      }
-    );
-    res.status(200).json({
-      msg: 'Todos los post con sus likes y comentarios',
-      allComments,
-    });
-
-  } catch (error) {
-    console.log("ERROR EN getAllComments", error);
-    res.status(500).send({ msg: "Hable con el administrador" });
-  }
-};
-
-const getCommentsById = async (req, res = response) => {
+const getComments = async (req, res = response) => {
   try {
     const { id } = req.params;
 
@@ -269,20 +252,25 @@ const getCommentsById = async (req, res = response) => {
           },
           include: [
             {
-              model: User,
-              attributes: ['firstName', 'image'],
-              through: {
-                attributes: []
-              },
-            },
-            {
-              model: Artist,
-              attributes: ['nickname', 'image'],
+              model: Response,
               through: {
                 attributes: []
               },
             }
-
+            // {
+            //   model: User,
+            //   attributes: ['firstName', 'image'],
+            //   through: {
+            //     attributes: []
+            //   },
+            // },
+            // {
+            //   model: Artist,
+            //   attributes: ['nickname', 'image'],
+            //   through: {
+            //     attributes: []
+            //   },
+            // }
           ]
         }
       ]
@@ -306,6 +294,7 @@ module.exports = {
   deleteLike,
   deleteComment,
   editComment,
-  getAllComments,
-  getCommentsById
+  getComments,
+  addCommentUser,
+  addCommentArtist
 };
