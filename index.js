@@ -7,6 +7,7 @@ const {
   loadArtists,
   loadGenres,
   loadTeam,
+  loadUsers
 } = require("./src/controllers/loadsDatabase");
 
 const port = process.env.PORT || 3000;
