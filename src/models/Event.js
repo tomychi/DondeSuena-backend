@@ -14,7 +14,6 @@ module.exports = (sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
                 // utf8_spanish_ci is case insensitive
-                collate: 'utf8_spanish_ci',
             },
             description: {
                 type: DataTypes.STRING,
