@@ -76,7 +76,6 @@ const createUser = async (req, res = response) => {
             email: user.email,
             token,
         });
-        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -107,6 +106,14 @@ const loginUser = async (req, res = response) => {
                     msg: 'El Artista no ha confirmado su email',
                 });
             }
+
+            if (!artist.state) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El Artista no esta activo',
+                });
+            }
+
             const validPassword = bcrypt.compareSync(password, artist.password); // me compara el password que me llega con el hash que tengo en la base de datos
 
             if (!validPassword) {
@@ -142,6 +149,13 @@ const loginUser = async (req, res = response) => {
                     msg: 'El usuario no ha confirmado su email',
                 });
             }
+
+            if (!user.state) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El usuario no esta activo',
+                });
+            }
             const validPassword = bcrypt.compareSync(password, user.password); // me compara el password que me llega con el hash que tengo en la base de datos
 
             if (!validPassword) {
@@ -162,6 +176,7 @@ const loginUser = async (req, res = response) => {
                 image: user.image,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                admin: user.isAdmin,
                 artista: false,
                 token,
             });
@@ -229,7 +244,6 @@ const googleSignIn = async (req, res = response) => {
             user,
             token,
         });
-
     } catch (error) {
         console.log(error);
         res.status(400).json({
@@ -258,7 +272,6 @@ const patchUser = async (req, res = response) => {
             msg: 'Usuario actualizado',
             user,
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -288,7 +301,6 @@ const postFavoriteArtist = async (req, res = response) => {
             uid: newFavorite.id,
             name: newFavorite.firstName,
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -314,7 +326,6 @@ const getFavoritesArtists = async (req, res = response) => {
             msg: 'Lista de artistas favoritos',
             artistsFind,
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -373,7 +384,6 @@ const deleteFavoriteArtist = async (req, res = response) => {
             ok: true,
             msg: 'Artista favorito eliminado',
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -553,7 +563,7 @@ const forgetPassword = async (req, res = response) => {
     if (!email) {
         return res.status(400).json({
             ok: false,
-            msg: 'nombre del usuario es requerido',
+            msg: 'email es requerido',
         });
     }
     let verificationLink;
