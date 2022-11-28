@@ -228,7 +228,6 @@ const getComments = async (req, res = response) => {
       include: [
         {
           model: Comment,
-          //where: { enabled: true },
           through: {
             attributes: []
           },
