@@ -106,6 +106,14 @@ const loginUser = async (req, res = response) => {
                     msg: 'El Artista no ha confirmado su email',
                 });
             }
+
+            if (!artist.state) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El Artista no esta activo',
+                });
+            }
+
             const validPassword = bcrypt.compareSync(password, artist.password); // me compara el password que me llega con el hash que tengo en la base de datos
 
             if (!validPassword) {
@@ -141,6 +149,13 @@ const loginUser = async (req, res = response) => {
                     msg: 'El usuario no ha confirmado su email',
                 });
             }
+
+            if (!user.state) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El usuario no esta activo',
+                });
+            }
             const validPassword = bcrypt.compareSync(password, user.password); // me compara el password que me llega con el hash que tengo en la base de datos
 
             if (!validPassword) {
@@ -161,6 +176,7 @@ const loginUser = async (req, res = response) => {
                 image: user.image,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                admin: user.isAdmin,
                 artista: false,
                 token,
             });
@@ -547,7 +563,7 @@ const forgetPassword = async (req, res = response) => {
     if (!email) {
         return res.status(400).json({
             ok: false,
-            msg: 'nombre del usuario es requerido',
+            msg: 'email es requerido',
         });
     }
     let verificationLink;
