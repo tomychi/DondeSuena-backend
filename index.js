@@ -11,8 +11,7 @@ const {
 
 const port = process.env.PORT || 3000;
 // Syncing all the models at once.
-conn.sync({ force: true }).then(async () => {
-  loadUsers();
+conn.sync({ force: false }).then(async () => {
   loadEvents();
   loadArtists();
   loadPlaces();
