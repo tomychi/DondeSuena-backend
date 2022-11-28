@@ -9,7 +9,9 @@
         "quotas": "10000",
         "image": "https://www.elheraldodesaltillo.mx/wp-content/uploads/2021/10/coldplay.jpeg",
         "address": "Estadio Nacional",
-        "city": "Lima"
+        "city": "Lima",
+        "genre":"Pop"
+        
     },
     {
         "name": "Songkick",
@@ -21,7 +23,8 @@
         "quotas": "20000",
         "image": "https://www.lunapark.com.ar/images/eventos/home/8221.jpg",
         "address": "Luna Park",
-        "city": "Cali"
+        "city": "Cali",
+        "genre":"Rock"
     },
     {
         "name": "3Décadas",
@@ -33,7 +36,8 @@
         "quotas": "22000",
         "image": "https://s3.amazonaws.com/bit-photos/large/9197333.jpeg",
         "address": "Calle 3",
-        "city": "Medellín"
+        "city": "Medellín",
+        "genre":"Rock"
     },
     {
         "name": "El Dorado",
@@ -45,7 +49,8 @@
         "quotas": "900",
         "image": "https://www.revistaneo.com/sites/default/files/2020-01/shakiraHBO.jpg",
         "address": "Calle 4",
-        "city": "Cordoba"
+        "city": "Cordoba",
+        "genre":"Pop"
     },
     {
         "name": "Érase",
@@ -57,7 +62,8 @@
         "quotas": "1000",
         "image": "https://rocksesion.files.wordpress.com/2015/02/la-vela-puerca-erase.jpg",
         "address": "Calle 5",
-        "city": "Buenos Aires"
+        "city": "Buenos Aires",
+        "genre":"Rock"
     },
     {
         "name": "Hola Mundo",
@@ -69,7 +75,8 @@
         "quotas": "3000",
         "image": "https://m.media-amazon.com/images/I/51V0AXMi+GL.jpg",
         "address": "Calle 6",
-        "city": "Rosario"
+        "city": "Rosario",
+        "genre":"Pop"
     },
     {
         "name": "Vamos Bien",
@@ -81,7 +88,8 @@
         "quotas": "2000",
         "image": "https://i.ytimg.com/vi/mn88VXcdLJ4/maxresdefault.jpg",
         "address": "Calle 7",
-        "city": "Lima"
+        "city": "Lima",
+        "genre":"Rock"
     },
     {
         "name": "XXV Aniversario",
@@ -91,9 +99,10 @@
         "end": "02:25",
         "price": "17100",
         "quotas": "3000",
-        "image": "",
+        "image": "https://mega981.com.ar//wp-content/uploads/2018/10/guasones.jpg",
         "address": "Calle 8",
-        "city": "Santiago"
+        "city": "Santiago",
+        "genre":"Rock"
     },
     {
         "name": "Pericos & Friends",
@@ -105,7 +114,8 @@
         "quotas": "8000",
         "image": "https://musicboxsd.com/wp-content/uploads/2022/03/pericojpg.jpg",
         "address": "Calle 9",
-        "city": "Rio cuarto"
+        "city": "Rio cuarto",
+        "genre":"Rock"
     },
     {
         "name": "Locas Fantasías",
@@ -117,7 +127,8 @@
         "quotas": "1000",
         "image": "https://metal-addiction.cl/wp-content/uploads/2020/07/105026579_554413861863984_3732584212077218898_n.jpg",
         "address": "Calle 10",
-        "city": "La Plata"
+        "city": "La Plata",
+        "genre":"Rock"
     },
     {
         "name": "Cosquin Rock",
@@ -129,6 +140,315 @@
         "quotas": "1000",
         "image": "https://i.ytimg.com/vi/S0At5D9Kprk/maxresdefault.jpg",
         "address": "Calle 10",
-        "city": "La Plata"
+        "city": "La Plata",
+        "genre":"Rock"
+    },
+     {
+        "name": "La Ultima Gira",
+        "description": "Daddy Yankee concierto ",
+        "date": "2022-08-18",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://f.rpp-noticias.io/2022/03/21/1234750whatsapp-image-2022-03-21-at-103909-amjpeg.jpeg",
+        "address": "Calle 11",
+        "city": "Lima",
+        "genre":"Reggaeton"
+    },
+     {
+        "name": "Latin Stars Festival",
+        "description": "Don Omar concierto ",
+        "date": "2022-10-29",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://64.media.tumblr.com/19a099cc04cb1239fe183f1d24157273/a21f74ef9f8d2f11-ee/s1280x1920/f4abe2d4368fdface8bf0f8639e847d05cfc4321.jpg",
+        "address": "Calle 11",
+        "city": "Santiago",
+        "genre":"Reggaeton"
+    },
+      {
+        "name": "La Ultima Mision",
+        "description": "Wisin y Yandel concierto ",
+        "date": "2022-07-09",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://adminventas.uepatickets.com/Modules/Ticketing/EventImages/12319_tn.jpg",
+        "address": "Calle 11",
+        "city": "Buenos Aires",
+        "genre":"Reggaeton"
+    },
+       {
+        "name": "Desde El Fin Del Mundo",
+        "description": "Duki concierto ",
+        "date": "2022-09-09",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://f.rpp-noticias.io/2022/04/18/1248048duki-peru-post10926jpg.jpg",
+        "address": "Calle 11",
+        "city": "Buenos Aires",
+        "genre":"Trap"
+    },
+    {
+        "name": "Mawz Tour",
+        "description": "Lit Killah concierto ",
+        "date": "2022-07-09",
+        "start": "21:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://www.tuentrada.com/images/626aca1cbe269.webp",
+        "address": "Calle 11",
+        "city": "La Plata",
+        "genre":"Trap"
+    },
+      {
+        "name": "Bien O Mal",
+        "description": "Trueno concierto ",
+        "date": "2022-12-03",
+        "start": "21:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://www.lunapark.com.ar/images/eventos/eventos/8947.jpg?1666213392",
+        "address": "Calle 11",
+        "city": "Buenos Aires",
+        "genre":"Trap"
+    },
+     {
+        "name": "Greeta Van Fleet",
+        "description": "Metallica concierto ",
+        "date": "2022-02-25",
+        "start": "21:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://mariskalrock.com/wp-content/uploads/2022/02/metallica-cartel-gira-22-vegas.jpg",
+        "address": "Calle 11",
+        "city": "Rosario",
+        "genre":"Hard Rock"
+    },
+     {
+        "name": "Rata Blanca",
+        "description": "Rata Blanca concierto ",
+        "date": "2022-10-15",
+        "start": "21:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://laboratoriodelrock.com/wp-content/uploads/2022/06/FLYER-RATA-BOGOTA-1.png",
+        "address": "Calle 11",
+        "city": "Cali",
+        "genre":"Hard Rock"
+    },
+   {
+        "name": "La Mona",
+        "description": "La Mona Jimenez concierto ",
+        "date": "2022-10-19",
+        "start": "21:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://1.bp.blogspot.com/-RChOfs5rJ7I/WnG83dVvfXI/AAAAAAAAERg/8DEL0NRlslcKtCdTw2KBMpyhLhJ3ANyOACLcBGAs/s1600/Mona.JPG",
+        "address": "Calle 11",
+        "city": "Cordoba",
+        "genre":"Cuarteto"
+    },
+     {
+        "name": "QLokura",
+        "description": "QLokura concierto ",
+        "date": "2022-10-15",
+        "start": "21:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://quierofm.com/uploads/images/image_750x_62d9f92fee98c.jpg",
+        "address": "Calle 11",
+        "city": "Rio cuarto",
+        "genre":"Cuarteto"
+    },
+     {
+        "name": "Ulises Bueno",
+        "description": "Ulises Bueno concierto ",
+        "date": "2022-11-25",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://dosdosunoprensa.files.wordpress.com/2022/09/anfiteatro-25-nov-22-feed.png?w=640",
+        "address": "Calle 11",
+        "city": "Rosario",
+        "genre":"Cuarteto"
+    },
+      {
+        "name": "Eminem",
+        "description": "Eminem concierto ",
+        "date": "2022-11-25",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://s1.abcstatics.com/media/cultura/2018/06/11/eminem-kfOC--620x349@abc.jpg",
+        "address": "Calle 11",
+        "city": "Medellín",
+        "genre":"Rap"
+    },
+      {
+        "name": "Snoop Dog",
+        "description": "Snoop Dog concierto ",
+        "date": "2022-11-25",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://www.quever.news/u/fotografias/m/2022/2/23/f850x638-24468_101957_5244.jpg",
+        "address": "Calle 11",
+        "city": "Cali",
+        "genre":"Rap"
+    },
+     {
+        "name": "Dread Mar I",
+        "description": "Dread Mar I concierto ",
+        "date": "2022-05-24",
+        "start": "22:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://www.lunapark.com.ar/images/eventos/eventos/54.jpg?1497621314",
+        "address": "Calle 11",
+        "city": "Buenos Aires",
+        "genre":"Reggae"
+    },
+        {
+        "name": "Fidel Nadal",
+        "description": "Fidel Nadal concierto ",
+        "date": "2022-05-29",
+        "start": "17:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "http://gritaradio.com/wp-content/uploads/2021/05/Fidel-Nadal.jpeg",
+        "address": "Calle 11",
+        "city": "Medellín",
+        "genre":"Reggae"
+    },
+         {
+        "name": "Zoe Gotusso",
+        "description": "Zoe Gotusso concierto ",
+        "date": "2022-06-23",
+        "start": "20:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://www.tuentrada.com/images/6235c59c9d993.webp",
+        "address": "Calle 11",
+        "city": "Santiago",
+        "genre":"Indie"
+    },
+        {
+        "name": "Koino Yokan",
+        "description": "Koino Yokan concierto ",
+        "date": "2022-06-23",
+        "start": "20:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://elvisentradas.com.ar/media/imagenes_eventos/detalle/2021/02/koino_yokan_1.jpg",
+        "address": "Calle 11",
+        "city": "La Plata",
+        "genre":"Indie"
+    },
+     {
+        "name": "Paz Carrara",
+        "description": "Paz Carrara concierto ",
+        "date": "2022-06-23",
+        "start": "20:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://polifoniaok.files.wordpress.com/2020/07/foto-paz.jpg",
+        "address": "Calle 11",
+        "city": "Cordoba",
+        "genre":"Indie"
+    },
+      {
+        "name": "Los Palmeras",
+        "description": "Los Palmeras concierto ",
+        "date": "2022-06-23",
+        "start": "20:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://static.misionesonline.news/wp-content/uploads/2021/12/entradas-para-los-palmera-22-de-diciembre-puerto-mbigua-1-1-1.jpg",
+        "address": "Calle 11",
+        "city": "Rio cuarto",
+        "genre":"Cumbia"
+    },
+     {
+        "name": "Los Angles Azules",
+        "description": "Los Angles Azules concierto ",
+        "date": "2022-06-23",
+        "start": "20:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://tuboleta.com/imagenes/623c809036507.jpg",
+        "address": "Calle 11",
+        "city": "Cali",
+        "genre":"Cumbia"
+    },
+       {
+        "name": "Karina",
+        "description": "Karina concierto ",
+        "date": "2022-11-22",
+        "start": "20:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://www.elcuyano.com/wp-content/uploads/2020/10/2020102114015943707.jpg",
+        "address": "Calle 11",
+        "city": "Buenos Aires",
+        "genre":"Cumbia"
+    },
+    {
+        "name": "Volcano",
+        "description": "Volcano concierto ",
+        "date": "2022-11-22",
+        "start": "20:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "https://cuarteldelmetal.com/wp-content/uploads/2022/01/V0A1856-scaled.jpg",
+        "address": "Calle 11",
+        "city": "Santiago",
+        "genre":"Heavy Metal"
+    },
+      {
+        "name": "Armagedon",
+        "description": "Armagedon concierto ",
+        "date": "2022-11-22",
+        "start": "20:00",
+        "end": "13:59",
+        "price": "15610",
+        "quotas": "1000",
+        "image": "http://3.bp.blogspot.com/_0tXapX63WbU/SucmQBYB5TI/AAAAAAAACu8/xUuWj2CfeAk/s400/armagedon.jpg",
+        "address": "Calle 11",
+        "city": "Rio cuarto",
+        "genre":"Heavy Metal"
     }
+    
+
+
+    
+
+
+
+    
+    
 ]
