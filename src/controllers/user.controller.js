@@ -547,7 +547,7 @@ const forgetPassword = async (req, res = response) => {
     if (!email) {
         return res.status(400).json({
             ok: false,
-            msg: 'nombre del usuario es requerido',
+            msg: 'email es requerido',
         });
     }
     let verificationLink;
