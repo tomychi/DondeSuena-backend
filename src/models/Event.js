@@ -13,7 +13,6 @@ module.exports = (sequelize) => {
             name: {
                 type: DataTypes.STRING,
                 allowNull: false,
-                // utf8_spanish_ci is case insensitive
             },
             description: {
                 type: DataTypes.STRING,
@@ -52,6 +51,10 @@ module.exports = (sequelize) => {
                 allowNull: false,
             },
             city: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            genre: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },

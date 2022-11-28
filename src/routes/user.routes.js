@@ -13,6 +13,7 @@ const {
     getUsers,
     getUser,
     postFavoriteArtist,
+    deleteFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
     sendInvoice,
@@ -23,11 +24,11 @@ const {
 const { validateJWT } = require('../middlewares/validate-jwt');
 
 const {
-    createLike,
-    createComment,
     deleteComment,
     deleteLike,
     editComment,
+    createLikeUser,
+    createCommentUser,
 } = require('../controllers/reactions.controller');
 
 const {
@@ -92,6 +93,8 @@ router.post(
 
 router.post('/postFavoriteArtist/:id', postFavoriteArtist);
 
+router.delete('/deleteFavoriteArtist/:id', deleteFavoriteArtist);
+
 router.get('/getFavoritesArtists', getFavoritesArtists);
 
 router.get('/getFavoritesById/:id', getFavoritesById);
@@ -105,9 +108,9 @@ router.get('/getUser/:id', getUser);
 router.get('/renew', validateJWT, renewToken);
 
 // Crear likes y comentarios
-router.post('/user/createLike', createLike);
+router.post('/user/createLike', createLikeUser);
 
-router.post('/user/createComment', createComment);
+router.post('/user/createComment', createCommentUser);
 
 // Eliminar like y comentario
 router.delete('/user/deleteLike/:id', deleteLike);

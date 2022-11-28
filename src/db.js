@@ -114,8 +114,14 @@ Post.belongsToMany(Artist, { through: "artists_posts" });
 User.belongsToMany(Like, { through: "users_likes" });
 Like.belongsToMany(User, { through: "users_likes" });
 
+Artist.belongsToMany(Like, { through: "artists_likes" });
+Like.belongsToMany(Artist, { through: "artists_likes" });
+
 User.belongsToMany(Comment, { through: "users_comments" });
 Comment.belongsToMany(User, { through: "users_comments" });
+
+Artist.belongsToMany(Comment, { through: "artists_comments" });
+Comment.belongsToMany(Artist, { through: "artists_comments" });
 
 Post.belongsToMany(Like, { through: "posts_likes" });
 Like.belongsToMany(Post, { through: "posts_likes" });

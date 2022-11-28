@@ -1,20 +1,21 @@
 const { response } = require("express");
-const { Like, Comment, User, Post } = require("../db");
+const { Like, Comment, User, Artist, Post } = require("../db");
 
-const createLike = async (req, res = response) => {
+const createLikeUser = async (req, res = response) => {
   try {
-    const { like, user, post } = req.body;
+    const { like, user, date, postId } = req.body;
 
     const newLike = await Like.create({
       like,
+      date
     });
 
-    const userDB = await User.findAll({ // debería ser por id
+    const userDB = await User.findAll({
       where: { firstName: user },
     });
 
     const postDB = await Post.findAll({
-      where: { title: post },
+      where: { id: postId },
     });
 
     newLike.addUser(userDB);
@@ -26,25 +27,26 @@ const createLike = async (req, res = response) => {
     });
 
   } catch (error) {
-    console.log("ERROR EN createLike", error);
+    console.log("ERROR EN createLikeUser", error);
     res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
 
-const createComment = async (req, res = response) => {
+const createCommentUser = async (req, res = response) => {
   try {
-    const { comment, user, post } = req.body;
+    const { comment, date, user, postId } = req.body;
 
     const newComment = await Comment.create({
       comment,
+      date
     });
 
-    const userDB = await User.findAll({ // debería ser por id
+    const userDB = await User.findAll({
       where: { firstName: user },
     });
 
     const postDB = await Post.findAll({
-      where: { title: post },
+      where: { id: postId },
     });
 
     newComment.addUser(userDB);
@@ -56,7 +58,112 @@ const createComment = async (req, res = response) => {
     });
 
   } catch (error) {
-    console.log("ERROR EN createLike", error);
+    console.log("ERROR EN createCommentArtist", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
+
+const createLikeArtist = async (req, res = response) => {
+  try {
+    const { like, user, date, postId } = req.body;
+
+    const newLike = await Like.create({
+      like,
+      date
+    });
+
+    const artistDB = await Artist.findAll({
+      where: { nickname: user },
+    });
+
+    const postDB = await Post.findAll({
+      where: { id: postId },
+    });
+
+    newLike.addArtist(artistDB);
+    newLike.addPost(postDB);
+
+    res.status(201).json({
+      msg: "¡Me gusta!",
+      newLike,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN createLikeArtist", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
+
+const createCommentArtist = async (req, res = response) => {
+  try {
+    const { comment, date, user, postId } = req.body;
+
+    const newComment = await Comment.create({
+      comment,
+      date
+    });
+
+    const artistDB = await Artist.findAll({
+      where: { nickname: user },
+    });
+
+    const postDB = await Post.findAll({
+      where: { id: postId },
+    });
+
+    newComment.addArtist(artistDB);
+    newComment.addPost(postDB);
+
+    res.status(201).json({
+      msg: "¡Acabas de comentar!",
+      newComment,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN createCommentUser", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
+
+
+
+
+
+
+const addComment = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+    const { comment, user, artist, date } = req.body;
+    const commentDB = await Comment.findByPk(id);
+
+    const add = await Comment.create({
+      comment,
+      date,
+    });
+
+    // Usuario
+    const userDB = await User.findAll({
+      where: { firstName: user },
+    });
+
+    // o Artista
+    const artistDB = await Artist.findAll({
+      where: { firstName: artist },
+    });
+
+    // parent comentario al que se comenta
+    // const commentDB = await Comment.findByPk(id)
+
+
+
+
+    res.status(201).json({
+      msg: "Comentario agregado",
+      add,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN addComment", error);
     res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
@@ -113,10 +220,56 @@ const editComment = async (req, res = response) => {
   }
 };
 
+const getComments = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+
+    let allComments = await Post.findByPk(id, {
+      include: [
+        {
+          model: Comment,
+          //where: { enabled: true },
+          through: {
+            attributes: []
+          },
+          include: [
+            {
+              model: User,
+              attributes: ['firstName', 'image'],
+              through: {
+                attributes: []
+              },
+            },
+            {
+              model: Artist,
+              attributes: ['nickname', 'image'],
+              through: {
+                attributes: []
+              },
+            }
+
+          ]
+        }
+      ]
+    });
+    res.status(200).json({
+      msg: 'Comentarios del post',
+      allComments,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN getComments", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
+
 module.exports = {
-  createLike,
-  createComment,
+  createLikeUser,
+  createCommentUser,
+  createLikeArtist,
+  createCommentArtist,
   deleteLike,
   deleteComment,
   editComment,
+  getComments
 };
