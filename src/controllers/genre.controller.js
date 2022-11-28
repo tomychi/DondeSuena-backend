@@ -17,6 +17,7 @@ const getGenres = async (req, res = response) => {
       msg: "Lista de generos",
       genres,
     });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({

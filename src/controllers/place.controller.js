@@ -28,6 +28,7 @@ const createPlace = async (req, res = response) => {
       ok: true,
       place,
     });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -38,11 +39,11 @@ const createPlace = async (req, res = response) => {
 };
 
 const getPlaces = async (req, res = response) => {
-    const places = await Place.findAll({ where: { state: true } });
-    res.json({
-        ok: true,
-        places,
-    });
+  const places = await Place.findAll({ where: { state: true } });
+  res.json({
+    ok: true,
+    places,
+  });
 };
 
 const getPlace = async (req, res = response) => {
@@ -62,6 +63,7 @@ const getPlace = async (req, res = response) => {
       ok: true,
       place,
     });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -108,6 +110,7 @@ const updatePlace = async (req, res = response) => {
       ok: true,
       place,
     });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -136,6 +139,7 @@ const deletePlace = async (req, res = response) => {
       ok: true,
       place,
     });
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({

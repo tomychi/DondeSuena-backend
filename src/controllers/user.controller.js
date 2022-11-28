@@ -55,9 +55,8 @@ const createUser = async (req, res = response) => {
             subject: 'Confirmación de registro',
             html: `<h1>Gracias por registrarte en DondeSuena</h1>
             <p>Para confirmar tu registro haz click en el siguiente enlace</p>
-            <a href="${
-                process.env.FRONT_URL || 'http://localhost:3000'
-            }/confirm/${token}">Confirmar registro</a>`,
+            <a href="${process.env.FRONT_URL || 'http://localhost:3000'
+                }/confirm/${token}">Confirmar registro</a>`,
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -75,6 +74,7 @@ const createUser = async (req, res = response) => {
             email: user.email,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -164,6 +164,7 @@ const loginUser = async (req, res = response) => {
                 token,
             });
         }
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -227,6 +228,7 @@ const googleSignIn = async (req, res = response) => {
             user,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(400).json({
@@ -256,6 +258,7 @@ const postFavoriteArtist = async (req, res = response) => {
             uid: newFavorite.id,
             name: newFavorite.firstName,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -281,6 +284,7 @@ const getFavoritesArtists = async (req, res = response) => {
             msg: 'Lista de artistas favoritos',
             artistsFind,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -312,6 +316,35 @@ const getFavoritesById = async (req, res = response) => {
                 artistID,
             });
         }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
+    }
+};
+
+const deleteFavoriteArtist = async (req, res = response) => {
+    const { id } = req.params;
+    try {
+        const artist = await Favorite.findByPk(id);
+
+        if (!artist || !artist.state) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro el artista favorito',
+            });
+        }
+
+        await artist.update({ state: false });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Artista favorito eliminado',
+        });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -385,6 +418,7 @@ const confirmationToken = async (req, res = response) => {
             msg: 'Usuario confirmado',
             usuario,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -404,6 +438,7 @@ const getUsers = async (req, res = response) => {
             ok: true,
             users,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -433,6 +468,7 @@ const getUser = async (req, res = response) => {
             ok: true,
             user,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -477,6 +513,7 @@ const sendInvoice = async (req, res = response) => {
                 });
             }
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -553,6 +590,7 @@ const forgetPassword = async (req, res = response) => {
             ok: true,
             msg: 'Email enviado',
         });
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -594,6 +632,7 @@ const createNewPassword = async (req, res = response) => {
             ok: true,
             msg: 'Contraseña actualizada',
         });
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -612,6 +651,7 @@ module.exports = {
     getUsers,
     getUser,
     postFavoriteArtist,
+    deleteFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
     sendInvoice,

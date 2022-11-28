@@ -17,6 +17,7 @@ const getTeam = async (req, res = response) => {
       msg: "Integrantes del equipo",
       allTeam,
     });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({
