@@ -30,6 +30,7 @@ const {
   editComment,
   createLikeUser,
   createCommentUser,
+  addCommentUser
 } = require("../controllers/reactions.controller");
 
 const {
@@ -110,6 +111,9 @@ router.get("/renew", validateJWT, renewToken);
 router.post("/user/createLike", createLikeUser);
 
 router.post("/user/createComment", createCommentUser);
+
+// Responder comentarios
+router.post("/user/addComment", addCommentUser);
 
 // Eliminar like y comentario
 router.delete("/user/deleteLike/:id", deleteLike);
