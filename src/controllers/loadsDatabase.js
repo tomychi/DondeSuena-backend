@@ -1,19 +1,17 @@
+const { User } = require("../db");
 const { Event } = require("../db");
 const { Place } = require("../db");
 const { Artist } = require("../db");
 const { Genre } = require("../db");
 const { Team } = require("../db");
-const { User } = require("../db");
 const path = require("path");
 const fs = require("fs");
 /* 
 cargar todos los datos en un json
-
 fs.writeFileSync(
     path.join(__dirname, '../database/Genres.json'),
     JSON.stringify(listGenres)
 );
-
 */
 
 const loadUsers = async () => {
