@@ -7,11 +7,12 @@ const {
   loadArtists,
   loadGenres,
   loadTeam,
+  loadUsers
 } = require("./src/controllers/loadsDatabase");
 
 const port = process.env.PORT || 3000;
 // Syncing all the models at once.
-conn.sync({ force: true }).then(async () => {
+conn.sync({ force: false }).then(async () => {
   loadUsers();
   loadEvents();
   loadArtists();
