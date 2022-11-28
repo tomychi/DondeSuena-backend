@@ -8,12 +8,10 @@ const path = require("path");
 const fs = require("fs");
 /* 
 cargar todos los datos en un json
-
 fs.writeFileSync(
     path.join(__dirname, '../database/Genres.json'),
     JSON.stringify(listGenres)
 );
-
 */
 
 const loadUsers = async () => {

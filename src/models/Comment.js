@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
             primaryKey: true,
             allowNull: false,
         },
-        comment: {
+        body: {
             type: DataTypes.TEXT,
             allowNull: false,
         },

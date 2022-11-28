@@ -34,10 +34,10 @@ const createLikeUser = async (req, res = response) => {
 
 const createCommentUser = async (req, res = response) => {
   try {
-    const { comment, date, user, postId } = req.body;
+    const { body, date, user, postId } = req.body;
 
     const newComment = await Comment.create({
-      comment,
+      body,
       date
     });
 
@@ -96,10 +96,10 @@ const createLikeArtist = async (req, res = response) => {
 
 const createCommentArtist = async (req, res = response) => {
   try {
-    const { comment, date, user, postId } = req.body;
+    const { body, date, user, postId } = req.body;
 
     const newComment = await Comment.create({
-      comment,
+      body,
       date
     });
 
@@ -126,47 +126,44 @@ const createCommentArtist = async (req, res = response) => {
 };
 
 
+// const addComment = async (req, res = response) => {
+//   try {
+//     const { id } = req.params;
+//     const { comment, user, artist, date } = req.body;
+//     const commentDB = await Comment.findByPk(id);
+
+//     const add = await Comment.create({
+//       comment,
+//       date,
+//     });
+
+//     // Usuario
+//     const userDB = await User.findAll({
+//       where: { firstName: user },
+//     });
+
+//     // o Artista
+//     const artistDB = await Artist.findAll({
+//       where: { firstName: artist },
+//     });
+
+//     // parent comentario al que se comenta
+//     // const commentDB = await Comment.findByPk(id)
 
 
 
 
-const addComment = async (req, res = response) => {
-  try {
-    const { id } = req.params;
-    const { comment, user, artist, date } = req.body;
-    const commentDB = await Comment.findByPk(id);
+//     res.status(201).json({
+//       msg: "Comentario agregado",
+//       add,
+//     });
 
-    const add = await Comment.create({
-      comment,
-      date,
-    });
+//   } catch (error) {
+//     console.log("ERROR EN addComment", error);
+//     res.status(500).send({ msg: "Hable con el administrador" });
+//   }
+// };
 
-    // Usuario
-    const userDB = await User.findAll({
-      where: { firstName: user },
-    });
-
-    // o Artista
-    const artistDB = await Artist.findAll({
-      where: { firstName: artist },
-    });
-
-    // parent comentario al que se comenta
-    // const commentDB = await Comment.findByPk(id)
-
-
-
-
-    res.status(201).json({
-      msg: "Comentario agregado",
-      add,
-    });
-
-  } catch (error) {
-    console.log("ERROR EN addComment", error);
-    res.status(500).send({ msg: "Hable con el administrador" });
-  }
-};
 
 const deleteLike = async (req, res = response) => {
   try {
@@ -199,7 +196,7 @@ const deleteComment = async (req, res = response) => {
 const editComment = async (req, res = response) => {
   try {
     const { id } = req.params;
-    const { comment } = req.body;
+    const { body, date } = req.body;
     const edit = await Comment.findByPk(id);
 
     if (!edit) {
@@ -208,7 +205,7 @@ const editComment = async (req, res = response) => {
       });
     }
 
-    await edit.update({ comment });
+    await edit.update({ body, date });
     res.status(201).json({
       msg: "Comentario editado",
       edit,
@@ -228,7 +225,6 @@ const getComments = async (req, res = response) => {
       include: [
         {
           model: Comment,
-          //where: { enabled: true },
           through: {
             attributes: []
           },

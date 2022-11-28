@@ -76,6 +76,7 @@ const createUser = async (req, res = response) => {
             email: user.email,
             token,
         });
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -228,6 +229,7 @@ const googleSignIn = async (req, res = response) => {
             user,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(400).json({
@@ -256,6 +258,7 @@ const patchUser = async (req, res = response) => {
             msg: 'Usuario actualizado',
             user,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -285,6 +288,7 @@ const postFavoriteArtist = async (req, res = response) => {
             uid: newFavorite.id,
             name: newFavorite.firstName,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -310,6 +314,7 @@ const getFavoritesArtists = async (req, res = response) => {
             msg: 'Lista de artistas favoritos',
             artistsFind,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -368,6 +373,7 @@ const deleteFavoriteArtist = async (req, res = response) => {
             ok: true,
             msg: 'Artista favorito eliminado',
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({

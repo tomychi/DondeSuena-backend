@@ -109,6 +109,7 @@ const updateStockTickets = async (req, res = response) => {
         res.status(201).send({
             msg: 'Se actualizó el stock de tickets para el Evento',
         });
+
     } catch (error) {
         console.log('ERROR EN updateStockTickets', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -126,6 +127,7 @@ const getStockTickets = async (req, res = response) => {
             msg: 'Stock de tickets',
             stock,
         });
+        
     } catch (error) {
         console.log('ERROR EN getStockTickets', error);
         res.status(500).send({ msg: 'Hable con el administrador' });

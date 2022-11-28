@@ -80,7 +80,7 @@ router.get('/artist/getPosts', getAllPosts);
 router.get('/artist/getPost/:id', getPostById);
 
 // Traer posteo específico y sus comentarios
-router.get('artist/getComments/:id', getComments); 
+router.get('/artist/getComments/:id', getComments);
 
 // Actualizar post
 router.put('/artist/editPost/:id', editPost);
