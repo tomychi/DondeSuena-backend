@@ -107,6 +107,7 @@ const createArtist = async (req, res = response) => {
             name: newArtist.firstName,
             token,
         });
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -135,6 +136,7 @@ const getArtists = async (req, res = response) => {
             msg: 'Lista de artistas',
             artists,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -196,6 +198,7 @@ const updateArtist = async (req, res = response) => {
             msg: 'Usuario actualizado',
             artist,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -224,6 +227,7 @@ const patchArtist = async (req, res = response) => {
             msg: 'Usuario actualizado',
             artist,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -252,6 +256,7 @@ const deleteArtist = async (req, res = response) => {
             ok: true,
             msg: 'Usuario eliminado',
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
