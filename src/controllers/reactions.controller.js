@@ -217,11 +217,50 @@ const editComment = async (req, res = response) => {
   }
 };
 
-const getComments = async (req, res = response) => {
+const getAllComments = async (req, res = response) => {
+  try {
+
+    let allComments = await Post.findAll(
+      {
+        model: Comment,
+        through: {
+          attributes: []
+        },
+        include: [
+          {
+            model: User,
+            attributes: ['firstName', 'image'],
+            through: {
+              attributes: []
+            },
+          },
+          {
+            model: Artist,
+            attributes: ['nickname', 'image'],
+            through: {
+              attributes: []
+            },
+          }
+
+        ]
+      }
+    );
+    res.status(200).json({
+      msg: 'Todos los post con sus likes y comentarios',
+      allComments,
+    });
+
+  } catch (error) {
+    console.log("ERROR EN getAllComments", error);
+    res.status(500).send({ msg: "Hable con el administrador" });
+  }
+};
+
+const getCommentsById = async (req, res = response) => {
   try {
     const { id } = req.params;
 
-    let allComments = await Post.findByPk(id, {
+    let commentsId = await Post.findByPk(id, {
       include: [
         {
           model: Comment,
@@ -250,11 +289,11 @@ const getComments = async (req, res = response) => {
     });
     res.status(200).json({
       msg: 'Comentarios del post',
-      allComments,
+      commentsId,
     });
 
   } catch (error) {
-    console.log("ERROR EN getComments", error);
+    console.log("ERROR EN getCommentsById", error);
     res.status(500).send({ msg: "Hable con el administrador" });
   }
 };
@@ -267,5 +306,6 @@ module.exports = {
   deleteLike,
   deleteComment,
   editComment,
-  getComments
+  getAllComments,
+  getCommentsById
 };

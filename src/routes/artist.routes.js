@@ -23,7 +23,7 @@ const {
     editPost,
     deletePost,
 } = require('../controllers/post.controller');
-const { createLikeArtist, createCommentArtist, getComments } = require('../controllers/reactions.controller');
+const { createLikeArtist, createCommentArtist, getCommentsById, getAllComments } = require('../controllers/reactions.controller');
 
 router.post(
     '/registerArtist',
@@ -79,8 +79,11 @@ router.get('/artist/getPosts', getAllPosts);
 // Artista ve sus posteos por (id)
 router.get('/artist/getPost/:id', getPostById);
 
+// Traer todos los posts con sus likes y comentarios
+router.get('/artist/getComments', getAllComments);
+
 // Traer posteo específico y sus comentarios
-router.get('/artist/getComments/:id', getComments);
+router.get('/artist/getComments/:id', getCommentsById);
 
 // Actualizar post
 router.put('/artist/editPost/:id', editPost);
