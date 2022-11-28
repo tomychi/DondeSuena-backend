@@ -13,6 +13,7 @@ const {
     getUsers,
     getUser,
     postFavoriteArtist,
+    deleteFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
     sendInvoice,
@@ -91,6 +92,8 @@ router.post(
 );
 
 router.post('/postFavoriteArtist/:id', postFavoriteArtist);
+
+router.delete('/deleteFavoriteArtist/:id', deleteFavoriteArtist);
 
 router.get('/getFavoritesArtists', getFavoritesArtists);
 

@@ -3,7 +3,7 @@ const { Post, Artist, Like, Comment } = require('../db');
 
 const createPosts = async (req, res = response) => {
     try {
-        const { description, image, date, artists } = req.body; 
+        const { description, image, date, artists } = req.body;
 
         const post = await Post.create({
             description,

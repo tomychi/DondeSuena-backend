@@ -155,7 +155,7 @@ const addComment = async (req, res = response) => {
     // const commentDB = await Comment.findByPk(id)
 
 
-    
+
 
     res.status(201).json({
       msg: "Comentario agregado",
