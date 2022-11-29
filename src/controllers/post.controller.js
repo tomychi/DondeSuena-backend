@@ -105,7 +105,7 @@ const getPostById = async (req, res = response) => {
         const { id } = req.params;
 
         let postId = await Artist.findByPk(id, {
-            attributes: ["nickname"],
+            attributes: ["nickname", "image"],
             include: [
                 {
                     model: Post,
