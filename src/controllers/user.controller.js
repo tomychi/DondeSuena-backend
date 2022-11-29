@@ -11,11 +11,12 @@ const createUser = async (req, res = response) => {
 
     try {
         let user = await User.findOne({ where: { email } });
+        let artist = await Artist.findOne({ where: { email } });
 
-        if (user) {
+        if (user || artist) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El usuario ya existe con ese email',
+                msg: 'El correo ya esta registrado',
             });
         }
 
@@ -102,9 +103,17 @@ const loginUser = async (req, res = response) => {
             if (!artist.confirmed) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'El usuario no ha confirmado su email',
+                    msg: 'El Artista no ha confirmado su email',
                 });
             }
+
+            if (!artist.state) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El Artista no esta activo',
+                });
+            }
+
             const validPassword = bcrypt.compareSync(password, artist.password); // me compara el password que me llega con el hash que tengo en la base de datos
 
             if (!validPassword) {
@@ -114,13 +123,20 @@ const loginUser = async (req, res = response) => {
                 });
             }
             // Generar JWT
-            const token = await generateJWT(user.id, artist.email);
+            const token = await generateJWT(artist.id, artist.email);
 
             return res.status(201).json({
                 ok: true,
                 msg: 'Login',
                 uid: artist.id,
                 email: artist.email,
+                image: artist.image,
+                spotify: artist.spotify,
+                twitter: artist.twitter,
+                instagram: artist.instagram,
+                nickname: artist.nickname,
+                description: artist.description,
+                phone: artist.phone,
                 artista: true,
                 token,
             });
@@ -131,6 +147,13 @@ const loginUser = async (req, res = response) => {
                 return res.status(400).json({
                     ok: false,
                     msg: 'El usuario no ha confirmado su email',
+                });
+            }
+
+            if (!user.state) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'El usuario no esta activo',
                 });
             }
             const validPassword = bcrypt.compareSync(password, user.password); // me compara el password que me llega con el hash que tengo en la base de datos
@@ -150,6 +173,10 @@ const loginUser = async (req, res = response) => {
                 msg: 'Login',
                 uid: user.id,
                 email: user.email,
+                image: user.image,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                admin: user.isAdmin,
                 artista: false,
                 token,
             });
@@ -162,7 +189,6 @@ const loginUser = async (req, res = response) => {
         });
     }
 };
-
 const renewToken = async (req, res = response) => {
     const { uid, name } = req;
 
@@ -227,15 +253,47 @@ const googleSignIn = async (req, res = response) => {
     }
 };
 
+const patchUser = async (req, res = response) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontró el usuario',
+            });
+        }
+
+        await user.update(req.body);
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario actualizado',
+            user,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
+    }
+};
+
 const postFavoriteArtist = async (req, res = response) => {
     const { id } = req.params;
+    const userId = req.query.userId;
 
     try {
         let artistFind = await Artist.findOne({ where: { id: id } });
+        let userFind = await User.findOne({ where: { id: userId } });
 
         const newFavorite = new Favorite(artistFind.dataValues);
 
         await newFavorite.save();
+
+        await userFind.addFavorite(newFavorite);
 
         res.status(201).json({
             ok: true,
@@ -308,35 +366,96 @@ const getFavoritesById = async (req, res = response) => {
     }
 };
 
+const deleteFavoriteArtist = async (req, res = response) => {
+    const { id } = req.params;
+    try {
+        const artist = await Favorite.findByPk(id);
+
+        if (!artist || !artist.state) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro el artista favorito',
+            });
+        }
+
+        await artist.update({ state: false });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Artista favorito eliminado',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
+    }
+};
+
 const confirmationToken = async (req, res = response) => {
     const { token } = req.params;
 
     try {
         const { uid } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findByPk(uid);
-
-        if (!user) {
+        const artist = await Artist.findByPk(uid);
+        const usuario = {};
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
 
-        if (user.confirmed) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'Usuario ya confirmado',
-            });
+        if (user) {
+            if (user.confirmed) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Usuario ya confirmado',
+                });
+            }
+            user.confirmed = true;
+            await user.save();
+            usuario.id = user.id;
+            usuario.email = user.email;
+            usuario.firstName = user.firstName;
+            usuario.lastName = user.lastName;
+            usuario.image = user.image;
+            usuario.confirmed = user.confirmed;
+            usuario.artista = false;
+            usuario.token = token;
         }
 
-        user.confirmed = true;
-
-        await user.save();
+        if (artist) {
+            if (artist.confirmed) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Artista ya confirmado',
+                });
+            }
+            artist.confirmed = true;
+            await artist.save();
+            usuario.id = artist.id;
+            usuario.email = artist.email;
+            usuario.firstName = artist.firstName;
+            usuario.lastName = artist.lastName;
+            usuario.image = artist.image;
+            usuario.confirmed = artist.confirmed;
+            usuario.spotify = artist.spotify;
+            usuario.twitter = artist.twitter;
+            usuario.instagram = artist.instagram;
+            usuario.nickname = artist.nickname;
+            usuario.description = artist.description;
+            usuario.phone = artist.phone;
+            usuario.artista = true;
+            usuario.token = token;
+        }
 
         res.status(200).json({
             ok: true,
             msg: 'Usuario confirmado',
-            user,
+            usuario,
         });
     } catch (error) {
         console.log(error);
@@ -444,26 +563,36 @@ const forgetPassword = async (req, res = response) => {
     if (!email) {
         return res.status(400).json({
             ok: false,
-            msg: 'nombre del usuario es requerido',
+            msg: 'email es requerido',
         });
     }
     let verificationLink;
     try {
         const user = await User.findOne({ where: { email } });
+        const artist = await Artist.findOne({ where: { email } });
 
-        if (!user) {
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
+        let token;
+        if (user) {
+            token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+                expiresIn: '15m',
+            });
+            verificationLink = process.env.FRONT_URL || 'http://localhost:3000';
+        }
 
-        const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: '15m',
-        });
-        // si existe FRONTEND_URL en el .env se usa, sino se usa localhost:3000
-        const url = process.env.FRONT_URL || 'http://localhost:3000';
-        verificationLink = `${url}/reset-password/${token}`;
+        if (artist) {
+            token = await jwt.sign({ id: artist.id }, process.env.JWT_SECRET, {
+                expiresIn: '15m',
+            });
+            verificationLink = process.env.FRONT_URL || 'http://localhost:3000';
+        }
+
+        verificationLink = `${verificationLink}/reset-password/${token}`;
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -481,14 +610,14 @@ const forgetPassword = async (req, res = response) => {
             to: email,
             subject: 'Reset Password',
             html: `<h1>Click the link to reset your password</h1>
-            <a href=${verificationLink}>${verificationLink}</a>`,
+            <a href=${verificationLink}>Click Here</a>`,
         };
 
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log(err);
             } else {
-                console.log(info);
+                console.log('Email enviado');
             }
         });
 
@@ -512,18 +641,26 @@ const createNewPassword = async (req, res = response) => {
     try {
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findByPk(id);
+        const artist = await Artist.findByPk(id);
 
-        if (!user) {
+        if (!user && !artist) {
             return res.status(404).json({
                 ok: false,
-                msg: 'Usuario no existe',
+                msg: 'El usuario no existe',
             });
         }
 
-        const salt = bcrypt.genSaltSync();
-        user.password = bcrypt.hashSync(password, salt);
+        if (user) {
+            const salt = bcrypt.genSaltSync();
+            user.password = bcrypt.hashSync(password, salt);
+            await user.save();
+        }
 
-        await user.save();
+        if (artist) {
+            const salt = bcrypt.genSaltSync();
+            artist.password = bcrypt.hashSync(password, salt);
+            await artist.save();
+        }
 
         res.status(200).json({
             ok: true,
@@ -547,9 +684,11 @@ module.exports = {
     getUsers,
     getUser,
     postFavoriteArtist,
+    deleteFavoriteArtist,
     getFavoritesArtists,
     getFavoritesById,
     sendInvoice,
     forgetPassword,
     createNewPassword,
+    patchUser,
 };

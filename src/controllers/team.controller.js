@@ -1,21 +1,21 @@
 const { response } = require("express");
-const { Genre } = require("../db");
+const { Team } = require("../db");
 
-const getGenres = async (req, res = response) => {
+const getTeam = async (req, res = response) => {
   try {
-    const genres = await Genre.findAll();
+    const allTeam = await Team.findAll();
 
-    if (!genres) {
+    if (!allTeam) {
       return res.status(404).json({
         ok: false,
-        msg: "No se encontraron generos",
+        msg: "No se encontró el team",
       });
     }
 
     res.status(200).json({
       ok: true,
-      msg: "Lista de generos",
-      genres,
+      msg: "Integrantes del equipo",
+      allTeam,
     });
 
   } catch (error) {
@@ -28,5 +28,5 @@ const getGenres = async (req, res = response) => {
 };
 
 module.exports = {
-  getGenres,
+  getTeam,
 };

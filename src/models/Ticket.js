@@ -8,13 +8,17 @@ module.exports = (sequelize) => {
             primaryKey: true,
             allowNull: false,
         },
-        priceTotal: { // Suma el precio de todas las entradas para el Usuario
+        priceTotal: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
         quantity: {
             type: DataTypes.INTEGER,
             defaultValue: 1,
+            allowNull: false
+        },
+        date: {
+            type: DataTypes.STRING,
             allowNull: false
         }
     },

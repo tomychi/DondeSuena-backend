@@ -8,10 +8,6 @@ module.exports = (sequelize) => {
             primaryKey: true,
             allowNull: false,
         },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         description: {
             type: DataTypes.TEXT,
             allowNull: false,
@@ -19,6 +15,10 @@ module.exports = (sequelize) => {
         image: {
             type: DataTypes.STRING,
             allowNull: true,
+        },
+        date: {
+            type: DataTypes.STRING,
+            allowNull: true
         },
         enabled: {
             type: DataTypes.BOOLEAN,

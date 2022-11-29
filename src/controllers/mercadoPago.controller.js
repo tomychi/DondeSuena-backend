@@ -1,11 +1,9 @@
 const mercadopago = require("mercadopago");
 require("dotenv").config();
 const { ACCESS_TOKEN } = process.env;
-const ruta_local = "http://localhost:3000/details/";
+const ruta_local = process.env.FRONT_URL || "http://localhost:3000/details/";
 
 const crearOrden = async (req, res) => {
-  // TOKEN VENDEDOR = TEST-278149704679461-111714-b31cf592f6bb901fa094f5dd10e62ff2-1241379948
-
   const { quantity, priceTotal, id } = req.body;
 
   mercadopago.configure({
@@ -15,7 +13,7 @@ const crearOrden = async (req, res) => {
   let preference = {
     items: [
       {
-        title: "Ticket",
+        title: "Tickets",
         quantity: quantity,
         currency_id: "ARS",
         unit_price: priceTotal,
@@ -28,7 +26,7 @@ const crearOrden = async (req, res) => {
     },
     auto_return: "approved",
     payment_methods: {
-      installments: 1
+      installments: 1,
     },
   };
 
