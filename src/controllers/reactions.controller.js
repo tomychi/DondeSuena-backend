@@ -25,7 +25,7 @@ const createLikeUser = async (req, res = response) => {
             msg: '¡Me gusta!',
             newLike,
         });
-        
+
     } catch (error) {
         console.log('ERROR EN createLikeUser', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -257,20 +257,20 @@ const getComments = async (req, res = response) => {
                                 attributes: [],
                             },
                         },
-                        // {
-                        //   model: User,
-                        //   attributes: ['firstName', 'image'],
-                        //   through: {
-                        //     attributes: []
-                        //   },
-                        // },
-                        // {
-                        //   model: Artist,
-                        //   attributes: ['nickname', 'image'],
-                        //   through: {
-                        //     attributes: []
-                        //   },
-                        // }
+                        {
+                            model: User,
+                            attributes: ['id','firstName','image'],
+                            through: {
+                                attributes: []
+                            },
+                        },
+                        {
+                            model: Artist,
+                            attributes: ['id','nickname', 'image'],
+                            through: {
+                                attributes: []
+                            },
+                        }
                     ],
                 },
             ],
