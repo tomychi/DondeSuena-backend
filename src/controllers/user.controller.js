@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { User, Artist, Favorite } = require('../db');
+const { User, Artist, Favorite, Event } = require('../db');
 const bcrypt = require('bcryptjs');
 const { generateJWT } = require('../helpers/jwt');
 const { googleVerify } = require('../helpers/google-verify');
@@ -543,8 +543,14 @@ const deleteUser = async (req, res = response) => {
 };
 
 const sendInvoice = async (req, res = response) => {
-    const { name, email, ticket } = req.body;
+    const {
+            name,
+            email,
+            quantity,
+            id
+        } = req.body;
     try {
+        const event = await Event.findByPk(id);
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             host: 'smtp.gmail.com',
@@ -559,10 +565,16 @@ const sendInvoice = async (req, res = response) => {
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'Confirmación de Compra - Donde Suena?',
+            subject: 'Confirmación de Compra',
             text: `
                 <h4>Hola ${name}!,</h4>
                 <p>Estamos muy agradecidos por tu compra en <b>DondeSuena?</b>, aquí estan los detalles de tu compra:</p>
+                <p>Evento: ${event.name}</p>
+                <p>Fecha: ${event.date}</p>
+                <p>ID del Evento: ${event.id}</p>
+                <p>Tickets: ${quantity}</p>
+                <p>Precio: ${event.price}$</p>
+                <p>Total: ${quantity * event.price}$</p>
                     `,
         };
 
