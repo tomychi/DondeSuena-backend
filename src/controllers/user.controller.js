@@ -72,7 +72,7 @@ const createUser = async (req, res = response) => {
         res.status(201).json({
             ok: true,
             msg: 'Usuario creado',
-            uid: user.id,
+            id: user.id,
             email: user.email,
             token,
         });
@@ -128,7 +128,7 @@ const loginUser = async (req, res = response) => {
             return res.status(201).json({
                 ok: true,
                 msg: 'Login',
-                uid: artist.id,
+                id: artist.id,
                 email: artist.email,
                 image: artist.image,
                 spotify: artist.spotify,
@@ -171,7 +171,7 @@ const loginUser = async (req, res = response) => {
             return res.status(201).json({
                 ok: true,
                 msg: 'Login',
-                uid: user.id,
+                id: user.id,
                 email: user.email,
                 image: user.image,
                 firstName: user.firstName,
@@ -298,7 +298,7 @@ const postFavoriteArtist = async (req, res = response) => {
         res.status(201).json({
             ok: true,
             msg: 'Artista favorito creado',
-            uid: newFavorite.id,
+            id: newFavorite.id,
             name: newFavorite.firstName,
         });
     } catch (error) {
