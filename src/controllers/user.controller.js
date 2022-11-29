@@ -576,14 +576,48 @@ const sendInvoice = async (req, res = response) => {
             to: email,
             subject: 'Confirmación de Compra',
             text: `
+                Hola ${name}!,
+                Estamos muy agradecidos por tu compra en DondeSuena, aquí estan los detalles de tu compra:
+                Evento: ${event.name}
+                Fecha: ${event.date}
+                ID del Evento: ${event.id}
+                Tickets: ${quantity}
+                Precio: ${event.price}$
+                Total: ${quantity * event.price}$
+                `,
+            html: `
                 <h4>Hola ${name}!,</h4>
-                <p>Estamos muy agradecidos por tu compra en <b>DondeSuena?</b>, aquí estan los detalles de tu compra:</p>
-                <p>Evento: ${event.name}</p>
-                <p>Fecha: ${event.date}</p>
+                <p>Estamos muy agradecidos por tu compra en DondeSuena, aquí estan los detalles de tu compra:</p>
+                <hr/>
+                <table cellspacing="1" bgcolor="#000000">
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Evento</th>
+                        <td>${event.name}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Fecha</th>
+                        <td>${event.date}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Cantidad de Tickets</th>
+                        <td>${quantity}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Precio Unitario</th>
+                        <td>${event.price}$</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Total</th>
+                        <td>${quantity * event.price}$</td>
+                    </tr>
+                </table>
+                <hr/>
                 <p>ID del Evento: ${event.id}</p>
-                <p>Tickets: ${quantity}</p>
-                <p>Precio: ${event.price}$</p>
-                <p>Total: ${quantity * event.price}$</p>
+                <hr/>
                     `,
         };
 
