@@ -20,6 +20,7 @@ const {
   forgetPassword,
   createNewPassword,
   patchUser,
+  deleteUser,
 } = require("../controllers/user.controller");
 
 const { validateJWT } = require("../middlewares/validate-jwt");
@@ -30,7 +31,7 @@ const {
   editComment,
   createLikeUser,
   createCommentUser,
-  addCommentUser
+  addCommentUser,
 } = require("../controllers/reactions.controller");
 
 const {
@@ -103,6 +104,8 @@ router.get("/confirmation/:token", confirmationToken);
 router.get("/getUsers", getUsers);
 
 router.get("/getUser/:id", getUser);
+
+router.delete("/deleteUser/:id", deleteUser);
 
 router.patch("/updateUser/:id", patchUser);
 
