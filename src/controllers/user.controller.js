@@ -469,7 +469,7 @@ const confirmationToken = async (req, res = response) => {
 const getUsers = async (req, res = response) => {
     try {
         const users = await User.findAll({
-            attributes: ['id', 'firstName', 'lastName', 'email', 'image'],
+            where: { isAdmin: false, state: true },
         });
 
         res.status(200).json({
@@ -504,6 +504,34 @@ const getUser = async (req, res = response) => {
         res.status(200).json({
             ok: true,
             user,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
+const deleteUser = async (req, res = response) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Usuario no existe',
+            });
+        }
+
+        await user.update({ state: false });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario eliminado',
         });
     } catch (error) {
         console.log(error);
@@ -691,4 +719,5 @@ module.exports = {
     forgetPassword,
     createNewPassword,
     patchUser,
+    deleteUser,
 };
