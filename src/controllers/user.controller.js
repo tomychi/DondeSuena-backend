@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { User, Artist, Favorite, Event } = require('../db');
+const { User, Artist, Favorite } = require('../db');
 const bcrypt = require('bcryptjs');
 const { generateJWT } = require('../helpers/jwt');
 const { googleVerify } = require('../helpers/google-verify');
@@ -315,27 +315,22 @@ const postFavoriteArtist = async (req, res = response) => {
 
 const getFavoritesArtists = async (req, res = response) => {
     try {
-        const artistsFind = await Favorite.findAll({ where: { state: true} });
+        const artistsFind = await Favorite.findAll();
 
         if (!artistsFind) {
             return res.status(404).json({
-                ok: false,
                 msg: 'No se encontroraron los artistas favoritos',
             });
         }
 
         res.status(200).json({
-            ok: true,
             msg: 'Lista de artistas favoritos',
             artistsFind,
         });
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Por favor hable con el administrador',
-        });
+        res.status(500).send({ msg: 'Por favor hable con el administrador' });
     }
 };
 
@@ -348,53 +343,34 @@ const getFavoritesById = async (req, res = response) => {
                 where: { id: id },
             });
 
-            if (!artistID || !artistID.state) {
+            if (!artistID) {
                 return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontró el usuario',
+                    msg: 'No se encontró el artista favorito',
                 });
             }
 
             return res.status(200).json({
-                ok: true,
-                msg: 'Usuario encontrado',
+                msg: 'Favorito encontrado',
                 artistID,
             });
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Por favor hable con el administrador',
-        });
+        res.status(500).send({ msg: 'Por favor hable con el administrador' });
     }
 };
 
 const deleteFavoriteArtist = async (req, res = response) => {
     try {
         const { id } = req.params;
-        const artist = await Favorite.findByPk(id);
+       
+        await Favorite.destroy({ where: { id: id } });
 
-        if (!artist || !artist.state) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontró el artista favorito',
-            });
-        }
-
-        await artist.update({ state: false });
-
-        res.status(200).json({
-            ok: true,
-            msg: 'Artista favorito eliminado',
-        });
+        res.status(200).send({ msg: 'Artista favorito eliminado' });
         
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Por favor hable con el administrador',
-        });
+        res.status(500).send({ msg: 'Por favor hable con el administrador' });
     }
 };
 
@@ -552,14 +528,8 @@ const deleteUser = async (req, res = response) => {
 };
 
 const sendInvoice = async (req, res = response) => {
-    const {
-            name,
-            email,
-            quantity,
-            id
-        } = req.body;
+    const { name, email, ticket } = req.body;
     try {
-        const event = await Event.findByPk(id);
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             host: 'smtp.gmail.com',
@@ -574,50 +544,10 @@ const sendInvoice = async (req, res = response) => {
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'Confirmación de Compra',
+            subject: 'Confirmación de Compra - Donde Suena?',
             text: `
-                Hola ${name}!,
-                Estamos muy agradecidos por tu compra en DondeSuena, aquí estan los detalles de tu compra:
-                Evento: ${event.name}
-                Fecha: ${event.date}
-                ID del Evento: ${event.id}
-                Tickets: ${quantity}
-                Precio: ${event.price}$
-                Total: ${quantity * event.price}$
-                `,
-            html: `
                 <h4>Hola ${name}!,</h4>
-                <p>Estamos muy agradecidos por tu compra en DondeSuena, aquí estan los detalles de tu compra:</p>
-                <hr/>
-                <table cellspacing="1" bgcolor="#000000">
-                    <tr bgcolor="#ffffff" align="center">
-                        <th>Evento</th>
-                        <td>${event.name}</td>
-                    </tr>
-                    <tr bgcolor="#ffffff" align="center">
-                        <th>Fecha</th>
-                        <td>${event.date}</td>
-                    </tr>
-                    <tr bgcolor="#ffffff" align="center">
-                        <th>Cantidad de Tickets</th>
-                        <td>${quantity}</td>
-                    </tr>
-                    <tr bgcolor="#ffffff" align="center">
-                        <th>Precio Unitario</th>
-                        <td>${event.price}$</td>
-                    </tr>
-                    <tr bgcolor="#ffffff" align="center">
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr bgcolor="#ffffff" align="center">
-                        <th>Total</th>
-                        <td>${quantity * event.price}$</td>
-                    </tr>
-                </table>
-                <hr/>
-                <p>ID del Evento: ${event.id}</p>
-                <hr/>
+                <p>Estamos muy agradecidos por tu compra en <b>DondeSuena?</b>, aquí estan los detalles de tu compra:</p>
                     `,
         };
 
