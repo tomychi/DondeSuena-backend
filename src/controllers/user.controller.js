@@ -315,7 +315,7 @@ const postFavoriteArtist = async (req, res = response) => {
 
 const getFavoritesArtists = async (req, res = response) => {
     try {
-        const artistsFind = await Favorite.findAll();
+        const artistsFind = await Favorite.findAll({ where: { state: true} });
 
         if (!artistsFind) {
             return res.status(404).json({
@@ -704,7 +704,7 @@ const createNewPassword = async (req, res = response) => {
             ok: true,
             msg: 'Contraseña actualizada',
         });
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
