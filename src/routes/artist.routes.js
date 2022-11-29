@@ -79,7 +79,7 @@ router.post('/artist/addComment', addCommentArtist);
 // Traer posteo específico y sus comentarios
 router.get('/artist/getComments/:id', getComments);
 
-// Ver todos los posteos de los Artistas o buscar posteos por Artista (query)
+// Ver todos los posteos de los Artistas
 router.get('/artist/getPosts', getAllPosts);
 
 // Artista ve sus posteos por (id)

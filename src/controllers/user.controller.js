@@ -56,9 +56,8 @@ const createUser = async (req, res = response) => {
             subject: 'Confirmación de registro',
             html: `<h1>Gracias por registrarte en DondeSuena</h1>
             <p>Para confirmar tu registro haz click en el siguiente enlace</p>
-            <a href="${
-                process.env.FRONT_URL || 'http://localhost:3000'
-            }/confirm/${token}">Confirmar registro</a>`,
+            <a href="${process.env.FRONT_URL || 'http://localhost:3000'
+                }/confirm/${token}">Confirmar registro</a>`,
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -367,14 +366,14 @@ const getFavoritesById = async (req, res = response) => {
 };
 
 const deleteFavoriteArtist = async (req, res = response) => {
-    const { id } = req.params;
     try {
+        const { id } = req.params;
         const artist = await Favorite.findByPk(id);
 
         if (!artist || !artist.state) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No se encontro el artista favorito',
+                msg: 'No se encontró el artista favorito',
             });
         }
 
@@ -384,6 +383,7 @@ const deleteFavoriteArtist = async (req, res = response) => {
             ok: true,
             msg: 'Artista favorito eliminado',
         });
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
