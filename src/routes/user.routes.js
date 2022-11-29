@@ -36,6 +36,7 @@ const {
   createTicket,
   getTicket,
   getTickets,
+  createTicketMP,
 } = require("../controllers/ticket.controller");
 
 router.post(
@@ -121,6 +122,8 @@ router.put("/user/editComment/:id", editComment);
 
 // Crear ticket
 router.post("/user/createTicket", createTicket);
+
+router.post("/user/createTicketMP", createTicketMP);
 
 // Ver ticket específico y su evento
 router.get("/user/getTicket/:id", getTicket);
