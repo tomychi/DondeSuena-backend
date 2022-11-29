@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { User, Artist, Favorite } = require('../db');
+const { User, Artist, Favorite, Event } = require('../db');
 const bcrypt = require('bcryptjs');
 const { generateJWT } = require('../helpers/jwt');
 const { googleVerify } = require('../helpers/google-verify');
@@ -552,8 +552,14 @@ const deleteUser = async (req, res = response) => {
 };
 
 const sendInvoice = async (req, res = response) => {
-    const { name, email, ticket } = req.body;
+    const {
+            name,
+            email,
+            quantity,
+            id
+        } = req.body;
     try {
+        const event = await Event.findByPk(id);
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             host: 'smtp.gmail.com',
@@ -568,10 +574,50 @@ const sendInvoice = async (req, res = response) => {
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'Confirmación de Compra - Donde Suena?',
+            subject: 'Confirmación de Compra',
             text: `
+                Hola ${name}!,
+                Estamos muy agradecidos por tu compra en DondeSuena, aquí estan los detalles de tu compra:
+                Evento: ${event.name}
+                Fecha: ${event.date}
+                ID del Evento: ${event.id}
+                Tickets: ${quantity}
+                Precio: ${event.price}$
+                Total: ${quantity * event.price}$
+                `,
+            html: `
                 <h4>Hola ${name}!,</h4>
-                <p>Estamos muy agradecidos por tu compra en <b>DondeSuena?</b>, aquí estan los detalles de tu compra:</p>
+                <p>Estamos muy agradecidos por tu compra en DondeSuena, aquí estan los detalles de tu compra:</p>
+                <hr/>
+                <table cellspacing="1" bgcolor="#000000">
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Evento</th>
+                        <td>${event.name}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Fecha</th>
+                        <td>${event.date}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Cantidad de Tickets</th>
+                        <td>${quantity}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Precio Unitario</th>
+                        <td>${event.price}$</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Total</th>
+                        <td>${quantity * event.price}$</td>
+                    </tr>
+                </table>
+                <hr/>
+                <p>ID del Evento: ${event.id}</p>
+                <hr/>
                     `,
         };
 
