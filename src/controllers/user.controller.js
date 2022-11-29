@@ -56,9 +56,8 @@ const createUser = async (req, res = response) => {
             subject: 'Confirmación de registro',
             html: `<h1>Gracias por registrarte en DondeSuena</h1>
             <p>Para confirmar tu registro haz click en el siguiente enlace</p>
-            <a href="${
-                process.env.FRONT_URL || 'http://localhost:3000'
-            }/confirm/${token}">Confirmar registro</a>`,
+            <a href="${process.env.FRONT_URL || 'http://localhost:3000'
+                }/confirm/${token}">Confirmar registro</a>`,
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -76,6 +75,7 @@ const createUser = async (req, res = response) => {
             email: user.email,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -244,6 +244,7 @@ const googleSignIn = async (req, res = response) => {
             user,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(400).json({
@@ -272,6 +273,7 @@ const patchUser = async (req, res = response) => {
             msg: 'Usuario actualizado',
             user,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -301,6 +303,7 @@ const postFavoriteArtist = async (req, res = response) => {
             id: newFavorite.id,
             name: newFavorite.firstName,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -312,7 +315,7 @@ const postFavoriteArtist = async (req, res = response) => {
 
 const getFavoritesArtists = async (req, res = response) => {
     try {
-        const artistsFind = await Favorite.findAll();
+        const artistsFind = await Favorite.findAll({ where: { state: true} });
 
         if (!artistsFind) {
             return res.status(404).json({
@@ -326,6 +329,7 @@ const getFavoritesArtists = async (req, res = response) => {
             msg: 'Lista de artistas favoritos',
             artistsFind,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -367,14 +371,14 @@ const getFavoritesById = async (req, res = response) => {
 };
 
 const deleteFavoriteArtist = async (req, res = response) => {
-    const { id } = req.params;
     try {
+        const { id } = req.params;
         const artist = await Favorite.findByPk(id);
 
         if (!artist || !artist.state) {
             return res.status(404).json({
                 ok: false,
-                msg: 'No se encontro el artista favorito',
+                msg: 'No se encontró el artista favorito',
             });
         }
 
@@ -384,6 +388,7 @@ const deleteFavoriteArtist = async (req, res = response) => {
             ok: true,
             msg: 'Artista favorito eliminado',
         });
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -457,6 +462,7 @@ const confirmationToken = async (req, res = response) => {
             msg: 'Usuario confirmado',
             usuario,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -476,6 +482,7 @@ const getUsers = async (req, res = response) => {
             ok: true,
             users,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -505,6 +512,7 @@ const getUser = async (req, res = response) => {
             ok: true,
             user,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -533,6 +541,7 @@ const deleteUser = async (req, res = response) => {
             ok: true,
             msg: 'Usuario eliminado',
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -653,6 +662,7 @@ const forgetPassword = async (req, res = response) => {
             ok: true,
             msg: 'Email enviado',
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -694,6 +704,7 @@ const createNewPassword = async (req, res = response) => {
             ok: true,
             msg: 'Contraseña actualizada',
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
