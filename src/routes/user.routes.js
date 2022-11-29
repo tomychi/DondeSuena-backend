@@ -20,6 +20,7 @@ const {
   forgetPassword,
   createNewPassword,
   patchUser,
+  deleteUser,
 } = require("../controllers/user.controller");
 
 const { validateJWT } = require("../middlewares/validate-jwt");
@@ -30,13 +31,14 @@ const {
   editComment,
   createLikeUser,
   createCommentUser,
-  addCommentUser
+  addCommentUser,
 } = require("../controllers/reactions.controller");
 
 const {
   createTicket,
   getTicket,
   getTickets,
+  createTicketMP,
 } = require("../controllers/ticket.controller");
 
 router.post(
@@ -103,6 +105,8 @@ router.get("/getUsers", getUsers);
 
 router.get("/getUser/:id", getUser);
 
+router.delete("/deleteUser/:id", deleteUser);
+
 router.patch("/updateUser/:id", patchUser);
 
 router.get("/renew", validateJWT, renewToken);
@@ -125,6 +129,8 @@ router.put("/user/editComment/:id", editComment);
 
 // Crear ticket
 router.post("/user/createTicket", createTicket);
+
+router.post("/user/createTicketMP", createTicketMP);
 
 // Ver ticket específico y su evento
 router.get("/user/getTicket/:id", getTicket);
