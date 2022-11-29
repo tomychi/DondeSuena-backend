@@ -75,6 +75,7 @@ const createUser = async (req, res = response) => {
             email: user.email,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -243,6 +244,7 @@ const googleSignIn = async (req, res = response) => {
             user,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(400).json({
@@ -271,6 +273,7 @@ const patchUser = async (req, res = response) => {
             msg: 'Usuario actualizado',
             user,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -300,6 +303,7 @@ const postFavoriteArtist = async (req, res = response) => {
             id: newFavorite.id,
             name: newFavorite.firstName,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -325,6 +329,7 @@ const getFavoritesArtists = async (req, res = response) => {
             msg: 'Lista de artistas favoritos',
             artistsFind,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -457,6 +462,7 @@ const confirmationToken = async (req, res = response) => {
             msg: 'Usuario confirmado',
             usuario,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -476,6 +482,7 @@ const getUsers = async (req, res = response) => {
             ok: true,
             users,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -505,6 +512,7 @@ const getUser = async (req, res = response) => {
             ok: true,
             user,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -533,6 +541,7 @@ const deleteUser = async (req, res = response) => {
             ok: true,
             msg: 'Usuario eliminado',
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -653,6 +662,7 @@ const forgetPassword = async (req, res = response) => {
             ok: true,
             msg: 'Email enviado',
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -694,6 +704,7 @@ const createNewPassword = async (req, res = response) => {
             ok: true,
             msg: 'Contraseña actualizada',
         });
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
