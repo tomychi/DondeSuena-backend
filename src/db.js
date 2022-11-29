@@ -76,6 +76,7 @@ const {
   Post,
   Like,
   Comment,
+  Response,
   Ticket,
   Favorite,
 } = sequelize.models;
@@ -128,6 +129,15 @@ Like.belongsToMany(Post, { through: "posts_likes" });
 
 Post.belongsToMany(Comment, { through: "posts_comments" });
 Comment.belongsToMany(Post, { through: "posts_comments" });
+
+User.belongsToMany(Response, { through: "users_responses" });
+Response.belongsToMany(User, { through: "users_responses" });
+
+Artist.belongsToMany(Response, { through: "artists_responses" });
+Response.belongsToMany(Artist, { through: "artists_responses" });
+
+Comment.belongsToMany(Response, { through: "comments_responses" });
+Response.belongsToMany(Comment, { through: "comments_responses" });
 
 Artist.belongsToMany(Genre, { through: "artists_genres" });
 Genre.belongsToMany(Artist, { through: "artists_genres" });
