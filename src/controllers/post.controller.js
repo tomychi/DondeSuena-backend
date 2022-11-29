@@ -103,7 +103,7 @@ const getAllPosts = async (req, res = response) => {
 const getPostById = async (req, res = response) => {
     try {
         const { id } = req.params;
-
+ 
         let postId = await Artist.findByPk(id, {
             attributes: ["nickname", "image"],
             include: [
