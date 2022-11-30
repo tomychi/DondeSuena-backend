@@ -133,7 +133,7 @@ const filterAllEvents = async ({
       //     return events;
       // }
       where.genre = {
-        [Op.iLike]: `%${genre}%`,
+        [Op.iLike]: `${genre}`,
       };
       where.state = true;
     }
