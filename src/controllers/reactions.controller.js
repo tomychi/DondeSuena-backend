@@ -1,36 +1,5 @@
 const { response } = require('express');
-const { Like, Comment, Response, User, Artist, Post } = require('../db');
-
-const createLikeUser = async (req, res = response) => {
-    try {
-        const { like, user, date, postId } = req.body;
-
-        const newLike = await Like.create({
-            like,
-            date,
-        });
-
-        const userDB = await User.findAll({
-            where: { firstName: user },
-        });
-
-        const postDB = await Post.findAll({
-            where: { id: postId },
-        });
-
-        newLike.addUser(userDB);
-        newLike.addPost(postDB);
-
-        res.status(201).json({
-            msg: '¡Me gusta!',
-            newLike,
-        });
-
-    } catch (error) {
-        console.log('ERROR EN createLikeUser', error);
-        res.status(500).send({ msg: 'Hable con el administrador' });
-    }
-};
+const { Comment, Response, User, Artist, Post } = require('../db');
 
 const createCommentUser = async (req, res = response) => {
     try {
@@ -63,36 +32,6 @@ const createCommentUser = async (req, res = response) => {
     }
 };
 
-const createLikeArtist = async (req, res = response) => {
-    try {
-        const { like, user, date, postId } = req.body;
-
-        const newLike = await Like.create({
-            like,
-            date,
-        });
-
-        const artistDB = await Artist.findAll({
-            where: { nickname: user },
-        });
-
-        const postDB = await Post.findAll({
-            where: { id: postId },
-        });
-
-        newLike.addArtist(artistDB);
-        newLike.addPost(postDB);
-
-        res.status(201).json({
-            msg: '¡Me gusta!',
-            newLike,
-        });
-
-    } catch (error) {
-        console.log('ERROR EN createLikeArtist', error);
-        res.status(500).send({ msg: 'Hable con el administrador' });
-    }
-};
 
 const createCommentArtist = async (req, res = response) => {
     try {
@@ -187,19 +126,6 @@ const addCommentArtist = async (req, res = response) => {
     }
 };
 
-const deleteLike = async (req, res = response) => {
-    try {
-        const { id } = req.params;
-
-        await Like.destroy({ where: { id: id } });
-        res.status(201).send({ msg: 'Ya no te gusta' });
-
-    } catch (error) {
-        console.log('ERROR EN deleteLike', error);
-        res.status(500).send({ msg: 'Hable con el administrador' });
-    }
-};
-
 // Borrado lógico
 const deleteComment = async (req, res = response) => {
     try {
@@ -250,6 +176,11 @@ const getComments = async (req, res = response) => {
                     through: {
                         attributes: [],
                     },
+                    model: Artist,
+                    attributes: ['nickname', 'image'],
+                    through: {
+                        attributes: []
+                    },
                     include: [
                         {
                             model: Response,
@@ -259,14 +190,14 @@ const getComments = async (req, res = response) => {
                         },
                         {
                             model: User,
-                            attributes: ['id','firstName','image'],
+                            attributes: ['id', 'firstName', 'image'],
                             through: {
                                 attributes: []
                             },
                         },
                         {
                             model: Artist,
-                            attributes: ['id','nickname', 'image'],
+                            attributes: ['id', 'nickname', 'image'],
                             through: {
                                 attributes: []
                             },
@@ -287,11 +218,8 @@ const getComments = async (req, res = response) => {
 };
 
 module.exports = {
-    createLikeUser,
     createCommentUser,
-    createLikeArtist,
     createCommentArtist,
-    deleteLike,
     deleteComment,
     editComment,
     getComments,

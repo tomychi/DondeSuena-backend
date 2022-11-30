@@ -27,9 +27,7 @@ const { validateJWT } = require("../middlewares/validate-jwt");
 
 const {
   deleteComment,
-  deleteLike,
   editComment,
-  createLikeUser,
   createCommentUser,
   addCommentUser,
 } = require("../controllers/reactions.controller");
@@ -111,17 +109,13 @@ router.patch("/updateUser/:id", patchUser);
 
 router.get("/renew", validateJWT, renewToken);
 
-// Crear likes y comentarios
-router.post("/user/createLike", createLikeUser);
-
+// Crear comentarios
 router.post("/user/createComment", createCommentUser);
 
 // Responder comentarios
 router.post("/user/addComment", addCommentUser);
 
-// Eliminar like y comentario
-router.delete("/user/deleteLike/:id", deleteLike);
-
+// Eliminar comentario
 router.delete("/user/deleteComment/:id", deleteComment);
 
 // Actualizar comentario
