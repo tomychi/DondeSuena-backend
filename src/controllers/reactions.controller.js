@@ -25,6 +25,7 @@ const createLikeUser = async (req, res = response) => {
             msg: '¡Me gusta!',
             newLike,
         });
+
     } catch (error) {
         console.log('ERROR EN createLikeUser', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -55,6 +56,7 @@ const createCommentUser = async (req, res = response) => {
             msg: '¡Acabas de comentar!',
             newComment,
         });
+
     } catch (error) {
         console.log('ERROR EN createCommentArtist', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -85,6 +87,7 @@ const createLikeArtist = async (req, res = response) => {
             msg: '¡Me gusta!',
             newLike,
         });
+
     } catch (error) {
         console.log('ERROR EN createLikeArtist', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -115,6 +118,7 @@ const createCommentArtist = async (req, res = response) => {
             msg: '¡Acabas de comentar!',
             newComment,
         });
+
     } catch (error) {
         console.log('ERROR EN createCommentUser', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -145,6 +149,7 @@ const addCommentUser = async (req, res = response) => {
             msg: 'Respondiste como usuario',
             newResponse,
         });
+
     } catch (error) {
         console.log('ERROR EN createResponseUser', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -175,6 +180,7 @@ const addCommentArtist = async (req, res = response) => {
             msg: 'Respondiste como artista',
             newResponse,
         });
+
     } catch (error) {
         console.log('ERROR EN createResponseArtista', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -187,6 +193,7 @@ const deleteLike = async (req, res = response) => {
 
         await Like.destroy({ where: { id: id } });
         res.status(201).send({ msg: 'Ya no te gusta' });
+
     } catch (error) {
         console.log('ERROR EN deleteLike', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -201,6 +208,7 @@ const deleteComment = async (req, res = response) => {
 
         await comment.update({ enabled: false });
         res.status(201).send({ msg: 'Comentario eliminado' });
+
     } catch (error) {
         console.log('ERROR EN deleteComment', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -224,6 +232,7 @@ const editComment = async (req, res = response) => {
             msg: 'Comentario editado',
             edit,
         });
+
     } catch (error) {
         console.log('ERROR EN editComment', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -248,20 +257,20 @@ const getComments = async (req, res = response) => {
                                 attributes: [],
                             },
                         },
-                        // {
-                        //   model: User,
-                        //   attributes: ['firstName', 'image'],
-                        //   through: {
-                        //     attributes: []
-                        //   },
-                        // },
-                        // {
-                        //   model: Artist,
-                        //   attributes: ['nickname', 'image'],
-                        //   through: {
-                        //     attributes: []
-                        //   },
-                        // }
+                        {
+                            model: User,
+                            attributes: ['id','firstName','image'],
+                            through: {
+                                attributes: []
+                            },
+                        },
+                        {
+                            model: Artist,
+                            attributes: ['id','nickname', 'image'],
+                            through: {
+                                attributes: []
+                            },
+                        }
                     ],
                 },
             ],
@@ -270,6 +279,7 @@ const getComments = async (req, res = response) => {
             msg: 'Comentarios del post',
             commentsId,
         });
+
     } catch (error) {
         console.log('ERROR EN getCommentsById', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
