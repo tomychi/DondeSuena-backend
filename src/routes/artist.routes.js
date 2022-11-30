@@ -23,7 +23,8 @@ const {
     editPost,
     deletePost,
 } = require('../controllers/post.controller');
-const { createLikeArtist, createCommentArtist, getComments, addCommentArtist } = require('../controllers/reactions.controller');
+
+const { createCommentArtist, getComments, addCommentArtist } = require('../controllers/reactions.controller');
 
 router.post(
     '/registerArtist',
@@ -68,9 +69,7 @@ router.get('/renew', validateJWT, renewToken);
 // Artista crea post
 router.post('/artist/createPost', createPosts);
 
-// Artista comenta y da like
-router.post('/artist/createLike', createLikeArtist);
-
+// Artista comenta
 router.post('/artist/createComment', createCommentArtist);
 
 // Responder comentarios como artista
