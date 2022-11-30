@@ -172,14 +172,16 @@ const getComments = async (req, res = response) => {
         let commentsId = await Post.findByPk(id, {
             include: [
                 {
-                    model: Comment,
-                    through: {
-                        attributes: [],
-                    },
                     model: Artist,
                     attributes: ['nickname', 'image'],
                     through: {
                         attributes: []
+                    },
+                },
+                {
+                    model: Comment,
+                    through: {
+                        attributes: [],
                     },
                     include: [
                         {

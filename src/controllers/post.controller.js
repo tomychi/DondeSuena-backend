@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Post, Artist, Like, Comment } = require('../db');
+const { Post, Artist, Comment } = require('../db');
 
 const createPosts = async (req, res = response) => {
     try {
@@ -35,10 +35,6 @@ const getAllPosts = async (req, res = response) => {
             {
                 include: [
                     {
-                        model: Like,
-                        through: {
-                            attributes: []
-                        },
                         model: Comment,
                         through: {
                             attributes: []
@@ -76,12 +72,6 @@ const getPostById = async (req, res = response) => {
                         attributes: []
                     },
                     include: [
-                        {
-                            model: Like,
-                            through: {
-                                attributes: []
-                            },
-                        },
                         {
                             model: Comment,
                             through: {
