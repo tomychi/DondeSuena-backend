@@ -10,9 +10,13 @@ const {
     getEvent,
     updateEvent,
     deleteEvent,
+    changeStateEvent,
 } = require('../controllers/event.controller');
 
-const { updateStockTickets, getStockTickets } = require('../controllers/ticket.controller');
+const {
+    updateStockTickets,
+    getStockTickets,
+} = require('../controllers/ticket.controller');
 
 router.post(
     '/createEvent',
@@ -51,5 +55,7 @@ router.put('/updateStock/:id', updateStockTickets);
 
 // Ver stock de tickets del Evento
 router.get('/stockQuotas/:id', getStockTickets);
+
+router.put('/changeStateEvent/:id', changeStateEvent);
 
 module.exports = router;

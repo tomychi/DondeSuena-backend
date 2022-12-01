@@ -147,10 +147,37 @@ const deletePlace = async (req, res = response) => {
     }
 };
 
+const changeStatePlace = async (req, res = response) => {
+    const { id } = req.params;
+    try {
+        const place = await Place.findByPk(id);
+        if (!place) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro lugar con ese id',
+            });
+        }
+
+        await place.update({ state: true });
+
+        res.json({
+            ok: true,
+            place,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
 module.exports = {
     createPlace,
     getPlaces,
     getPlace,
     updatePlace,
     deletePlace,
+    changeStatePlace,
 };
