@@ -28,9 +28,7 @@ const { validateJWT } = require('../middlewares/validate-jwt');
 
 const {
     deleteComment,
-    deleteLike,
     editComment,
-    createLikeUser,
     createCommentUser,
     addCommentUser,
 } = require('../controllers/reactions.controller');
@@ -39,6 +37,7 @@ const {
     createTicket,
     getTicket,
     getTickets,
+    createTicketMP,
 } = require('../controllers/ticket.controller');
 
 router.post(
@@ -117,17 +116,13 @@ router.patch('/updateUser/:id', patchUser);
 
 router.get('/renew', validateJWT, renewToken);
 
-// Crear likes y comentarios
-router.post('/user/createLike', createLikeUser);
-
+// Crear comentarios
 router.post('/user/createComment', createCommentUser);
 
 // Responder comentarios
 router.post('/user/addComment', addCommentUser);
 
-// Eliminar like y comentario
-router.delete('/user/deleteLike/:id', deleteLike);
-
+// Eliminar comentario
 router.delete('/user/deleteComment/:id', deleteComment);
 
 // Actualizar comentario
@@ -135,6 +130,8 @@ router.put('/user/editComment/:id', editComment);
 
 // Crear ticket
 router.post('/user/createTicket', createTicket);
+
+router.post('/user/createTicketMP', createTicketMP);
 
 // Ver ticket específico y su evento
 router.get('/user/getTicket/:id', getTicket);

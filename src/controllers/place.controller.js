@@ -27,6 +27,7 @@ const createPlace = async (req, res = response) => {
             ok: true,
             place,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -61,6 +62,7 @@ const getPlace = async (req, res = response) => {
             ok: true,
             place,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -107,6 +109,7 @@ const updatePlace = async (req, res = response) => {
             ok: true,
             place,
         });
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -134,6 +137,7 @@ const deletePlace = async (req, res = response) => {
             ok: true,
             place,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({

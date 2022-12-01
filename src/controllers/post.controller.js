@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { Post, Artist, Like, Comment } = require('../db');
+const { Post, Artist, Comment } = require('../db');
 
 const createPosts = async (req, res = response) => {
     try {
@@ -30,69 +30,27 @@ const createPosts = async (req, res = response) => {
 
 const getAllPosts = async (req, res = response) => {
     try {
-        const { name } = req.query;
-
-        if (name) {
-            const findPosts = await Artist.findOne({
-                where: { nickname: name },
-                attributes: ["nickname"],
+        const allPosts = await Post.findAll(
+            //{ where: { status: true } },
+            {
                 include: [
                     {
-                        model: Post,
-                        //where: { enabled: true },
+                        model: Comment,
                         through: {
                             attributes: []
                         },
-                        include: [
-                            {
-                                model: Like,
-                                through: {
-                                    attributes: []
-                                },
-                            },
-                            {
-                                model: Comment,
-                                through: {
-                                    attributes: []
-                                },
-                            }
-                        ]
+                        model: Artist,
+                        attributes: ['nickname', 'image'],
+                        through: {
+                            attributes: [],
+                        },
                     }
                 ]
             });
-            return res.status(200).json({
-                msg: `Estos son los posteos de ${name}`,
-                findPosts
-            })
-        }
-
-        else {
-            const allPosts = await Post.findAll(
-                //{ where: { status: true } },
-                {
-                    include: [
-                        {
-                            model: Like,
-                            through: {
-                                attributes: []
-                            },
-                            model: Comment,
-                            through: {
-                                attributes: []
-                            },
-                            model: Artist,
-                            attributes: ['nickname', 'image'],
-                            through: {
-                                attributes: [],
-                            },
-                        }
-                    ]
-                });
-            return res.status(200).json({
-                msg: 'Todos los post de los artistas',
-                allPosts,
-            });
-        }
+        return res.status(200).json({
+            msg: 'Todos los post de los artistas',
+            allPosts,
+        });
 
     } catch (error) {
         console.log("ERROR EN getAllPosts", error);
@@ -103,7 +61,7 @@ const getAllPosts = async (req, res = response) => {
 const getPostById = async (req, res = response) => {
     try {
         const { id } = req.params;
- 
+
         let postId = await Artist.findByPk(id, {
             attributes: ["nickname", "image"],
             include: [
@@ -114,12 +72,6 @@ const getPostById = async (req, res = response) => {
                         attributes: []
                     },
                     include: [
-                        {
-                            model: Like,
-                            through: {
-                                attributes: []
-                            },
-                        },
                         {
                             model: Comment,
                             through: {
