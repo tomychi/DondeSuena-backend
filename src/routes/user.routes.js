@@ -21,6 +21,7 @@ const {
     createNewPassword,
     patchUser,
     deleteUser,
+    changeStateUser,
 } = require('../controllers/user.controller');
 
 const { validateJWT } = require('../middlewares/validate-jwt');
@@ -93,6 +94,8 @@ router.post(
     ],
     googleSignIn
 );
+
+router.put('/changeStateUser/:id', changeStateUser);
 
 router.post('/postFavoriteArtist/:id', postFavoriteArtist);
 

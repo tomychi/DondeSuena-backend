@@ -10,6 +10,7 @@ const {
     getPlace,
     updatePlace,
     deletePlace,
+    changeStatePlace,
 } = require('../controllers/place.controller');
 
 router.post(
@@ -35,5 +36,7 @@ router.get('/getPlace/:id', getPlace);
 router.put('/updatePlace/:id', updatePlace);
 
 router.delete('/deletePlace/:id', deletePlace);
+
+router.put('/changeStatePlace/:id', changeStatePlace);
 
 module.exports = router;

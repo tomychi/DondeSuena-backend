@@ -272,6 +272,33 @@ const deleteArtist = async (req, res = response) => {
     }
 };
 
+const changeStateArtist = async (req, res = response) => {
+    const { id } = req.params;
+    try {
+        const artist = await Artist.findByPk(id);
+
+        if (!artist) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro el usuario con ese Id',
+            });
+        }
+
+        await artist.update({ state: true });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario activado',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
+    }
+};
+
 // TOKEN ----------------------------------------------------------------------
 const renewToken = async (req, res = response) => {
     const { uid, name } = req;
@@ -295,4 +322,5 @@ module.exports = {
     deleteArtist,
     renewToken,
     getArtistById,
+    changeStateArtist,
 };

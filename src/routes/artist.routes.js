@@ -14,6 +14,7 @@ const {
     deleteArtist,
     renewToken,
     getArtistById,
+    changeStateArtist,
 } = require('../controllers/artist.controller');
 
 const {
@@ -23,7 +24,12 @@ const {
     editPost,
     deletePost,
 } = require('../controllers/post.controller');
-const { createLikeArtist, createCommentArtist, getComments, addCommentArtist } = require('../controllers/reactions.controller');
+const {
+    createLikeArtist,
+    createCommentArtist,
+    getComments,
+    addCommentArtist,
+} = require('../controllers/reactions.controller');
 
 router.post(
     '/registerArtist',
@@ -52,6 +58,8 @@ router.post(
 
     createArtist
 );
+
+router.put('/changeStateArtist/:id', changeStateArtist);
 
 router.get('/getArtists', getArtists);
 
@@ -90,6 +98,5 @@ router.put('/artist/editPost/:id', editPost);
 
 // Eliminar post
 router.delete('/artist/deletePost/:id', deletePost);
-
 
 module.exports = router;
