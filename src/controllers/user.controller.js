@@ -294,7 +294,6 @@ const postFavoriteArtist = async (req, res = response) => {
         const newFavorite = new Favorite(artistFind.dataValues);
 
         await newFavorite.save();
-
         await userFind.addFavorite(newFavorite);
 
         res.status(201).json({
@@ -735,6 +734,34 @@ const createNewPassword = async (req, res = response) => {
     }
 };
 
+const changeStateUser = async (req, res = response) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Usuario no existe',
+            });
+        }
+
+        await user.update({ state: true });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario activado',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
 module.exports = {
     createUser,
     loginUser,
@@ -752,4 +779,5 @@ module.exports = {
     createNewPassword,
     patchUser,
     deleteUser,
+    changeStateUser,
 };
