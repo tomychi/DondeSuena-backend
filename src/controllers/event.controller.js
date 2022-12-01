@@ -71,7 +71,6 @@ const createEvent = async (req, res = response) => {
             msg: 'Evento creado',
             event,
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -91,6 +90,7 @@ const getEvents = async (req, res = response) => {
             return res.status(404).json({
                 ok: false,
                 msg: 'No se encontraron eventos',
+                events,
             });
         }
 
@@ -99,7 +99,6 @@ const getEvents = async (req, res = response) => {
             msg: 'Eventos encontrados',
             events,
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -127,7 +126,6 @@ const deleteEvent = async (req, res = response) => {
             ok: true,
             msg: 'Evento eliminado',
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -154,7 +152,6 @@ const getEvent = async (req, res = response) => {
             msg: 'Evento encontrado',
             event,
         });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -183,7 +180,6 @@ const updateEvent = async (req, res = response) => {
             msg: 'Evento actualizado',
             event,
         });
-        
     } catch (error) {
         console.log(error);
         res.status(500).json({
