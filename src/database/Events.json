@@ -32,7 +32,7 @@
         "start": "04:15",
         "end": "09:30",
         "price": "16900",
-        "quotas": "22000",
+        "quotas": "3",
         "image": "https://s3.amazonaws.com/bit-photos/large/9197333.jpeg",
         "address": "Calle 3",
         "city": "Medellín",
