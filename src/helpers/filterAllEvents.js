@@ -14,6 +14,17 @@ const filterAllEvents = async ({
 }) =>
     // { limit, offset }
     {
+        // si alguno de los campos me llega undefined, lo seteo a vacio
+        name = name || '';
+        description = description || '';
+        beginDate = beginDate || '';
+        endDate = endDate || '';
+        city = city || '';
+        address = address || '';
+        artist = artist || '';
+        genre = genre || '';
+        // search = search || '';
+
         let where = {};
 
         // if (search) {
