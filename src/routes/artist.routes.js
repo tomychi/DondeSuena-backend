@@ -29,9 +29,6 @@ const {
     createCommentArtist,
     getComments,
     addCommentArtist,
-    createCommentArtist,
-    getComments,
-    addCommentArtist,
 } = require('../controllers/reactions.controller');
 
 router.post(
