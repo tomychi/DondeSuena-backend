@@ -90,6 +90,7 @@ const getEvents = async (req, res = response) => {
             return res.status(404).json({
                 ok: false,
                 msg: 'No se encontraron eventos',
+                events,
             });
         }
 
@@ -188,10 +189,38 @@ const updateEvent = async (req, res = response) => {
     }
 };
 
+const changeStateEvent = async (req, res = response) => {
+    const { id } = req.params;
+    try {
+        const event = await Event.findByPk(id);
+
+        if (!event) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro evento con ese Id',
+            });
+        }
+
+        await event.update({ state: true });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Estado del evento actualizado',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
+    }
+};
+
 module.exports = {
     createEvent,
     getEvents,
     deleteEvent,
     updateEvent,
     getEvent,
+    changeStateEvent,
 };

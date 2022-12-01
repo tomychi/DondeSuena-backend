@@ -6,6 +6,7 @@ const createTicket = async (req, res = response) => {
         const { priceTotal, quantity, date, event, user } = req.body;
 
         const newTicket = await Ticket.create({
+            id: Math.random() * 10000,
             priceTotal,
             quantity,
             date,
@@ -24,6 +25,38 @@ const createTicket = async (req, res = response) => {
 
         res.status(201).json({
             msg: `Tenés ${quantity} tickets para ir a ${event} `,
+            newTicket,
+        });
+    } catch (error) {
+        console.log('ERROR EN createTicket', error);
+        res.status(500).send({ msg: 'Hable con el administrador' });
+    }
+};
+
+const createTicketMP = async (req, res = response) => {
+    try {
+        const { priceTotal, date, event, user } = req.body;
+        const { payment_id, purchasedQuantity } = req.query;
+        const newTicket = await Ticket.create({
+            id: payment_id,
+            quantity: purchasedQuantity,
+            priceTotal,
+            date,
+        });
+
+        const eventDB = await Event.findAll({
+            where: { name: event },
+        });
+
+        const userDB = await User.findAll({
+            where: { firstName: user },
+        });
+
+        newTicket.addEvent(eventDB);
+        newTicket.addUser(userDB);
+
+        res.status(201).json({
+            msg: `Tenés ${purchasedQuantity} tickets para ir a ${event} `,
             newTicket,
         });
     } catch (error) {
@@ -105,11 +138,10 @@ const updateStockTickets = async (req, res = response) => {
             ...event,
             quotas: parseInt(event.quotas) - quantity,
         });
-        console.log(event.quotas);
+
         res.status(201).send({
             msg: 'Se actualizó el stock de tickets para el Evento',
         });
-
     } catch (error) {
         console.log('ERROR EN updateStockTickets', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
@@ -127,9 +159,34 @@ const getStockTickets = async (req, res = response) => {
             msg: 'Stock de tickets',
             stock,
         });
-        
     } catch (error) {
         console.log('ERROR EN getStockTickets', error);
+        res.status(500).send({ msg: 'Hable con el administrador' });
+    }
+};
+
+const getTicketByEvent = async (req, res = response) => {
+    try {
+        let { id } = req.params;
+
+        // buscar en la tabla intermedia los tickets que tengan el id del evento
+        let countTickets = await Event.count({
+            where: { id },
+            include: {
+                model: Ticket,
+                attributes: ['id'],
+                through: {
+                    attributes: [],
+                },
+            },
+        });
+
+        res.status(200).json({
+            msg: 'Tickets por evento',
+            countTickets,
+        });
+    } catch (error) {
+        console.log('ERROR EN getTicketByEvent', error);
         res.status(500).send({ msg: 'Hable con el administrador' });
     }
 };
@@ -140,4 +197,6 @@ module.exports = {
     getTickets,
     updateStockTickets,
     getStockTickets,
+    createTicketMP,
+    getTicketByEvent,
 };

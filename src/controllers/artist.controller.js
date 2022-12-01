@@ -23,6 +23,17 @@ const createArtist = async (req, res = response) => {
     } = req.body;
 
     try {
+        const artistNickname = await Artist.findOne({
+            where: { nickname: nickname },
+        });
+
+        if (artistNickname) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'El nickname ya esta registrado',
+            });
+        }
+
         let artistFind = await Artist.findOne({ where: { email } });
         let user = await User.findOne({ where: { email } });
 
@@ -107,7 +118,7 @@ const createArtist = async (req, res = response) => {
             name: newArtist.firstName,
             token,
         });
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -198,7 +209,7 @@ const updateArtist = async (req, res = response) => {
             msg: 'Usuario actualizado',
             artist,
         });
-
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -256,7 +267,34 @@ const deleteArtist = async (req, res = response) => {
             ok: true,
             msg: 'Usuario eliminado',
         });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador',
+        });
+    }
+};
 
+const changeStateArtist = async (req, res = response) => {
+    const { id } = req.params;
+    try {
+        const artist = await Artist.findByPk(id);
+
+        if (!artist) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'No se encontro el usuario con ese Id',
+            });
+        }
+
+        await artist.update({ state: true });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario activado',
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -289,4 +327,5 @@ module.exports = {
     deleteArtist,
     renewToken,
     getArtistById,
+    changeStateArtist,
 };

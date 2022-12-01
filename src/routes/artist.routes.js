@@ -14,6 +14,7 @@ const {
     deleteArtist,
     renewToken,
     getArtistById,
+    changeStateArtist,
 } = require('../controllers/artist.controller');
 
 const {
@@ -23,7 +24,12 @@ const {
     editPost,
     deletePost,
 } = require('../controllers/post.controller');
-const { createLikeArtist, createCommentArtist, getComments, addCommentArtist } = require('../controllers/reactions.controller');
+const {
+    createLikeArtist,
+    createCommentArtist,
+    getComments,
+    addCommentArtist,
+} = require('../controllers/reactions.controller');
 
 router.post(
     '/registerArtist',
@@ -53,6 +59,8 @@ router.post(
     createArtist
 );
 
+router.put('/changeStateArtist/:id', changeStateArtist);
+
 router.get('/getArtists', getArtists);
 
 router.get('/getArtistById/:id', getArtistById);
@@ -68,9 +76,7 @@ router.get('/renew', validateJWT, renewToken);
 // Artista crea post
 router.post('/artist/createPost', createPosts);
 
-// Artista comenta y da like
-router.post('/artist/createLike', createLikeArtist);
-
+// Artista comenta
 router.post('/artist/createComment', createCommentArtist);
 
 // Responder comentarios como artista
@@ -79,7 +85,7 @@ router.post('/artist/addComment', addCommentArtist);
 // Traer posteo específico y sus comentarios
 router.get('/artist/getComments/:id', getComments);
 
-// Ver todos los posteos de los Artistas o buscar posteos por Artista (query)
+// Ver todos los posteos de los Artistas
 router.get('/artist/getPosts', getAllPosts);
 
 // Artista ve sus posteos por (id)
@@ -90,6 +96,5 @@ router.put('/artist/editPost/:id', editPost);
 
 // Eliminar post
 router.delete('/artist/deletePost/:id', deletePost);
-
 
 module.exports = router;

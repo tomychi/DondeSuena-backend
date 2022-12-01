@@ -1,5 +1,5 @@
 const { response } = require('express');
-const { User, Artist, Favorite } = require('../db');
+const { User, Artist, Favorite, Event } = require('../db');
 const bcrypt = require('bcryptjs');
 const { generateJWT } = require('../helpers/jwt');
 const { googleVerify } = require('../helpers/google-verify');
@@ -56,9 +56,8 @@ const createUser = async (req, res = response) => {
             subject: 'Confirmación de registro',
             html: `<h1>Gracias por registrarte en DondeSuena</h1>
             <p>Para confirmar tu registro haz click en el siguiente enlace</p>
-            <a href="${
-                process.env.FRONT_URL || 'http://localhost:3000'
-            }/confirm/${token}">Confirmar registro</a>`,
+            <a href="${process.env.FRONT_URL || 'http://localhost:3000'
+                }/confirm/${token}">Confirmar registro</a>`,
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
@@ -72,10 +71,11 @@ const createUser = async (req, res = response) => {
         res.status(201).json({
             ok: true,
             msg: 'Usuario creado',
-            uid: user.id,
+            id: user.id,
             email: user.email,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -128,7 +128,7 @@ const loginUser = async (req, res = response) => {
             return res.status(201).json({
                 ok: true,
                 msg: 'Login',
-                uid: artist.id,
+                id: artist.id,
                 email: artist.email,
                 image: artist.image,
                 spotify: artist.spotify,
@@ -171,7 +171,7 @@ const loginUser = async (req, res = response) => {
             return res.status(201).json({
                 ok: true,
                 msg: 'Login',
-                uid: user.id,
+                id: user.id,
                 email: user.email,
                 image: user.image,
                 firstName: user.firstName,
@@ -244,6 +244,7 @@ const googleSignIn = async (req, res = response) => {
             user,
             token,
         });
+
     } catch (error) {
         console.log(error);
         res.status(400).json({
@@ -272,6 +273,7 @@ const patchUser = async (req, res = response) => {
             msg: 'Usuario actualizado',
             user,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -292,15 +294,15 @@ const postFavoriteArtist = async (req, res = response) => {
         const newFavorite = new Favorite(artistFind.dataValues);
 
         await newFavorite.save();
-
         await userFind.addFavorite(newFavorite);
 
         res.status(201).json({
             ok: true,
             msg: 'Artista favorito creado',
-            uid: newFavorite.id,
+            id: newFavorite.id,
             name: newFavorite.firstName,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -316,22 +318,18 @@ const getFavoritesArtists = async (req, res = response) => {
 
         if (!artistsFind) {
             return res.status(404).json({
-                ok: false,
                 msg: 'No se encontroraron los artistas favoritos',
             });
         }
 
         res.status(200).json({
-            ok: true,
             msg: 'Lista de artistas favoritos',
             artistsFind,
         });
+
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Por favor hable con el administrador',
-        });
+        res.status(500).send({ msg: 'Por favor hable con el administrador' });
     }
 };
 
@@ -344,52 +342,34 @@ const getFavoritesById = async (req, res = response) => {
                 where: { id: id },
             });
 
-            if (!artistID || !artistID.state) {
+            if (!artistID) {
                 return res.status(404).json({
-                    ok: false,
-                    msg: 'No se encontró el usuario',
+                    msg: 'No se encontró el artista favorito',
                 });
             }
 
             return res.status(200).json({
-                ok: true,
-                msg: 'Usuario encontrado',
+                msg: 'Favorito encontrado',
                 artistID,
             });
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Por favor hable con el administrador',
-        });
+        res.status(500).send({ msg: 'Por favor hable con el administrador' });
     }
 };
 
 const deleteFavoriteArtist = async (req, res = response) => {
-    const { id } = req.params;
     try {
-        const artist = await Favorite.findByPk(id);
+        const { id } = req.params;
+       
+        await Favorite.destroy({ where: { id: id } });
 
-        if (!artist || !artist.state) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'No se encontro el artista favorito',
-            });
-        }
-
-        await artist.update({ state: false });
-
-        res.status(200).json({
-            ok: true,
-            msg: 'Artista favorito eliminado',
-        });
+        res.status(200).send({ msg: 'Artista favorito eliminado' });
+        
     } catch (error) {
         console.log(error);
-        res.status(500).json({
-            ok: false,
-            msg: 'Por favor hable con el administrador',
-        });
+        res.status(500).send({ msg: 'Por favor hable con el administrador' });
     }
 };
 
@@ -457,6 +437,7 @@ const confirmationToken = async (req, res = response) => {
             msg: 'Usuario confirmado',
             usuario,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -469,13 +450,14 @@ const confirmationToken = async (req, res = response) => {
 const getUsers = async (req, res = response) => {
     try {
         const users = await User.findAll({
-            attributes: ['id', 'firstName', 'lastName', 'email', 'image'],
+            where: { isAdmin: false, state: true },
         });
 
         res.status(200).json({
             ok: true,
             users,
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -505,6 +487,36 @@ const getUser = async (req, res = response) => {
             ok: true,
             user,
         });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
+const deleteUser = async (req, res = response) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Usuario no existe',
+            });
+        }
+
+        await user.update({ state: false });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario eliminado',
+        });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -515,8 +527,14 @@ const getUser = async (req, res = response) => {
 };
 
 const sendInvoice = async (req, res = response) => {
-    const { name, email, ticket } = req.body;
+    const {
+            name,
+            email,
+            quantity,
+            id
+        } = req.body;
     try {
+        const event = await Event.findByPk(id);
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             host: 'smtp.gmail.com',
@@ -527,14 +545,53 @@ const sendInvoice = async (req, res = response) => {
                 pass: process.env.PASSWORD,
             },
         });
-
         const mailOptions = {
             from: process.env.EMAIL,
             to: email,
-            subject: 'Confirmación de Compra - Donde Suena?',
+            subject: 'Confirmación de Compra',
             text: `
+                Hola ${name}!,
+                Estamos muy agradecidos por tu compra en DondeSuena, aquí estan los detalles de tu compra:
+                Evento: ${event.name}
+                Fecha: ${event.date}
+                ID del Evento: ${event.id}
+                Tickets: ${quantity}
+                Precio: ${event.price}$
+                Total: ${quantity * event.price}$
+                `,
+            html: `
                 <h4>Hola ${name}!,</h4>
-                <p>Estamos muy agradecidos por tu compra en <b>DondeSuena?</b>, aquí estan los detalles de tu compra:</p>
+                <p>Estamos muy agradecidos por tu compra en DondeSuena, aquí estan los detalles de tu compra:</p>
+                <hr/>
+                <table cellspacing="1" bgcolor="#000000">
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Evento</th>
+                        <td>${event.name}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Fecha</th>
+                        <td>${event.date}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Cantidad de Tickets</th>
+                        <td>${quantity}</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Precio Unitario</th>
+                        <td>${event.price}$</td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr bgcolor="#ffffff" align="center">
+                        <th>Total</th>
+                        <td>${quantity * event.price}$</td>
+                    </tr>
+                </table>
+                <hr/>
+                <p>ID del Evento: ${event.id}</p>
+                <hr/>
                     `,
         };
 
@@ -625,6 +682,7 @@ const forgetPassword = async (req, res = response) => {
             ok: true,
             msg: 'Email enviado',
         });
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -666,6 +724,35 @@ const createNewPassword = async (req, res = response) => {
             ok: true,
             msg: 'Contraseña actualizada',
         });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador',
+        });
+    }
+};
+
+const changeStateUser = async (req, res = response) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Usuario no existe',
+            });
+        }
+
+        await user.update({ state: true });
+
+        res.status(200).json({
+            ok: true,
+            msg: 'Usuario activado',
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -691,4 +778,6 @@ module.exports = {
     forgetPassword,
     createNewPassword,
     patchUser,
+    deleteUser,
+    changeStateUser,
 };
